@@ -1,6 +1,8 @@
 .gradle
 build/
 build-gwt/
+target/
+target-gwt/
 gwt-unitCache/
 
 # Ignore Gradle GUI config

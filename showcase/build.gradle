@@ -1,0 +1,284 @@
+task usage << { print """
+==================================================================================
+
+gradle javaCompile
+  Compile Java source code displaying warnings and error to the terminal console. Does not
+  cross compile Java to JavaScript.
+
+gradle clean compileGWT
+    Executes the 'javaCompile' task as a syntax check and then cross compiles Java source
+    code to JavaScript.
+
+gradle clean jettyRun
+  Cross compiles the client side Java into JavaScript; launches Jetty.  Use any browser to 
+  connect to:
+               http://localhost:${jettyRun.httpPort}/${project.name}/
+
+gradle clean war -P tomcat
+  Build a WAR for deployment.  Be sure to 'clean' after the WAR is deployed in order to
+  reset the filtered property resources to their defaults.
+
+gradle clean
+  Delete working files in '${buildDir.name}' and '${gwtBuildDir}' 
+
+============================================================================================ */
+"""}
+
+// Used to modify properties file resources
+import org.apache.tools.ant.filters.ReplaceTokens
+
+apply plugin: 'java'
+apply plugin: 'jetty'
+apply plugin: 'maven'
+apply plugin: 'war'
+
+
+// C O N F I G U R A T I O N ------------------------------------------------------------------
+
+// Project Configuration ----------------------------------------------------------------------
+
+ext.applicationName = "Mobile Showcase"
+group = 'client'
+version = '1.0'
+
+// Optional: 'target' is more familiar to Maven users
+buildDir = 'target'
+
+// WebApp Configuration -----------------------------------------------------------------------
+
+// GWT Configuration
+ext.gwtModule = 'Showcase'                        // Path to module descriptor
+ext.gwtModuleRenamedTo = 'app'                    // 'rename-to' within module descriptor
+ext.gwtRunTarget = 'index.html'                   // HTML launching file
+ext.gwtBuildDir = 'target-gwt'                     // GWT build directory
+
+// Dont't add Java compiled client side classes to the WAR
+ext.excludedClasses = [
+ '**/client/**',
+ '**/*.gwt.xml'
+]
+
+// We aren't using these skins or SmartGWT tools
+ext.excludedResources = [ 
+  'WEB-INF/deploy'
+]
+
+
+// Properties Configuration -------------------------------------------------------------------
+
+ext.localityProperties = [
+    'project.version'                : project.version,
+    'project.name'                   : applicationName,
+    'user.agent'                     : project.hasProperty('tomcat')  ? 'safari,gecko1_8' : findProperty('user.agent', 'safari'),
+]
+
+// GWT and Java Compilers Configuration -------------------------------------------------------
+
+// GWT SDK
+ext.gwtSDK = '2.7.0'
+ext.smartgwtMobile  = '1.0d_2014-12-06'
+
+// Java SDK
+sourceCompatibility = 1.7
+targetCompatibility = sourceCompatibility
+compileJava.options.compilerArgs = []  // To invoke Xlint use: ['-Xlint:unchecked', -Xlint:deprecation]
+
+
+// R E P O S I T O R I E S   &   D E P E N D E N C I E S --------------------------------------
+
+configurations { [gwtCompile] }
+
+repositories {
+
+    maven {
+        url "http://informagen.org/maven"              // Remote maven
+    }
+
+    mavenLocal()                                       // User's local
+    mavenCentral()                                     // Maven Central repository
+}
+
+dependencies {
+    compile ([ 
+    
+        // SmartGWT Mobile =================================================
+        "com.smartgwt:smartgwt-mobile:$smartgwtMobile",
+
+        // GWT =============================================================
+        "com.google.gwt:gwt-servlet:$gwtSDK",
+        "com.google.gwt:gwt-user:$gwtSDK",
+        
+    ])
+    
+    runtime ([
+        // GWT Validation API (since GWT 2.3.0) ============================
+        "com.google.gwt:validation-api:1.0.0.GA",
+        "com.google.gwt:validation-sources:1.0.0.GA",        
+    ])
+
+    testCompile([  /* TBD*/ ])
+
+    testRuntime([ /* TBD*/ ])
+
+    // The GWT cross compiler; Not needed for production or testing
+    gwtCompile([
+        "com.google.gwt:gwt-dev:$gwtSDK", 
+    ])
+
+}
+
+// G W T   T A S K S --------------------------------------------------------------------------
+
+task compileGWT(dependsOn: ['compileJava', 'copyWebAppResources'], type:JavaExec) {
+
+    description ='Cross compiles Java into JavaScript for each browser specified'
+
+    // Don't invoke GWT compiler if no source code has changed; 
+    //  Gradle Goodness at work here!!
+
+    outputs.upToDateSpec = new org.gradle.api.specs.AndSpec()
+    inputs.dir sourceSets.main.java.srcDirs
+    outputs.dir new File("${gwtBuildDir}/${gwtModuleRenamedTo}")
+
+    // Define the properties for the 'JavaExec' task
+    main ='com.google.gwt.dev.Compiler'
+    
+    jvmArgs = ['-Xmx512M']                 // 512M Memory, increase for larger Apps
+
+    classpath = files ([
+        sourceSets.main.java.srcDirs,      // Contains Java sources to be compiled into JavaScript
+        sourceSets.main.runtimeClasspath,  // Contains .gwt.xml file
+        configurations.gwtCompile.files    // Contains the GWT compiler
+    ])
+
+    args = [ "-war", gwtBuildDir,  gwtModule]
+
+}
+
+
+jettyRun.doFirst {
+    print """=================================================================================='
+    |
+    | Jetty running, open a browser with the URL->   http://localhost:${jettyRun.httpPort}/${project.name}/
+    |
+    | Control-C (Command-. on Mac OS X) to quit Jetty
+    |
+    """.replaceAll(/\n */,'\n')
+}
+
+
+// U T I L I T Y   M E T H O D S -------------------------------------------------------------- 
+
+def String findProperty(String propertyName, defaultValue='') {
+    def property = rootProject.hasProperty(propertyName) ? rootProject.getProperty(propertyName) : defaultValue
+    return property?.trim()
+}
+
+task copyWebAppResources(type: Copy) {
+    description = "Copies resources into '${gwtBuildDir}'"
+
+    // Modify the web.xml file to provide a description
+    from('src/main/webapp') {
+        include '**/web.xml'
+        filter(ReplaceTokens,
+               tokens:[version: project.version, name: applicationName ])
+    }
+
+    // Copy the other unmodified files as well
+    from('src/main/webapp') {
+       exclude '**/web.xml'
+    }
+
+    into gwtBuildDir
+}
+
+
+task copyLibraries(type: Copy) {
+    description = "Copies server side libraries into the '${gwtBuildDir}/WEB-INF/lib' directory"
+    from (sourceSets.main.runtimeClasspath) { include '**/*.jar'}
+    into "${gwtBuildDir}/WEB-INF/lib"
+}
+
+
+task cleanGWT(type: Delete) {
+    description = "Cleans the '${gwtBuildDir}/${gwtModuleRenamedTo}' JavaScript directory; Does not delete webapp resources"
+    delete = [
+        "${gwtBuildDir}/${gwtModuleRenamedTo}",
+        "${gwtBuildDir}/WEB-INF/deploy",
+        "${gwtBuildDir}/WEB-INF/lib",
+    ]
+}
+
+
+task cleanGWTBuildDir(type:Delete) {
+    delete gwtBuildDir
+}
+
+
+task createPOM(dependsOn: 'war') {
+    pom{}.writeTo("${buildDir}/poms/${project.name}-${project.version}.xml")
+}
+
+// G R A D L E   C O N F I G U R A T I O N ====================================================
+
+// WAR and Jetty builds; requires results of 'compileGWT' task rather than 'src/main/webapp'
+webAppDirName = "${gwtBuildDir}"
+
+// Jetty Configuration
+jettyRun.httpPort = 9090           // Avoid potential conflicts with 8080
+
+
+// P L U G I N   C O N F I G U R A T I O N ====================================================
+
+// Must execute the 'compileGWT' task before 'war' and 'jettyRun';  By adding a 'dependsOn'
+//   to the 'war' and 'jettyRun' task configuration we don't have to remember to do this
+//   on the command line.  Same idea with the 'clean' task to clean up the 'devMode' directory
+
+war {dependsOn 'compileGWT'}
+jettyRun { dependsOn 'compileGWT' }
+clean { dependsOn 'cleanGWTBuildDir'}
+
+war {
+
+    // Undefine the default 'war' classpath; we'll build our own
+    classpath = [] 
+
+    // Copy everything except the excluded classes and the jars which are going into 'lib'
+    from (sourceSets.main.runtimeClasspath) {
+        into 'WEB-INF/classes'
+        excludes = excludedClasses
+        exclude  '*.jar'
+
+    }
+
+    // Put all of the JAR files into 'lib' except those used by the GWT DevMode and
+    //   the Java/JavaScript cross compiler
+    from (sourceSets.main.runtimeClasspath) {
+        into 'WEB-INF/lib'
+        include '*.jar'
+        exclude  'gwt-dev-*.jar'
+        exclude  'gwt-user-*.jar'
+    }
+
+    // Exclude resources which we don't want in the WAR
+    excludes = excludedResources
+}
+
+
+// Augment the 'processResources' task from the 'java' plugin.  Use filtering to replace
+//   '@...@' tags with properties in order to customize the target environment
+
+processResources {
+    filter(ReplaceTokens, tokens: localityProperties)
+}
+
+// U N I T   T E S T I N G --------------------------------------------------------------------
+
+// Launch the browser if any test fails and display the report 
+gradle.taskGraph.afterTask { task, taskState ->
+    if (task.name == 'test' && taskState.failure)
+        java.awt.Desktop.desktop.browse(new File(testReportDir, 'index.html').toURI())
+}
+
+
+

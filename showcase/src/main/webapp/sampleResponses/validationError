@@ -1,0 +1,6 @@
+{
+    response : {
+        status: -4,
+        errors: {email:"This email already exists"}
+    }
+}

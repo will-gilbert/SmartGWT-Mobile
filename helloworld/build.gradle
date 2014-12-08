@@ -1,0 +1,178 @@
+
+task usage << { print """
+==================================================================================
+
+gradle compileJava
+  Compile Java source code displaying warnings and error to the terminal console. Does not
+  cross compile Java to JavaScript
+
+gradle clean compileGWT
+
+gradle clean jettyRun
+  Cross compiles the client side Java into JavaScript; launches Jetty.  Use any browser to 
+  connect to the localhost on the port defined by 'jettyRun.httpPort'
+
+gradle clean
+  Delete working files in 'project.buildDir'; invokes '' to remove the directory 
+  used by the GWT DevMode environment
+
+============================================================================================
+"""}
+
+apply plugin: 'java'
+apply plugin: 'jetty'
+apply plugin: 'maven'
+
+// C O N F I G U R A T I O N ------------------------------------------------------------------
+
+// Project Configuration ----------------------------------------------------------------------
+
+ext.applicationName = "Mobile HelloWorld"
+group = 'client'
+version = '1.0'
+
+// WebApp Configuration -----------------------------------------------------------------------
+
+// GWT Configuration
+ext.gwtModule = 'HelloWorld'                      // Path to module descriptor
+ext.gwtModuleRenamedTo = 'app'                    // 'rename-to' within module descriptor
+ext.gwtRunTarget = 'index.html'                   // HTML launching file
+ext.gwtBuildDir = 'build-gwt'                     // GWT build directory and devMode
+
+// Properties Configuration -------------------------------------------------------------------
+
+// GWT and Java Compilers Configuration -------------------------------------------------------
+
+// GWT SDK
+ext.gwtSDK = '2.7.0'
+ext.smartgwtMobile  = '1.0d_2014-12-06'
+
+// Java SDK
+sourceCompatibility = 1.7
+targetCompatibility = sourceCompatibility
+compileJava.options.compilerArgs = []  // To invoke Xlint use: ['-Xlint:unchecked', -Xlint:deprecation]
+
+
+// R e p o s i t o r i e s   &   D e p e n d e n c i e s --------------------------------------
+
+configurations { [gwtCompile] }
+
+repositories {
+
+    maven {
+        url "http://informagen.org/maven"               // Remote maven
+    }
+
+    mavenLocal()                                       // User's local
+    mavenCentral()                                     // Maven Central repository
+}
+
+dependencies {
+
+    compile ([ 
+    
+        // SmartGWT Mobile =================================================
+        "com.smartgwt:smartgwt-mobile:$smartgwtMobile",
+
+        // GWT =============================================================
+        "com.google.gwt:gwt-servlet:$gwtSDK",
+        "com.google.gwt:gwt-user:$gwtSDK",
+        
+    ])
+    
+    runtime ([
+        // GWT Validation API (since GWT 2.3.0) ============================
+        "com.google.gwt:validation-api:1.0.0.GA",
+        "com.google.gwt:validation-sources:1.0.0.GA",        
+    ])
+
+    // The GWT cross compiler; Not needed for production or testing
+    gwtCompile([
+        "com.google.gwt:gwt-dev:$gwtSDK", 
+        "com.google.gwt:gwt-servlet:$gwtSDK"
+    ])
+}
+
+// G W T   T A S K S --------------------------------------------------------------------------
+
+task compileGWT(dependsOn: ['compileJava', 'copyWebAppResources'], type:JavaExec) {
+
+    description ='Cross compiles Java into JavaScript for each browser specified'
+
+    // Don't invoke GWT compiler if no source code has changed; 
+    //  Gradle Goodness at work here!!
+
+    outputs.upToDateSpec = new org.gradle.api.specs.AndSpec()
+    inputs.dir sourceSets.main.java.srcDirs
+    outputs.dir new File("${gwtBuildDir}/${gwtModuleRenamedTo}")
+
+    // Define the properties for the 'JavaExec' task
+    main ='com.google.gwt.dev.Compiler'
+    
+    jvmArgs = ['-Xmx512M']                 // 256M Memory, increase for larger Apps
+
+    classpath = files([
+        sourceSets.main.java.srcDirs,      // Contains Java sources to be compiled into JavaScript
+        sourceSets.main.runtimeClasspath,  // Contains .gwt.xml file
+        configurations.gwtCompile.files       // Contains the GWT compiler JAR
+    ])
+
+    args = [ "-war", gwtBuildDir,  gwtModule]
+
+}
+
+jettyRun.doFirst {
+    print """=================================================================================='
+    |
+    | Jetty running, open a browser with the URL->   http://localhost:${jettyRun.httpPort}/${project.name}/
+    |
+    | Control-C (Command-. on Mac OS X) to quit Jetty
+    |
+    """.replaceAll(/\n */,'\n')
+}
+
+// U T I L I T Y   M E T H O D S -------------------------------------------------------------- 
+
+task copyWebAppResources(type: Copy) {
+    description = "Copies resources into '${gwtBuildDir}'"
+
+    // Modify the web.xml file to provide a description
+    from('src/main/webapp') {
+        include '**/web.xml'
+    }
+
+    // Copy the other unmodified files as well
+    from('src/main/webapp') {
+       exclude '**/web.xml'
+    }
+
+    into gwtBuildDir
+}
+
+
+task cleanDevMode(type:Delete) {
+    delete gwtBuildDir
+}
+
+
+// G R A D L E   C O N F I G U R A T I O N ====================================================
+
+// WAR and Jetty builds; requires results of 'compileGWT' task rather than 'src/main/webapp'
+webAppDirName = "${gwtBuildDir}"
+
+// Jetty Configuration
+jettyRun.httpPort = 9090           // Avoid potential conflicts with 8080
+
+// P L U G I N   C O N F I G U R A T I O N ====================================================
+
+jettyRun { dependsOn 'compileGWT' }
+clean { dependsOn 'cleanDevMode'}
+
+// Augment the 'processResources' task from the 'java' plugin.  Use filtering to replace
+//   '@...@' tags with properties in order to customize the running environment
+
+
+
+
+
+

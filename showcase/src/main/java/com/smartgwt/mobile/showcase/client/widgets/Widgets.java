@@ -6,12 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.gwt.user.client.History;
+
 import com.smartgwt.mobile.client.core.Function;
 import com.smartgwt.mobile.client.data.Record;
 import com.smartgwt.mobile.client.data.RecordList;
 import com.smartgwt.mobile.client.types.NavigationMode;
 import com.smartgwt.mobile.client.types.SelectionStyle;
 import com.smartgwt.mobile.client.types.TableMode;
+
 import com.smartgwt.mobile.client.widgets.Panel;
 import com.smartgwt.mobile.client.widgets.ScrollablePanel;
 import com.smartgwt.mobile.client.widgets.icons.IconResources;
@@ -19,6 +21,8 @@ import com.smartgwt.mobile.client.widgets.layout.NavStack;
 import com.smartgwt.mobile.client.widgets.tableview.TableView;
 import com.smartgwt.mobile.client.widgets.tableview.events.RecordNavigationClickEvent;
 import com.smartgwt.mobile.client.widgets.tableview.events.RecordNavigationClickHandler;
+
+
 import com.smartgwt.mobile.showcase.client.widgets.badges.Badges;
 import com.smartgwt.mobile.showcase.client.widgets.buttons.Buttons;
 import com.smartgwt.mobile.showcase.client.widgets.databinding.DataBinding;
@@ -33,7 +37,7 @@ import com.smartgwt.mobile.showcase.client.widgets.toolbar.Toolbars;
 
 public class Widgets extends NavStack {
 
-    private String titles[] = {
+    private final String titles[] = {
             "Buttons",
             "Badges",
             "Data Binding",
@@ -46,11 +50,25 @@ public class Widgets extends NavStack {
             "Menus",
             "Other"
     };
-    private int counts[] = {
-       2, 1, 5, 6, 7, 2, 2, 11, 3, 1, 3
+    private final int counts[] = {
+       2, 
+       1, 
+       5, 
+       6, 
+       7, 
+       2, 
+       2, 
+       11, 
+       3, 
+       1, 
+       3
     };
+
+
+
     private List<Function<Panel>> functions = new ArrayList<Function<Panel>>();
     private Map<String, Function<Panel>> map = new HashMap<String,Function<Panel>>();
+
     private static Record createRecord(int id, String title, int detailCount) {
         Record record = new Record();
         record.setAttribute("_id", id);
@@ -75,6 +93,8 @@ public class Widgets extends NavStack {
             }
         }
     }
+
+    //==================================================================================================================
 
     public Widgets() {
         super("Widgets", IconResources.INSTANCE.files());

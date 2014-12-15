@@ -18,23 +18,58 @@ import com.smartgwt.mobile.client.widgets.tableview.TableView;
 import com.smartgwt.mobile.client.widgets.tableview.events.RecordNavigationClickEvent;
 import com.smartgwt.mobile.client.widgets.tableview.events.RecordNavigationClickHandler;
 
+
 public class Buttons extends ScrollablePanel {
 
-    private String titles[] = {
-            "Rounded Buttons",
-            "Action Buttons"
-    };
+    private final String titles[] = { "Rounded Buttons", "Action Buttons" };
+
     private List<Function<Panel>> functions = new ArrayList<Function<Panel>>();
     private Map<String, Function<Panel>> map = new HashMap<String,Function<Panel>>();
-    private static Record createRecord(String id, String title) {
-        Record record = new Record();
-        record.setAttribute("_id", id);
-        record.setAttribute("title", title);
-        return record;
+
+
+    public Buttons(String title, final NavStack nav) {
+        super(title);
+
+        final TableView tableView = new TableView();
+
+
+        functions.add(new Function<Panel>(){public Panel execute(){return new RoundedButtons();}});
+        functions.add(new Function<Panel>(){public Panel execute(){return new ActionButtons();}});
+
+        RecordList recordList = new RecordList();
+        for(int i = 0; i < titles.length; ++i) {
+            recordList.add(createRecord(new Integer(i).toString(),titles[i]));
+            map.put(titles[i], functions.get(i));
+        }
+
+        tableView.setTitleField("title");
+        tableView.setShowNavigation(true);
+        tableView.setSelectionType(SelectionStyle.SINGLE);
+        tableView.setNavigationMode(NavigationMode.WHOLE_RECORD);
+        tableView.setParentNavStack(nav);
+        tableView.setTableMode(TableMode.GROUPED);
+        tableView.setData(recordList);
+
+
+        tableView.addRecordNavigationClickHandler(new RecordNavigationClickHandler() {
+            @Override
+            public void onRecordNavigationClick(RecordNavigationClickEvent event) {
+                final Record selectedRecord = event.getRecord();
+                String title = selectedRecord.getAttribute("title");
+                create(title, nav);
+            }
+        });
+
+        addMember(tableView);
     }
 
+
+    //  C L A S S   M E T H O D S  =====================================================================================
+
     private void create(String title, NavStack nav) {
+
         final Function<Panel> function = map.get(title);
+        
         if (function != null) {
             final Panel panel = function.execute();
             if (panel != null) {
@@ -43,31 +78,14 @@ public class Buttons extends ScrollablePanel {
         }
     }
 
-    public Buttons(String title, final NavStack nav) {
-        super(title);
-        final TableView buttonsTable = new TableView();
-        RecordList recordList = new RecordList();
-        functions.add(new Function<Panel>(){public Panel execute(){return new RoundedButtons();}});
-        functions.add(new Function<Panel>(){public Panel execute(){return new ActionButtons();}});
-        for(int i = 0; i < titles.length; ++i) {
-            recordList.add(createRecord(new Integer(i).toString(),titles[i]));
-            map.put(titles[i], functions.get(i));
-        }
-        buttonsTable.setTitleField("title");
-        buttonsTable.setShowNavigation(true);
-        buttonsTable.setSelectionType(SelectionStyle.SINGLE);
-        buttonsTable.setNavigationMode(NavigationMode.WHOLE_RECORD);
-        buttonsTable.setParentNavStack(nav);
-        buttonsTable.setTableMode(TableMode.GROUPED);
-        buttonsTable.setData(recordList);
-        buttonsTable.addRecordNavigationClickHandler(new RecordNavigationClickHandler() {
-            @Override
-            public void onRecordNavigationClick(RecordNavigationClickEvent event) {
-                final Record selectedRecord = event.getRecord();
-                String title = selectedRecord.getAttribute("title");
-                create(title, nav);
-            }
-        });
-        addMember(buttonsTable);
+
+    // S T A T I C   M E T H O D S   ===================================================================================
+
+    private static Record createRecord(String id, String title) {
+        Record record = new Record();
+        record.setAttribute("_id", id);
+        record.setAttribute("title", title);
+        return record;
     }
+
 }

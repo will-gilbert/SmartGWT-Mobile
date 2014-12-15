@@ -9,6 +9,30 @@ public interface AppResources extends ClientBundle {
 
     public static final AppResources INSTANCE = GWT.create(AppResources.class);
 
+
+    // NB: These images MUST be in the same directory as this file; The same
+    //     directory in the Classpath was not sufficient. I can't explain why this
+    //     had to be but I wasted the better part of an afternoon trying to put
+    //      these four file in the 'src/main/resources' directory tree.
+
+    @Source("cube_green.png")
+    @ImageOptions(preventInlining = true)
+    public ImageResource cube_green();
+
+    @Source("files_prerendered_iOS.png")
+    @ImageOptions(preventInlining = true)
+    public ImageResource files_prerendered_iOS();
+
+    @Source("home_prerendered_iOS.png")
+    @ImageOptions(preventInlining = true)
+    public ImageResource home_prerendered_iOS();
+
+    @Source("info_prerendered_iOS.png")
+    @ImageOptions(preventInlining = true)
+    public ImageResource info_prerendered_iOS();
+
+    //====================================================================
+
     @Source("com/smartgwt/mobile/client/widgets/icons/action.png")
     @ImageOptions(preventInlining = true)
     public ImageResource action();
@@ -73,10 +97,6 @@ public interface AppResources extends ClientBundle {
     @ImageOptions(preventInlining = true)
     public ImageResource contacts();
 
-    @Source("cube_green.png")
-    @ImageOptions(preventInlining = true)
-    public ImageResource cube_green();
-
     @Source("com/smartgwt/mobile/client/widgets/icons/download.png")
     @ImageOptions(preventInlining = true)
     public ImageResource download();
@@ -85,21 +105,9 @@ public interface AppResources extends ClientBundle {
     @ImageOptions(preventInlining = true)
     public ImageResource downloads();
 
-    @Source("files_prerendered_iOS.png")
-    @ImageOptions(preventInlining = true)
-    public ImageResource files_prerendered_iOS();
-
     @Source("com/smartgwt/mobile/client/widgets/icons/flag.png")
     @ImageOptions(preventInlining = true)
     public ImageResource flag();
-
-    @Source("home_prerendered_iOS.png")
-    @ImageOptions(preventInlining = true)
-    public ImageResource home_prerendered_iOS();
-
-    @Source("info_prerendered_iOS.png")
-    @ImageOptions(preventInlining = true)
-    public ImageResource info_prerendered_iOS();
 
     @Source("com/smartgwt/mobile/client/widgets/icons/location_pin.png")
     @ImageOptions(preventInlining = true)

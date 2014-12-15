@@ -1,8 +1,12 @@
 package com.smartgwt.mobile.showcase.client.overview;
 
+
+// GWT - Core & i18n
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.TimeZone;
+
+// SmartGWT Mobile
 import com.smartgwt.mobile.client.Version;
 import com.smartgwt.mobile.client.widgets.Panel;
 import com.smartgwt.mobile.client.widgets.ScrollablePanel;

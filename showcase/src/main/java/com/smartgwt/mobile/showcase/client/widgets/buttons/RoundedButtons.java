@@ -63,21 +63,26 @@ public class RoundedButtons extends ScrollablePanel {
         vlayout.addMember(new HRWidget());
         vlayout.addMember(new Header2("'Important' style Rounded Rectangular buttons"));
 
-        // Create another row of buttons with a different 'Buttontype'
+        // Create another row of similar buttons with a different 'Buttontype' of IMPORTANT
         HLayout hlayout2 = new HLayout();
         hlayout2.setLayoutMargin(10);
+
         Button button21 = new Button("Button", Button.ButtonType.ROUNDED_RECTANGLE_IMPORTANT);
         hlayout2.addMember(button21);
+
         Button button22 = new Button("Button with Icon", Button.ButtonType.ROUNDED_RECTANGLE_IMPORTANT);
         button22.setIcon(AppResources.INSTANCE.cube_green(), false);
         hlayout2.addMember(button22);
+
         Button button23 = new Button("Disabled", Button.ButtonType.ROUNDED_RECTANGLE_IMPORTANT);
         button23.setDisabled(true);
         hlayout2.addMember(button23);
+
         Button button24 = new Button("Disabled with Icon", Button.ButtonType.ROUNDED_RECTANGLE_IMPORTANT);
         button24.setDisabled(true);
         button24.setIcon(AppResources.INSTANCE.contacts(), false, IconAlign.RIGHT);
         hlayout2.addMember(button24);
+
         vlayout.addMember(hlayout2);
         addMember(vlayout);
     }

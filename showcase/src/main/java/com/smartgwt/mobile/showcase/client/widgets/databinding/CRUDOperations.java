@@ -19,12 +19,12 @@ import com.smartgwt.mobile.showcase.client.resources.AppResources;
 
 public class CRUDOperations extends ScrollablePanel {
 
-    private static final DataSourceField CODE_FIELD = new DataSourceField("countryCode", "Country Code"),
-            NAME_FIELD = new DataSourceField("countryName", "Country Name"),
-            POPULATION_FIELD = new DataSourceField("population", "Population"),
-            AREA_FIELD = new DataSourceField("area", "Total Area"),
-            INDEPENDENCE_FIELD = new DataSourceField("independence"),
-            GOVERNMENT_FIELD = new DataSourceField("government", "Government");
+    private static final DataSourceField CODE_FIELD = new DataSourceField("countryCode", "Country Code");
+    private static final DataSourceField NAME_FIELD = new DataSourceField("countryName", "Country Name");
+    private static final DataSourceField POPULATION_FIELD = new DataSourceField("population", "Population");
+    private static final DataSourceField AREA_FIELD = new DataSourceField("area", "Total Area");
+    private static final DataSourceField INDEPENDENCE_FIELD = new DataSourceField("independence");
+    private static final DataSourceField GOVERNMENT_FIELD = new DataSourceField("government", "Government");
 
     static {
         CODE_FIELD.setPrimaryKey(true);
@@ -33,39 +33,46 @@ public class CRUDOperations extends ScrollablePanel {
         INDEPENDENCE_FIELD.setType("date");
     }
 
+    final DataSource countryDS = new DataSource("CRUD_countries");
+    final TableView tableView = new TableView();
+
 	public CRUDOperations(String title) {
 		super(title);
 		setWidth("100%");
+
+        // Build vertical stack layout -- typical for mobile panes
 		VLayout layout = new VLayout();
         layout.setWidth("100%");
         layout.setAlign(Alignment.CENTER);
 
-        final DataSource countryDS = new DataSource("CRUD_countries");
-        final TableView tableView = new TableView();
+        // Add a series of button to the right side of the navigation bar
+        setActions(
+
+            new Action(AppResources.INSTANCE.add()) {
+                @Override
+                public void execute(ActionContext context) {
+                    tableView.addData(new Record());
+                    context.getControl().disable();
+                }
+            }, 
+
+            new Action(AppResources.INSTANCE.refresh()) {
+                @Override
+                public void execute(ActionContext context) {
+                    tableView.updateData(new Record());
+                    context.getControl().disable();
+                }
+            }, 
+            new Action(AppResources.INSTANCE.stop()) {
+                @Override
+                public void execute(ActionContext context) {
+                    tableView.removeData(new Record());
+                    context.getControl().disable();
+                }
+            }
+        );
+
         tableView.setAlign(Alignment.CENTER);
-
-        setActions(new Action(AppResources.INSTANCE.add()) {
-            @Override
-            public void execute(ActionContext context) {
-                tableView.addData(new Record());
-
-                context.getControl().disable();
-            }
-        }, new Action(AppResources.INSTANCE.refresh()) {
-            @Override
-            public void execute(ActionContext context) {
-                tableView.updateData(new Record());
-
-                context.getControl().disable();
-            }
-        }, new Action(AppResources.INSTANCE.stop()) {
-            @Override
-            public void execute(ActionContext context) {
-                tableView.removeData(new Record());
-
-                context.getControl().disable();
-            }
-        });
 
         tableView.setTitleField(NAME_FIELD.getName());
         tableView.setShowNavigation(false);
@@ -74,6 +81,7 @@ public class CRUDOperations extends ScrollablePanel {
         tableView.setDataFetchMode(FetchMode.BASIC);
 
         countryDS.setFields(CODE_FIELD, NAME_FIELD, POPULATION_FIELD, AREA_FIELD, INDEPENDENCE_FIELD, GOVERNMENT_FIELD);
+
         countryDS.setFetchDataURL("data/dataIntegration/json/country_fetch.js");
         countryDS.setAddDataURL("data/dataIntegration/json/country_add.js");
         countryDS.setUpdateDataURL("data/dataIntegration/json/country_update.js");

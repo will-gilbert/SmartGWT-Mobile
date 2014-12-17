@@ -17,11 +17,14 @@ public class ProgressIndicators extends ScrollablePanel {
 
     public ProgressIndicators(String title) {
         super(title);
+
         this.setWidth("100%");
+
         final Panel output = new Panel();
         output.setStyleName("sc-rounded-panel");
         output.getElement().getStyle().setProperty("textAlign", "center");
         output.getElement().getStyle().setOpacity(0.0);
+
         HLayout panelWrapper = new HLayout();
         panelWrapper.setWidth("auto");
         panelWrapper.setHeight("auto");
@@ -30,10 +33,12 @@ public class ProgressIndicators extends ScrollablePanel {
         panelWrapper.setMembersMargin(20);
         panelWrapper.addMember(output);
         this.addMember(new Header2("Progressbar in a view"));
+
         HLayout hlayout = new HLayout();
         hlayout.setWidth("100%");
         hlayout.setAlign(Alignment.CENTER);
         progressbar = new Progressbar();
+        
         progressbar.addPercentChangedHandler(new PercentChangedHandler() {
             @Override
             public void onPercentChanged(PercentChangedEvent event) {
@@ -41,6 +46,7 @@ public class ProgressIndicators extends ScrollablePanel {
                 AnimationUtil.fadeTransition(output, true);
             }
         });
+
         hlayout.addMember(progressbar);
         addMember(hlayout);
         addMember(new HRWidget());

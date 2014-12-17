@@ -19,6 +19,7 @@ import com.smartgwt.mobile.showcase.client.resources.AppResources;
 
 public class CRUDOperations extends ScrollablePanel {
 
+    // Define SmartGWT Datasource elements
     private static final DataSourceField CODE_FIELD = new DataSourceField("countryCode", "Country Code");
     private static final DataSourceField NAME_FIELD = new DataSourceField("countryName", "Country Name");
     private static final DataSourceField POPULATION_FIELD = new DataSourceField("population", "Population");
@@ -45,7 +46,7 @@ public class CRUDOperations extends ScrollablePanel {
         layout.setWidth("100%");
         layout.setAlign(Alignment.CENTER);
 
-        // Add a series of button to the right side of the navigation bar
+        // Add a series of icon buttons to the right side of the navigation bar
         setActions(
 
             new Action(AppResources.INSTANCE.add()) {
@@ -80,6 +81,7 @@ public class CRUDOperations extends ScrollablePanel {
         tableView.setTableMode(TableMode.GROUPED);
         tableView.setDataFetchMode(FetchMode.BASIC);
 
+        // Define SmartGWT DataSource fields and ReST URLs
         countryDS.setFields(CODE_FIELD, NAME_FIELD, POPULATION_FIELD, AREA_FIELD, INDEPENDENCE_FIELD, GOVERNMENT_FIELD);
 
         countryDS.setFetchDataURL("data/dataIntegration/json/country_fetch.js");
@@ -87,9 +89,11 @@ public class CRUDOperations extends ScrollablePanel {
         countryDS.setUpdateDataURL("data/dataIntegration/json/country_update.js");
         countryDS.setRemoveDataURL("data/dataIntegration/json/country_remove.js");
 
+        // Bind the DataSource to the TableView
         tableView.setDataSource(countryDS);
         tableView.fetchData();
 
+        // Add the TableView to the layout then to the panel
         layout.addMember(tableView);
         addMember(layout);
     }

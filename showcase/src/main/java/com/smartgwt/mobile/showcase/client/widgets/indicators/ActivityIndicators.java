@@ -11,13 +11,17 @@ public class ActivityIndicators extends ScrollablePanel {
 
     public ActivityIndicators(String title) {
         super(title);
+
         this.setWidth("100%");
+
         HLayout hlayout = new HLayout();
         hlayout.setWidth("100%");
         hlayout.setAlign(Alignment.CENTER);
         hlayout.addMember(new ActivityIndicator());
         addMember(hlayout);
+        
         addMember(new Header2("Activity Indicator in Toolbar"));
+        
         ToolStrip toolbar = new ToolStrip();
         toolbar.addMember(new ActivityIndicator());
         addMember(toolbar);

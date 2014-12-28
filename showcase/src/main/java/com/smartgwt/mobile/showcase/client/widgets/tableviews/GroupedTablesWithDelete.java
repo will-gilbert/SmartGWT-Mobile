@@ -1,4 +1,4 @@
-package com.smartgwt.mobile.showcase.client.widgets.tableviews;
+hpackage com.smartgwt.mobile.showcase.client.widgets.tableviews;
 
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.smartgwt.mobile.client.data.Record;

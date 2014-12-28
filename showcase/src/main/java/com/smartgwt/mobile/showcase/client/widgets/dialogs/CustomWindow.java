@@ -19,12 +19,17 @@ public class CustomWindow extends ScrollablePanel {
 
         // NOTE: See `index.html' for the accompanying CSS.
         loadingWindow = new Window();
+
         loadingWindow.setIsModal(true);
         loadingWindow.setAnimateShowEffect(AnimationEffect.FADE);
         loadingWindow.setAnimateHideEffect(AnimationEffect.FADE);
         loadingWindow.setBackgroundStyle("app-customLoadingWindowBackground");
+
         loadingWindow.addChild(new ActivityIndicator());
         loadingWindow.addChild(new Label("Loading...") {{ setStyleName("app-customLoadingLabel"); }});
+
+
+
         loadingWindow.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -33,12 +38,14 @@ public class CustomWindow extends ScrollablePanel {
         });
 
         showWindowButton = new Button("Show Window");
+
         showWindowButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 loadingWindow.show();
             }
         });
+        
         addMember(showWindowButton);
     }
 }

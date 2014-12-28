@@ -11,30 +11,40 @@ public class SimpleTables extends ScrollablePanel {
 
     public SimpleTables(String title) {
         super(title);
+
         this.setWidth("100%");
+
         TableView tableView = new TableView();
-        @SuppressWarnings({"serial"})
-        RecordList recordList = new RecordList(new Record[]{
-                    new Record() {
-                        {
-                            setAttribute("_id", "1");
-                            setAttribute("title", "People");
-                            setAttribute("icon", ImageResources.INSTANCE.ipod());
-                        }
-                    },
-                    new Record() {
-                        {
-                            setAttribute("_id", "2");
-                            setAttribute("title", "Places");
-                            setAttribute("icon", ImageResources.INSTANCE.phone());
-                        }
-                    }
-                });
         tableView.setTitleField("title");
         tableView.setShowNavigation(false);
         tableView.setShowIcons(true);
         tableView.setTableMode(TableMode.PLAIN);
+
+        @SuppressWarnings({"serial"})
+        RecordList recordList = new RecordList(
+            new Record[] {
+
+                new Record() {
+                    {
+                        setAttribute("_id", "1");
+                        setAttribute("title", "People");
+                        setAttribute("icon", ImageResources.INSTANCE.ipod());
+                    }
+                },
+
+                new Record() {
+                    {
+                        setAttribute("_id", "2");
+                        setAttribute("title", "Places");
+                        setAttribute("icon", ImageResources.INSTANCE.phone());
+                    }
+                }
+
+            });
+
+
         tableView.setData(recordList);
+        
         addMember(tableView);
     }
 }

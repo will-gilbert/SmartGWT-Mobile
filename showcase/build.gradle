@@ -21,7 +21,7 @@ gradle clean war -P tomcat
 gradle clean
   Delete working files in '${buildDir.name}' and '${gwtBuildDir}' 
 
-============================================================================================ */
+==================================================================================
 """}
 
 // Used to modify properties file resources

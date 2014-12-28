@@ -1,7 +1,7 @@
 task usage << { print """
 ==================================================================================
 
-gradle javaCompile
+gradle compileJava
   Compile Java source code displaying warnings and error to the terminal console. Does not
   cross compile Java to JavaScript.
 
@@ -21,8 +21,24 @@ gradle clean war -P tomcat
 gradle clean
   Delete working files in '${buildDir.name}' and '${gwtBuildDir}' 
 
+
 ==================================================================================
 """}
+
+/* ===================================================================================================
+
+NB: The bootclasspath and the default browser are set locally by creating a properties 
+    file in ~/.gradle/gradle.properties.  For example, I develop on Mac OSX with Java 7 
+    and my gradle.properties file looks something like this:
+    
+    defaultBrowser     safari
+    bootclasspath_16   /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar
+    bootclasspath_17   /Library/Java/JavaVirtualMachines/jdk1.7.0_09.jdk/Contents/Home/jre/lib/rt.jar
+
+Not defining the 'bootclasspath' only gives a warning at this time.  Use a search engine to
+    find out more about this new compiler flag for Java 7.
+
+ =================================================================================================== */
 
 // Used to modify properties file resources
 import org.apache.tools.ant.filters.ReplaceTokens
@@ -81,8 +97,11 @@ ext.smartgwtMobile  = '1.0d_2014-12-06'
 // Java SDK
 sourceCompatibility = 1.7
 targetCompatibility = sourceCompatibility
-compileJava.options.compilerArgs = []  // To invoke Xlint use: ['-Xlint:unchecked', -Xlint:deprecation]
-
+compileJava.options.compilerArgs = [
+    "-Xbootclasspath:${bootclasspath_17}", 
+//    '-Xlint:unchecked', 
+    '-Xlint:deprecation',
+] 
 
 // R E P O S I T O R I E S   &   D E P E N D E N C I E S --------------------------------------
 

@@ -32,7 +32,7 @@ public final class Version {
      * @return the library version
      */
     public static String getVersion() {
-        return "1.0";
+        return "1.0d-SNAPSHOT";
     }
 
     /**
@@ -53,6 +53,16 @@ public final class Version {
      * @return the library build time
      */
     public static Date getBuildDate() {
-        return BUILD_DATE_FORMAT.parse("2014-12-06 00:00:00 -0000");
+
+        Date buildDate;
+
+        try {
+            buildDate = BUILD_DATE_FORMAT.parse("2014-12-29 13:10:24 -0500");
+        } catch (java.lang.IllegalArgumentException exception) {
+            buildDate = new Date(0);
+        }
+
+        return buildDate;
+
     }
 }

@@ -22,6 +22,7 @@ gradle install
 
 // Used to modify sources and resources
 import org.apache.tools.ant.filters.ReplaceTokens
+import java.text.SimpleDateFormat;
 
 apply plugin: 'java'
 apply plugin: 'maven'
@@ -36,7 +37,7 @@ version = '1.0d-SNAPSHOT'
 
 ext.localityProperties = [
     'project.version'  : project.version,
-    'build.date'       : "2015-01-01 00:00:00 -0000"
+    'build.date'       : new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z").format(new Date())
 ]
 
 // Compilers Configuration -------------------------------------------------------------------

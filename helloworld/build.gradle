@@ -45,12 +45,16 @@ ext.gwtBuildDir = 'build-gwt'                     // GWT build directory and dev
 
 // GWT SDK
 ext.gwtSDK = '2.7.0'
-ext.smartgwtMobile  = '1.0d_2014-12-06'
+ext.smartgwtMobile  = '1.0d-SNAPSHOT'
 
 // Java SDK
 sourceCompatibility = 1.7
 targetCompatibility = sourceCompatibility
-compileJava.options.compilerArgs = []  // To invoke Xlint use: ['-Xlint:unchecked', -Xlint:deprecation]
+compileJava.options.compilerArgs = [
+    "-Xbootclasspath:${bootclasspath_17}", 
+//    '-Xlint:unchecked', 
+//    '-Xlint:deprecation',
+] 
 
 
 // R e p o s i t o r i e s   &   D e p e n d e n c i e s --------------------------------------

@@ -57,8 +57,8 @@ ext.applicationName = "Mobile Showcase"
 group = 'client'
 version = '1.0'
 
-// Optional: 'target' is more familiar to Maven users
-buildDir = 'target'
+// Optional: Could define as 'target' to be more familiar to Maven users
+buildDir = 'build'
 
 // WebApp Configuration -----------------------------------------------------------------------
 
@@ -66,7 +66,7 @@ buildDir = 'target'
 ext.gwtModule = 'Showcase'                        // Path to module descriptor
 ext.gwtModuleRenamedTo = 'app'                    // 'rename-to' within module descriptor
 ext.gwtRunTarget = 'index.html'                   // HTML launching file
-ext.gwtBuildDir = 'target-gwt'                     // GWT build directory
+ext.gwtBuildDir = "${buildDir}-gwt"               // GWT build directory
 
 // Dont't add Java compiled client side classes to the WAR
 ext.excludedClasses = [

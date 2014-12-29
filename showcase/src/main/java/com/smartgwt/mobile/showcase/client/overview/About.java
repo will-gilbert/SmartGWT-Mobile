@@ -24,16 +24,16 @@ public class About extends NavStack {
         final ScrollablePanel about = new ScrollablePanel("About", IconResources.INSTANCE.info());
 
         final Panel roundedPanel = new Panel();
-
-        roundedPanel.setContents("This app was built with:" +
-                "<ul><li>SmartGWT.mobile 1.0d (beta) built on " + DTF.format(Version.getBuildDate(), TimeZone.createTimeZone(0)) + "</li>" +
-                "<li>GWT version " + GWT.getVersion() + "</li></ul>");
-
         roundedPanel.setStyleName("sc-rounded-panel");
         roundedPanel.setMargin(10);
-        
+
+        roundedPanel.setContents("This app was built with:" +
+                "<ul><li>SmartGWT.mobile v" + Version.getVersion() + 
+                " built on " + DTF.format(Version.getBuildDate(), TimeZone.createTimeZone(0)) + "</li>" +
+                "<li>GWT version " + GWT.getVersion() + "</li></ul>");
+
         about.addMember(roundedPanel);
-        
+       
         setSinglePanel(about);
     }
 }

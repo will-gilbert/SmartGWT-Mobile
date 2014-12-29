@@ -72,7 +72,11 @@ dependencies {
 
 // Include both source and classes in the final JAR
 jar {
-     from sourceSets.main.allSource
+     from (sourceSets.main.allSource) {
+       exclude '**/*.properties'
+    }
+
+     excludes
  }
 
 // Augment the 'processResources' task from the 'java' plugin.  Use filtering to replace

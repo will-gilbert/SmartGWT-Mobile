@@ -20,11 +20,14 @@ package com.smartgwt.mobile.client;
 import java.util.Date;
 
 import com.google.gwt.i18n.shared.DateTimeFormat;
+import com.google.gwt.core.client.GWT;
 
 /**
  * Class that returns meta information like version number, major version, minor version and build date.
  */
 public final class Version {
+
+    private static VersionConstants constants = GWT.create(VersionConstants.class); 
 
     private static final DateTimeFormat BUILD_DATE_FORMAT = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss Z");
 
@@ -32,7 +35,7 @@ public final class Version {
      * @return the library version
      */
     public static String getVersion() {
-        return "1.0d-SNAPSHOT";
+        return constants.projectVersion();
     }
 
     /**
@@ -57,7 +60,7 @@ public final class Version {
         Date buildDate;
 
         try {
-            buildDate = BUILD_DATE_FORMAT.parse("2014-12-29 13:10:24 -0500");
+            buildDate = BUILD_DATE_FORMAT.parse(constants.buildDate());
         } catch (java.lang.IllegalArgumentException exception) {
             buildDate = new Date(0);
         }

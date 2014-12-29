@@ -1,0 +1,83 @@
+
+task usage << { print """
+==================================================================================
+
+gradle compileJava
+  Compile Java source code displaying warnings and error to the terminal console.
+
+gradle jar
+  Build the JAR; Contains both the class and source files
+
+gradle clean
+  Delete working files in 'project.buildDir'; invokes '' to remove the directory 
+  used by the GWT DevMode environment
+
+gradle install
+  Build the JAR; Install it in the local Maven repository; It will then get
+  accessed via Gradle. If using the suffix '-SNAPSHOT', the resposity will be
+  check on every rebuild of project using this dependency.
+
+============================================================================================
+"""}
+
+// Used to modify sources and resources
+import org.apache.tools.ant.filters.ReplaceTokens
+
+apply plugin: 'java'
+apply plugin: 'maven'
+
+// C O N F I G U R A T I O N ------------------------------------------------------------------
+
+// Project Configuration ----------------------------------------------------------------------
+group = 'com.smartgwt'
+version = '1.0d-SNAPSHOT'
+
+// Properties Configuration -------------------------------------------------------------------
+
+ext.localityProperties = [
+    'project.version'  : project.version,
+    'build.date'       : "2015-01-01 00:00:00 -0000"
+]
+
+// Compilers Configuration -------------------------------------------------------------------
+
+// GWT SDK
+ext.gwtSDK = '2.7.0'
+
+// Java SDK
+sourceCompatibility = 1.7
+targetCompatibility = sourceCompatibility
+compileJava.options.compilerArgs = [
+    "-Xbootclasspath:${bootclasspath_17}", 
+//    '-Xlint:unchecked', 
+//    '-Xlint:deprecation',
+] 
+
+// R e p o s i t o r i e s   &   D e p e n d e n c i e s --------------------------------------
+
+repositories {
+    mavenLocal()                                       // User's local
+    mavenCentral()                                     // Maven Central repository
+}
+
+dependencies {
+
+    compile ([ 
+        "com.google.gwt:gwt-user:$gwtSDK",
+        "com.google.gwt:gwt-dev:$gwtSDK"  
+    ])
+    
+}
+
+// Include both source and classes in the final JAR
+jar {
+     from sourceSets.main.allSource
+ }
+
+// Augment the 'processResources' task from the 'java' plugin.  Use filtering to replace
+//   '@...@' tags with properties in order to customize the target environment
+
+processResources {
+    filter(ReplaceTokens, tokens: localityProperties)
+}
+

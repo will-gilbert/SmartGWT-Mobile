@@ -1,0 +1,11 @@
+@external .sc-*;
+
+.disabled{}
+.selected{}
+
+.sc-switchitem{}
+.switchedOn{}
+.switchedOff{}
+.switchedOnText{}
+.switchedOffText{}
+.switchItemKnob{}

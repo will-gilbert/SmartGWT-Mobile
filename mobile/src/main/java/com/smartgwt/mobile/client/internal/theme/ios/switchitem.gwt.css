@@ -1,0 +1,309 @@
+/*
+ * SmartGWT Mobile
+ * Copyright 2008 and beyond, Isomorphic Software, Inc.
+ *
+ * SmartGWT Mobile is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License version 3
+ * as published by the Free Software Foundation.  SmartGWT Mobile is also
+ * available under typical commercial license terms - see
+ * http://smartclient.com/license
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ */
+
+@def switchTransitionDurationMillis 200ms;
+
+@url switchItemLeftOverlayImageUrl switchItemLeftOverlayImageData;
+@url switchItemMiddleOverlayImageUrl switchItemMiddleOverlayImageData;
+@url switchItemRightOverlayImageUrl switchItemRightOverlayImageData;
+@url retinaSwitchItemLeftOverlayImageUrl retinaSwitchItemLeftOverlayImageData;
+@url retinaSwitchItemMiddleOverlayImageUrl retinaSwitchItemMiddleOverlayImageData;
+@url retinaSwitchItemRightOverlayImageUrl retinaSwitchItemRightOverlayImageData;
+
+/*@if user.agent gecko1_8 {
+    
+} @else {
+    
+}*/
+
+@if user.agent gecko1_8 {
+    .sc-switchitem {
+        -moz-user-select: none;
+    }
+} @else {
+    .sc-switchitem {
+        -webkit-user-select: none;
+    }
+}
+.sc-switchitem {
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 1px;
+    height: 27px;
+    overflow: hidden;
+    user-select: none;
+}
+@if (com.smartgwt.mobile.client.widgets.form.fields.SwitchItemImplRAF.willWork()) {
+    .sc-switchitem {
+        /* WebKit browsers will not clip the text children to the curved border unless there *is* a border,
+           so we use a 1px-wide, transparent border. */
+        border: 1px solid transparent;
+        min-width: 77px;
+        max-width: 130px;
+        border-radius: 14px;
+    }
+} @else {
+    .sc-switchitem {
+        width: 80px;
+    }
+}
+@if iOS.minVersion NA v1 v5 v6 {
+} @else {
+    .sc-switchitem {
+        vertical-align: middle;
+    }
+}
+
+.sc-switchitem:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    z-index: 500;
+}
+@if (com.smartgwt.mobile.client.widgets.form.fields.SwitchItemImplRAF.willWork()) {
+    @if user.agent gecko1_8 {
+        .sc-switchitem:before {
+            -moz-box-sizing: border-box;
+            -moz-box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.25);
+        }
+    } @else {
+        .sc-switchitem:before {
+            -webkit-box-sizing: border-box;
+            -webkit-box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.25);
+        }
+    }
+    .sc-switchitem:before {
+        box-sizing: border-box;
+        border-top: 1px solid rgba(0, 0, 0, 0.34);
+        border-right: 1px solid rgba(0, 0, 0, 0.36);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.23);
+        border-left: 1px solid rgba(0, 0, 0, 0.36);
+        border-radius: 14px;
+        background: transparent;
+        box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.25);
+    }
+} @else {
+    .sc-switchitem:before {
+        background: switchItemLeftOverlayImageUrl, switchItemRightOverlayImageUrl, switchItemMiddleOverlayImageUrl;
+        background-repeat: no-repeat, no-repeat, no-repeat;
+        background-position: left, right, value('switchItemLeftOverlayImage.getWidth', 'px');
+        background-size: auto, auto, 52px value('switchItemMiddleOverlayImage.getHeight', 'px');
+    }
+    @if (com.smartgwt.mobile.client.widgets.Canvas._isHDPIDisplay()) {
+        .sc-switchitem:before {
+            background: retinaSwitchItemLeftOverlayImageUrl, retinaSwitchItemRightOverlayImageUrl, retinaSwitchItemMiddleOverlayImageUrl;
+            background-repeat: no-repeat, no-repeat, no-repeat;
+            background-position: left, right, value('switchItemLeftOverlayImage.getWidth', 'px');
+            background-size:
+                value('switchItemLeftOverlayImage.getWidth', 'px') value('switchItemLeftOverlayImage.getHeight', 'px'),
+                value('switchItemRightOverlayImage.getWidth', 'px') value('switchItemRightOverlayImage.getHeight', 'px'),
+                52px value('switchItemMiddleOverlayImage.getHeight', 'px');
+        }
+    }
+}
+
+@if user.agent gecko1_8 {
+    .sc-switchitem > .switchedOnText,
+    .sc-switchitem > .switchedOffText {
+        -moz-box-sizing: border-box;
+    }
+} @else {
+    .sc-switchitem > .switchedOnText,
+    .sc-switchitem > .switchedOffText {
+        -webkit-box-sizing: border-box;
+    }
+}
+.sc-switchitem > .switchedOnText,
+.sc-switchitem > .switchedOffText {
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    border-radius: 14px;
+    color: rgba(0, 0, 0, 0.43);
+    font: bold 16px/28px Helvetica, sans-serif;
+    text-transform: uppercase;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    z-index: 0;
+}
+@if user.agent safari {
+    .sc-switchitem > .switchedOnText,
+    .sc-switchitem > .switchedOffText {
+        line-height: 30px;
+    }
+}
+
+@if user.agent gecko1_8 {
+    .sc-switchitem > .switchedOnText {
+        background: literal("-moz-linear-gradient(top,#218fec 0%,#218fec 60%,#6eafe6 100%)");
+        -moz-box-shadow: inset 0 9px 0 4px #007fea;
+    }
+} @else {
+    .sc-switchitem > .switchedOnText {
+        background: literal("-webkit-gradient(linear,left top,left bottom,from(#218fec),color-stop(.6,#218fec),to(#6eafe6))");
+        -webkit-box-shadow: inset 0 9px 0 4px #007fea;
+    }
+}
+@if user.agent android {
+    .sc-switchitem > .switchedOnText {
+        -webkit-box-shadow: inset 0 9px 1px 4px #007fea;
+    }
+}
+.sc-switchitem > .switchedOnText {
+    padding-right: 31px;
+    padding-left: 11px;
+    background: literal("linear-gradient(to bottom,#218fec 0%,#218fec 60%,#6eafe6 100%)");
+    color: white;
+    text-shadow: 0 -1px 0 #0069a3;
+    box-shadow: inset 0 9px 0 4px #007fea;
+}
+@if user.agent android {
+    .sc-switchitem > .switchedOnText {
+        text-shadow: 0 -1px 1px #0069a3;
+    }
+}
+
+@if user.agent gecko1_8 {
+    .sc-switchitem > .switchedOffText {
+        -moz-box-shadow: inset 0 9px 0 4px rgba(0, 0, 0, 0.04);
+    }
+} @else {
+    .sc-switchitem > .switchedOffText {
+        -webkit-box-shadow: inset 0 9px 0 4px rgba(0, 0, 0, 0.04);
+    }
+}
+.sc-switchitem > .switchedOffText {
+    top: -100%;
+    padding-left: 31px;
+    padding-right: 11px;
+    background-color: #f7f7f7;
+    box-shadow: inset 0 9px 0 4px rgba(0, 0, 0, 0.04);
+}
+
+@if user.agent gecko1_8 {
+    .switchItemKnob {
+        -moz-box-sizing: border-box;
+        background: literal("-moz-linear-gradient(top,#d3d3d3 15%,#fefefe 100%)");
+        -moz-box-shadow: inset 0 2px 2px white, inset 0 -1px 2px white;
+    }
+} @else {
+    .switchItemKnob {
+        -webkit-box-sizing: border-box;
+        background: literal("-webkit-gradient(linear,left top,left bottom,color-stop(.15,#d3d3d3),to(#fefefe))");
+        -webkit-box-shadow: inset 0 2px 2px white, inset 0 -1px 2px white;
+    }
+}
+.switchItemKnob {
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    border: 1px solid #999;
+    border-radius: 14px;
+    width: 27px;
+    height: 27px;
+    background: literal("linear-gradient(to bottom,#d3d3d3 15%,#fefefe 100%)");
+    box-shadow: inset 0 2px 2px white, inset 0 -1px 2px white;
+    z-index: 750;
+}
+
+@if (com.smartgwt.mobile.client.widgets.form.fields.SwitchItemImplRAF.willWork()) {
+} @else {
+    @if user.agent gecko1_8 {
+        .sc-switchitem > .switchedOnText,
+        .sc-switchitem > .switchedOffText,
+        .switchItemKnob {
+            -moz-transition: -moz-transform switchTransitionDurationMillis linear;
+        }
+        .sc-switchitem.switchedOn > .switchedOnText {
+            -moz-transform: translate3d(0, 0, 0);
+        }
+        .sc-switchitem.switchedOn > .switchedOffText,
+        .sc-switchitem.switchedOn > .switchItemKnob {
+            -moz-transform: translate3d(53px, 0, 0);
+        }
+        .sc-switchitem.switchedOff > .switchedOnText {
+            -moz-transform: translate3d(-53px, 0, 0);
+        }
+        .sc-switchitem.switchedOff > .switchedOffText,
+        .sc-switchitem.switchedOff > .switchItemKnob {
+            -moz-transform: translate3d(0, 0, 0);
+        }
+    } @else {
+        .sc-switchitem > .switchedOnText,
+        .sc-switchitem > .switchedOffText,
+        .switchItemKnob {
+            -webkit-transition: -webkit-transform switchTransitionDurationMillis linear;
+        }
+        .sc-switchitem.switchedOn > .switchedOnText {
+            -webkit-transform: translate3d(0, 0, 0);
+        }
+        .sc-switchitem.switchedOn > .switchedOffText,
+        .sc-switchitem.switchedOn > .switchItemKnob {
+            -webkit-transform: translate3d(53px, 0, 0);
+        }
+        .sc-switchitem.switchedOff > .switchedOnText {
+            -webkit-transform: translate3d(-53px, 0, 0);
+        }
+        .sc-switchitem.switchedOff > .switchedOffText,
+        .sc-switchitem.switchedOff > .switchItemKnob {
+            -webkit-transform: translate3d(0, 0, 0);
+        }
+    }
+    @if user.agent android {
+        .sc-switchitem.switchedOn > .switchedOnText {
+            -webkit-transform: translate(0);
+        }
+        .sc-switchitem.switchedOn > .switchedOffText,
+        .sc-switchitem.switchedOn > .switchItemKnob {
+            -webkit-transform: translate(53px);
+        }
+        .sc-switchitem.switchedOff > .switchedOnText {
+            -webkit-transform: translate(-53px);
+        }
+        .sc-switchitem.switchedOff > .switchedOffText,
+        .sc-switchitem.switchedOff > .switchItemKnob {
+            -webkit-transform: translate(0);
+        }
+    }
+    .sc-switchitem > .switchedOnText,
+    .sc-switchitem > .switchedOffText,
+    .switchItemKnob {
+        transition: transform switchTransitionDurationMillis linear;
+    }
+    .sc-switchitem.switchedOn > .switchedOnText {
+        transform: translate(0);
+    }
+    .sc-switchitem.switchedOn > .switchedOffText,
+    .sc-switchitem.switchedOn > .switchItemKnob {
+        transform: translate(53px);
+    }
+    .sc-switchitem.switchedOff > .switchedOnText {
+        transform: translate(-53px);
+    }
+    .sc-switchitem.switchedOff > .switchedOffText,
+    .sc-switchitem.switchedOff > .switchItemKnob {
+        transform: translate(0);
+    }
+}

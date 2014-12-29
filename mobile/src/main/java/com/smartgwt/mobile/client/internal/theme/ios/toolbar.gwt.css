@@ -1,0 +1,200 @@
+/*
+ * SmartGWT Mobile
+ * Copyright 2008 and beyond, Isomorphic Software, Inc.
+ *
+ * SmartGWT Mobile is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License version 3
+ * as published by the Free Software Foundation.  SmartGWT Mobile is also
+ * available under typical commercial license terms - see
+ * http://smartclient.com/license
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ */
+
+@def DEBUG_COLOR #f0f;
+@url DEBUG_BACKGROUND_IMAGE_URL DEBUG_BACKGROUND_IMAGE_DATA;
+
+.sc-toolbar {
+    display: box;
+    display: -webkit-box;
+    display: -moz-box;
+    position: relative;
+    width: 100%;
+    box-orient: horizontal;
+    -webkit-box-orient: horizontal;
+    -moz-box-orient: horizontal;
+    box-pack:begin;
+    -webkit-box-pack:begin;
+    -moz-box-pack:begin;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-align: center;
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    height: 45px;
+    border-top: 1px solid DEBUG_COLOR;
+    border-bottom: 1px solid DEBUG_COLOR;
+    padding: 0px;
+    background-image: DEBUG_BACKGROUND_IMAGE_URL;
+}
+
+.sc-toolbar > h1 {
+    box-flex: 1;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    text-align: center;
+    margin: 0px;
+    font: bold 20px/32px Helvetica, Sans-serif;
+    letter-spacing: -1px;
+    color: DEBUG_COLOR;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.sc-toolbar > h1.h2 {
+    font-size: 16px;
+}
+
+.sc-toolbar .sc-heading.sc-toolbar-center {
+    position: absolute;
+    top: 0;
+    right: 85px;
+    bottom: 0;
+    left: 85px;
+    line-height: 43px;
+}
+
+.sc-toolbar .sc-button {
+    margin: 0px 3px 0px 10px;
+    -webkit-margin-collapse: discard;
+}
+.sc-toolbar .sc-button + .sc-button {
+    margin: 0px 3px;
+}
+.sc-toolbar .sc-button:last-of-type {
+    margin-right: 10px;
+}
+.sc-button.borderedButton.nextButton { margin-right: 15px; }
+
+.sc-toolbar.plainIconToolStrip {
+    box-pack: justify;
+    -webkit-box-pack: justify;
+    -moz-box-pack: justify;
+}
+
+.sc-toolbar > .sc-segmented-control {
+    margin: 0px 10px;
+}
+
+.sc-toolbar .sc-button.buttonSegment {
+    background-image: literal("-webkit-gradient(linear,left top,left bottom,from(#92a1bf),color-stop(.25,#798aad),color-stop(.5,#6276a0),color-stop(.5,#556a97),color-stop(.75,#566c98),to(#546993))");
+    background-image: literal("-moz-linear-gradient(top,#92a1bf 0%,#798aad 25%,#6276a0 50%,#556a97 50%,#566c98 75%,#546993 100%)");
+    background-image: literal("linear-gradient(to bottom,#92a1bf 0%,#798aad 25%,#6276a0 50%,#556a97 50%,#566c98 75%,#546993 100%)");
+    box-shadow: 0 1px 1px #9aa5bb, 0 -1px 1px #8e96a5; 
+    -webkit-box-shadow: 0 1px 1px #9aa5bb, 0 -1px 1px #8e96a5; 
+    -moz-box-shadow: 0 1px 1px #9aa5bb, 0 -1px 1px #8e96a5; 
+    border: solid 1px #54617d;
+    border-color: #484e59 #54617d #4c5c7a #54617d; 
+    cursor: pointer;
+    margin: 0;
+    padding: 0px 10px;
+    font-size: 12px;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-flex: 1;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    text-align: center;
+    color: #fff;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+}
+.sc-toolbar .sc-button.buttonSegment.touchedButton {
+    background-image: literal("-webkit-gradient(linear,left top,left bottom,from(#7d88a5),color-stop(.25,#58698c),color-stop(.5,#3a4e78),color-stop(.5,#253c6a),color-stop(.75,#273f6d),to(#273f6d))");
+    background-image: literal("-moz-linear-gradient(top,#7d88a5 0%,#58698c 25%,#3a4e78 50%,#253c6a 50%,#273f6d 75%,#273f6d 100%)");
+    -webkit-tap-highlight-color: transparent;
+}
+.sc-toolbar .sc-button.buttonSegment.disabled.touchedButton {
+    background-image: literal("-webkit-gradient(linear,left top,left bottom,from(#92a1bf),color-stop(.25,#798aad),color-stop(.5,#6276a0),color-stop(.5,#556a97),color-stop(.75,#566c98),to(#546993))"); 
+    background-image: literal("-moz-linear-gradient(top,#92a1bf 0%,#798aad 25%,#6276a0 50%,#556a97 50%,#566c98 75%,#546993 100%)"); 
+    color: #fff;
+    border-color: #484e59 #54617d #4c5c7a #54617d;
+}
+.sc-toolbar .sc-button.buttonSegment:first-of-type {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-left: solid 1px #424650;
+}
+.sc-toolbar .sc-button.buttonSegment:last-of-type {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+.sc-toolbar.customTintedToolStrip {
+    background-image: literal("-webkit-gradient(linear,left top,left bottom,from(rgba(255,255,255,.5)),color-stop(.5,rgba(30,30,30,.5)),color-stop(.5,rgba(0,0,0,.5)),to(rgba(0,0,0,.45)))");
+    background-image: literal("-moz-linear-gradient(top,rgba(255,255,255,.5)0%,rgba(30,30,30,.5)50%,rgba(0,0,0,.5)50%,rgba(0,0,0,.45)100%)");
+    border-top: 1px solid #878788;
+    border-bottom: 1px solid #2c2c2c; 
+}
+.sc-navstack > .sc-navigationbar + .sc-layout-vbox .sc-toolbar.customTintedToolStrip { border-top-width: 0; }
+.sc-button.buttonSegment.customTintedButton,
+.sc-button.buttonSegment.customTintedButton.disabled.touchedButton {
+    border: solid 1px #484e59;
+    background-image: literal("-webkit-gradient(linear,left top,left bottom,from(rgba(255,255,255,.5)),color-stop(.5,rgba(30,30,30,.5)),color-stop(.5,rgba(0,0,0,.5)),to(rgba(0,0,0,.5)))");
+    background-image: literal("-moz-linear-gradient(top,rgba(255,255,255,.5)0%,rgba(30,30,30,.5)50%,rgba(0,0,0,.5)50%,rgba(0,0,0,.5)100%)");
+    color: #fff;
+}
+.sc-button.buttonSegment.customTintedButton.touchedButton {
+    border: solid 1px #484e59;
+    background-image: literal("-webkit-gradient(linear,left top,left bottom,from(rgba(0,0,0,.35)),color-stop(.5,rgba(0,0,0,.35)),color-stop(.5,rgba(50,50,50,.35)),to(rgba(255,255,255,.35)))");
+    background-image: literal("-moz-linear-gradient(top,rgba(0,0,0,.35)0%,rgba(0,0,0,.35)50%,rgba(50,50,50,.35)50%,rgba(255,255,255,.35)100%)");
+    color: #fff;
+}
+
+@if user.agent gecko1_8 {
+    .sc-toolbar.pickerToolbar {
+        background-image: literal("-moz-linear-gradient(top,rgba(0,0,0,.4)0%,rgba(0,0,0,.55)50%,rgba(0,0,0,.6)50%)");
+        -moz-box-pack: justify;
+    }
+} @else {
+    .sc-toolbar.pickerToolbar {
+        background-image: literal("-webkit-gradient(linear,left top,left bottom,from(rgba(0,0,0,.4)),color-stop(.5,rgba(0,0,0,.55)),color-stop(.5,rgba(0,0,0,.6)))");
+        -webkit-box-pack: justify;
+        -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    }
+}
+@if user.agent android {
+    .sc-toolbar.pickerToolbar {
+        -webkit-box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25);
+    }
+}
+.sc-toolbar.pickerToolbar {
+    position: absolute;
+    bottom: 215px;
+    border-top-color: #484848;
+    border-bottom: 1px solid #313945;
+    background-image: literal("linear-gradient(to bottom,rgba(0,0,0,.4)0%,rgba(0,0,0,.55)50%,rgba(0,0,0,.6)50%)");
+    box-pack: justify;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+@if user.agent gecko1_8 {
+} @else {
+    .pickerToolbar > .sc-button.borderedButton {
+        -webkit-box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.1), 0 1px 0 #8c8c8c;
+    }
+}
+@if user.agent android {
+    .pickerToolbar > .sc-button.borderedButton {
+        -webkit-box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.2), 0 1px 1px #8c8c8c;
+    }
+}
+.pickerToolbar > .sc-button.borderedButton {
+    box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.1), 0 1px 0 #8c8c8c;
+}

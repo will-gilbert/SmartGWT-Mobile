@@ -92,7 +92,7 @@ ext.localityProperties = [
 
 // GWT SDK
 ext.gwtSDK = '2.7.0'
-ext.smartgwtMobile  = '1.0d_2014-12-06'
+ext.smartgwtMobile  = '1.0d-SNAPSHOT' // '1.0d_2014-12-06'
 
 // Java SDK
 sourceCompatibility = 1.7

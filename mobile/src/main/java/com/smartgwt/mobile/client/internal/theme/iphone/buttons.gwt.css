@@ -1,0 +1,200 @@
+/*
+ * SmartGWT Mobile
+ * Copyright 2008 and beyond, Isomorphic Software, Inc.
+ *
+ * SmartGWT Mobile is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License version 3
+ * as published by the Free Software Foundation.  SmartGWT Mobile is also
+ * available under typical commercial license terms - see
+ * http://smartclient.com/license
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ */
+
+@url backButtonArrowTipImageUrl backButtonArrowTipImageData;
+@url nextButtonArrowTipImageUrl nextButtonArrowTipImageData;
+@url retinaBackButtonArrowTipImageUrl retinaBackButtonArrowTipImageData;
+@url retinaNextButtonArrowTipImageUrl retinaNextButtonArrowTipImageData;
+@url iOS6BackButtonArrowTipImageUrl iOS6BackButtonArrowTipImageData;
+@url iOS6NextButtonArrowTipImageUrl iOS6NextButtonArrowTipImageData;
+@url retinaIOS6BackButtonArrowTipImageUrl retinaIOS6BackButtonArrowTipImageData;
+@url retinaIOS6NextButtonArrowTipImageUrl retinaIOS6NextButtonArrowTipImageData;
+
+@if iOS.min6_0 no {
+    @if user.agent gecko1_8 {
+        .sc-button.borderedButton {
+            -moz-box-sizing: border-box;
+            -moz-box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.1), 0 1px 0 #9cacc0;
+            -moz-tap-highlight-color: transparent;
+            -moz-user-select: none;
+        }
+    } @else {
+        .sc-button.borderedButton {
+            -webkit-box-sizing: border-box;
+            -webkit-box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.1), 0 1px 0 #9cacc0;
+            -webkit-tap-highlight-color: transparent;
+        }
+    }
+    @if user.agent android {
+        .sc-button.borderedButton {
+            /* Tested Android 2.3.3 Browser and found that the box shadow "blur" must be non-zero.
+               http://code.google.com/p/android/issues/detail?id=15935 */
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.2), 0 1px 1px #9cacc0;
+        }
+    }
+    .sc-button.borderedButton {
+        box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.1), 0 1px 0 #9cacc0;
+    }
+
+    .sc-button.borderedButton,
+    .sc-button.borderedButton.disabled.touchedButton {
+        border-color: #30363e #344e73 #364f74 #344e73;
+        background-image: literal("-webkit-gradient(linear,left top,left bottom,from(#8da3c2),color-stop(.5,#5776a4),color-stop(.5,#45689b),to(#496b9d))");
+        background-image: literal("-moz-linear-gradient(top,#8da3c2 0%,#5776a4 50%,#45689b 50%,#496b9d 100%)");
+        background-image: literal("linear-gradient(to bottom,#8da3c2 0%,#5776a4 50%,#45689b 50%,#496b9d 100%)");
+    }
+
+    .sc-button.borderedButton.touchedButton {
+        border-color: #2b2e36 #1b2c50 #1c2e52 #1b2c50;
+        background-image: literal("-webkit-gradient(linear,left top,left bottom,from(#8995b0),color-stop(.5,#394d79),color-stop(.5,#253c6a),to(#273f6d))");
+        background-image: literal("-moz-linear-gradient(top,#8995b0 0%,#394d79 50%,#253c6a 50%,#273f6d 100%)");
+        background-image: literal("linear-gradient(to bottom,#8995b0 0%,#394d79 50%,#253c6a 50%,#273f6d 100%)");
+    }
+} @else {
+    .sc-button.borderedButton,
+    .sc-button.borderedButton.disabled.touchedButton {
+        border-color: #4a525d #475b78 #355179 #475b78;
+        background-image: literal("-webkit-gradient(linear,left top,left bottom,from(#96a8c0),color-stop(.5,#617a9d),color-stop(.5,#3f5f8d))");
+    }
+    .sc-button.borderedButton.touchedButton {
+        border-color: #494f5b #343f55 #1c2c4f #343f55;
+        background-image: literal("-webkit-gradient(linear,left top,left bottom,from(#8b97af),color-stop(.5,#4d5f82),color-stop(.5,#263d6c))");
+    }
+}
+
+@if iOS.min6_0 no {
+    .sc-button.borderedButton.backButton:before {
+        width: value('backButtonArrowTipImage.getWidth', 'px');
+        background-image: backButtonArrowTipImageUrl;
+    }
+    @if (com.smartgwt.mobile.client.widgets.Canvas._isHDPIDisplay()) {
+        .sc-button.borderedButton.backButton:before {
+            background-image: retinaBackButtonArrowTipImageUrl;
+            background-size: value('backButtonArrowTipImage.getWidth', 'px') value('backButtonArrowTipImage.getHeight', 'px');
+        }
+    }
+} @else {
+    .sc-button.borderedButton.backButton:before {
+        width: value('iOS6BackButtonArrowTipImage.getWidth', 'px');
+        background-image: iOS6BackButtonArrowTipImageUrl;
+    }
+    @if (com.smartgwt.mobile.client.widgets.Canvas._isHDPIDisplay()) {
+        .sc-button.borderedButton.backButton:before {
+            background-image: retinaIOS6BackButtonArrowTipImageUrl;
+            background-size: value('iOS6BackButtonArrowTipImage.getWidth', 'px') value('iOS6BackButtonArrowTipImage.getHeight', 'px');
+        }
+    }
+}
+
+.sc-button.backButton.touchedButton:before {
+    background-position: 0 -30px;
+}
+
+.sc-button.backButton.disabled.touchedButton:before {
+    background-position: 0 0;
+}
+
+@if iOS.min6_0 no {
+    .sc-button.borderedButton.nextButton:before {
+        width: value('nextButtonArrowTipImage.getWidth', 'px');
+        background-image: nextButtonArrowTipImageUrl;
+    }
+    @if (com.smartgwt.mobile.client.widgets.Canvas._isHDPIDisplay()) {
+        .sc-button.borderedButton.nextButton:before {
+            background-image: retinaNextButtonArrowTipImageUrl;
+            background-size: value('nextButtonArrowTipImage.getWidth', 'px') value('nextButtonArrowTipImage.getHeight', 'px');
+        }
+    }
+} @else {
+    .sc-button.borderedButton.nextButton:before {
+        width: value('iOS6NextButtonArrowTipImage.getWidth', 'px');
+        background-image: iOS6NextButtonArrowTipImageUrl;
+    }
+    @if (com.smartgwt.mobile.client.widgets.Canvas._isHDPIDisplay()) {
+        .sc-button.borderedButton.nextButton:before {
+            background-image: retinaIOS6NextButtonArrowTipImageUrl;
+            background-size: value('iOS6NextButtonArrowTipImage.getWidth', 'px') value('iOS6NextButtonArrowTipImage.getHeight', 'px');
+        }
+    }
+}
+
+.sc-button.nextButton.touchedButton:before {
+    background-position: 0 -30px;
+}
+
+.sc-button.nextButton.disabled.touchedButton:before {
+    background-position: 0 0;
+}
+
+/* The following styles are used to regenerate the back and next button "tip" images.
+   Use iOS 5.0 or 5.1 simulator, though, because iOS 6.0 Safari does not do as good a
+   job of rendering the button. */
+/*@if iOS.min6_0 no {
+    .sc-button.borderedButton.backButton:before {
+        content: "";
+        display: block;
+        -webkit-box-shadow: inset 1px 0px 0 rgba(0, 0, 0, 0.1), 0px 1px 0 #a6b7cc;
+        z-index: 0;
+        background-image: literal("-webkit-gradient(linear,left top,right bottom,from(#9dadc6),color-stop(.5,#5579a6),color-stop(.5,#45689b),to(#496b9d))");
+        border-left: 1px solid #24282e;
+        border-bottom: 1px solid #30496b;
+        -webkit-border-top-left-radius: 9px;
+        -webkit-border-bottom-right-radius: 7px;
+        height: 24.5px;
+        width: 24.5px;
+        -webkit-transform: scale(0.8, 1) rotate(45deg);
+        position: absolute;
+        left: -10px;
+        top: 1px;
+    }
+    .sc-button.backButton.touchedButton:before {
+        border-left-color: #2b2e36;
+        border-bottom-color: #1b2c50;
+        background-image: literal("-webkit-gradient(linear,left top,right bottom,from(#a0a7c0),color-stop(.5,#394e7a),color-stop(.5,#253c6a),to(#273f6d))");
+    }
+} @else {
+    .sc-button.borderedButton.backButton:before {
+        content: "";
+        display: block;
+        -webkit-box-shadow: inset 1px 0px 0 rgba(0, 0, 0, 0.1), 0px 1px 0 #859dbd;
+        z-index: 0;
+        background-image: literal("-webkit-gradient(linear,left top,right bottom,from(#a0b0c6),to(#35558a))");
+        border-left: 1px solid #293445;
+        border-bottom: 1px solid #355179;
+        border-top-left-radius: 9px;
+        border-bottom-right-radius: 7px;
+        height: 24.5px;
+        width: 24.5px;
+        -webkit-transform: scale(0.8, 1) rotate(45deg);
+        position: absolute;
+        left: -10px;
+        top: 1px;
+    }
+    @if (com.smartgwt.mobile.client.widgets.Canvas._isHDPIDisplay()) {
+        .sc-button.borderedButton.backButton:before {
+            left: -9px;
+        }
+    }
+    .sc-button.backButton.touchedButton:before {
+        border-left-color: #3f454f;
+        border-bottom-color: #172542;
+        background-image: literal("-webkit-gradient(linear,left top,right bottom,from(#9aa3b7),to(#1a3165))");
+    }
+}*/
+
+.sc-button.plainIconButton.touchedButton {
+    background-image: literal("-webkit-gradient(radial,50% 50%,0,50% 50%,24,from(rgba(213,231,247,.9)),to(rgba(213,231,247,0)))");
+}

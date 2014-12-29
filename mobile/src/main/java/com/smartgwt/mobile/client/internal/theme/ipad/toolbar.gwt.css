@@ -1,0 +1,27 @@
+/*
+ * SmartGWT Mobile
+ * Copyright 2008 and beyond, Isomorphic Software, Inc.
+ *
+ * SmartGWT Mobile is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License version 3
+ * as published by the Free Software Foundation.  SmartGWT Mobile is also
+ * available under typical commercial license terms - see
+ * http://smartclient.com/license
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ */
+
+.sc-toolbar {
+    border-top-color: #fff;
+    border-bottom-color: #797f90;
+    background-image: literal("-webkit-gradient(linear,left top,left bottom,color-stop(.1,#f4f5f7),color-stop(.3,#ebecef),color-stop(.65,#cccfd7),to(#a5a9b6))");
+    box-shadow: inset 0 -1px 0 rgba(255,255,255,0.1);
+}
+
+.sc-toolbar > h1 {
+    color: #717880;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}

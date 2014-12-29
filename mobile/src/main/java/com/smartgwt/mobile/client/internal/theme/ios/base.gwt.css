@@ -1,0 +1,43 @@
+/*
+ * SmartGWT Mobile
+ * Copyright 2008 and beyond, Isomorphic Software, Inc.
+ *
+ * SmartGWT Mobile is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License version 3
+ * as published by the Free Software Foundation.  SmartGWT Mobile is also
+ * available under typical commercial license terms - see
+ * http://smartclient.com/license
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ */
+
+/* WebKit browsers disable subpixel antialiasing during transitions.
+   In Safari 6.0, this behavior was making the text in TabSetItems and NavigationBars visibly
+   change during a page transition or any other transition effect.
+   http://stackoverflow.com/questions/10218039/css3-transition-messing-up-fonts-in-webkit 
+
+   To fix, always use font-smoothing:antialiased. */
+* { -webkit-font-smoothing: antialiased; }
+
+html, body {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: 100%;
+    font: normal 14px / 16px "Helvetica", sans-serif;
+    font: -apple-system-body;
+}
+
+body {
+    background: #cbd2d8;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-text-size-adjust: none;
+}
+@if iOS.minVersion NA v1 v5 v6 {
+} @else {
+    body { background: #efeff4; }
+}

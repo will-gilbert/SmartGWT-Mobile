@@ -1,0 +1,103 @@
+/*
+ * SmartGWT Mobile
+ * Copyright 2008 and beyond, Isomorphic Software, Inc.
+ *
+ * SmartGWT Mobile is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License version 3
+ * as published by the Free Software Foundation.  SmartGWT Mobile is also
+ * available under typical commercial license terms - see
+ * http://smartclient.com/license
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ */
+
+@url backButtonArrowTipImageUrl backButtonArrowTipImageData;
+@url nextButtonArrowTipImageUrl nextButtonArrowTipImageData;
+@url retinaBackButtonArrowTipImageUrl retinaBackButtonArrowTipImageData;
+@url retinaNextButtonArrowTipImageUrl retinaNextButtonArrowTipImageData;
+@url iOS6BackButtonArrowTipImageUrl iOS6BackButtonArrowTipImageData;
+@url iOS6NextButtonArrowTipImageUrl iOS6NextButtonArrowTipImageData;
+@url retinaIOS6BackButtonArrowTipImageUrl retinaIOS6BackButtonArrowTipImageData;
+@url retinaIOS6NextButtonArrowTipImageUrl retinaIOS6NextButtonArrowTipImageData;
+
+.sc-button.borderedButton,
+.sc-button.borderedButton.disabled.touchedButton {
+    border-color: #4e4f51 #585c62 #565b64 #585c62;
+    background-image: literal("-webkit-gradient(linear,left top,left bottom,from(#b2b6bc),to(#6b737e))");
+}
+
+.sc-button.borderedButton.touchedButton {
+    border-color: #464748 #46494c #363a40 #46494c;
+    background-image: literal("-webkit-gradient(linear,left top,left bottom,from(#9ea1a4),to(#444950))");
+}
+
+.sc-button.borderedButton.backButton:before {
+    width: value('backButtonArrowTipImage.getWidth', 'px');
+    background-image: backButtonArrowTipImageUrl;
+}
+@if (com.smartgwt.mobile.client.widgets.Canvas._isHDPIDisplay()) {
+    .sc-button.borderedButton.backButton:before {
+        background-image: retinaBackButtonArrowTipImageUrl;
+        background-size: value('backButtonArrowTipImage.getWidth', 'px') value('backButtonArrowTipImage.getHeight', 'px');
+    }
+}
+
+.sc-button.backButton.touchedButton:before {
+    background-position: 0 -30px;
+}
+
+.sc-button.backButton.disabled.touchedButton:before {
+    background-position: 0 0;
+}
+
+.sc-button.borderedButton.nextButton:before {
+    width: value('nextButtonArrowTipImage.getWidth', 'px');
+    background-image: nextButtonArrowTipImageUrl;
+}
+@if (com.smartgwt.mobile.client.widgets.Canvas._isHDPIDisplay()) {
+    .sc-button.borderedButton.nextButton:before {
+        background-image: retinaNextButtonArrowTipImageUrl;
+        background-size: value('nextButtonArrowTipImage.getWidth', 'px') value('nextButtonArrowTipImage.getHeight', 'px');
+    }
+}
+
+.sc-button.nextButton.touchedButton:before {
+    background-position: 0 -30px;
+}
+
+.sc-button.nextButton.disabled.touchedButton:before {
+    background-position: 0 0;
+}
+
+/* The following styles are used to regenerate the back and next button "tip" images.
+   Use iOS 5.0 or 5.1 simulator, though, because iOS 6.0 Safari does not do as good a
+   job of rendering the button. */
+/*.sc-button.borderedButton.backButton:before {
+    content: "";
+    display: block;
+    box-shadow: inset 1px 0px 0 rgba(0, 0, 0, 0.1), 0px 1px 0 #d6d8e0;
+    z-index: 0;
+    background-image: literal("-webkit-gradient(linear,left top,right bottom,from(#b9bdc3),to(#646c77))");
+    border-left: 1px solid #2a2a2b;
+    border-bottom: 1px solid #393c42;
+    border-top-left-radius: 9px;
+    border-bottom-right-radius: 7px;
+    height: 24.5px;
+    width: 24.5px;
+    -webkit-transform: scale(0.8, 1) rotate(45deg);
+    position: absolute;
+    left: -9px;
+    top: 1px;
+}
+.sc-button.backButton.touchedButton:before {
+    border-left-color: #232526;
+    border-bottom-color: #232526;
+    background-image: literal("-webkit-gradient(linear,left top,right bottom,from(#aaadaf),to(#373d44))");
+}*/
+
+.sc-button.plainIconButton.touchedButton {
+    background-image: literal("-webkit-gradient(radial,50% 50%,0,50% 50%,24,from(rgba(255,255,255,.9)),to(rgba(255,255,255,0)))");
+}

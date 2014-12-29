@@ -1,0 +1,149 @@
+/*
+ * SmartGWT Mobile
+ * Copyright 2008 and beyond, Isomorphic Software, Inc.
+ *
+ * SmartGWT Mobile is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License version 3
+ * as published by the Free Software Foundation.  SmartGWT Mobile is also
+ * available under typical commercial license terms - see
+ * http://smartclient.com/license
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ */
+
+@def spinAnimationName sc-spinner-anim2;
+
+.blade1{}
+.blade2{}
+.blade3{}
+.blade4{}
+.blade5{}
+.blade6{}
+.blade7{}
+.blade8{}
+
+@if user.agent android {
+    .sc-activity-indicator {
+        width: 35px;
+        height: 35px;
+        margin: 0 auto;
+    }
+    .sc-activity-indicator > div {
+        width: 35px;
+        height: 35px;
+    }
+    .sc-activity-indicator > div > img {
+        -moz-animation-duration: 2s;
+        -moz-animation-iteration-count: infinite;
+        -moz-animation-timing-function: linear;
+        -moz-animation-name: spinAnimationName;
+        -webkit-animation-duration: 2s;
+        -webkit-animation-iteration-count: infinite;
+        -webkit-animation-timing-function: linear;
+        -webkit-animation-name: spinAnimationName;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+        animation-name: spinAnimationName;
+    }
+} @else {
+    .sc-activity-indicator {
+        margin: 0 auto;
+        width: 35px;
+        height: 35px;
+    }
+    .sc-activity-indicator > div {
+        width: 35px;
+        height: 35px;
+        -moz-animation-duration: 2s;
+        -moz-animation-iteration-count: infinite;
+        -moz-animation-timing-function: linear;
+        -moz-animation-name: spinAnimationName;
+        -webkit-animation-duration: 2s;
+        -webkit-animation-iteration-count: infinite;
+        -webkit-animation-timing-function: linear;
+        -webkit-animation-name: spinAnimationName;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+        animation-name: spinAnimationName;
+    }
+    .sc-activity-indicator .blade1,
+    .sc-activity-indicator .blade2,
+    .sc-activity-indicator .blade3,
+    .sc-activity-indicator .blade4,
+    .sc-activity-indicator .blade5,
+    .sc-activity-indicator .blade6,
+    .sc-activity-indicator .blade7,
+    .sc-activity-indicator .blade8 {
+        position: absolute;
+        left: 16px;
+        top: 0px;
+        height: 10px;
+        width: 3px;
+        border-radius: 5px;
+        background-color: #e1e1e1;
+        -moz-transform-origin: 50% 175%;
+        -webkit-transform-origin: 50% 175%;
+        transform-origin: 50% 175%;
+        opacity: 0.23;
+    }
+    .sc-activity-indicator .blade2 {
+        -moz-transform: rotate(30deg);
+        -webkit-transform: rotate(30deg);
+        transform: rotate(30deg);
+        opacity: 0.30;
+    }
+    .sc-activity-indicator .blade3 {
+        -moz-transform: rotate(60deg);
+        -webkit-transform: rotate(60deg);
+        transform: rotate(60deg);
+        opacity: 0.37;
+    }
+    .sc-activity-indicator .blade4 {
+        -moz-transform: rotate(90deg);
+        -webkit-transform: rotate(90deg);
+        transform: rotate(90deg);
+        opacity: 0.44;
+    }
+    .sc-activity-indicator .blade5 {
+        -moz-transform: rotate(120deg);
+        -webkit-transform: rotate(120deg);
+        transform: rotate(120deg);
+        opacity: 0.51;
+    }
+    .sc-activity-indicator .blade6 {
+        -moz-transform: rotate(150deg);
+        -webkit-transform: rotate(150deg);
+        transform: rotate(150deg);
+        opacity: 0.58;
+    }
+    .sc-activity-indicator .blade7 {
+        -moz-transform: rotate(180deg);
+        -webkit-transform: rotate(180deg);
+        transform: rotate(180deg);
+        opacity: 0.65;
+    }
+    .sc-activity-indicator .blade8 {
+        -moz-transform: rotate(210deg);
+        -webkit-transform: rotate(210deg);
+        transform: rotate(210deg);
+        opacity: 0.72;
+    }
+
+    @if user.agent ipad {
+        .sc-activity-indicator .blade1,
+        .sc-activity-indicator .blade2,
+        .sc-activity-indicator .blade3,
+        .sc-activity-indicator .blade4,
+        .sc-activity-indicator .blade5,
+        .sc-activity-indicator .blade6,
+        .sc-activity-indicator .blade7,
+        .sc-activity-indicator .blade8 {
+            background-color: #4e4e4e;
+        }
+    }
+}

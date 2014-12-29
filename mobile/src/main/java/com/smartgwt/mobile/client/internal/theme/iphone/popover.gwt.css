@@ -1,0 +1,354 @@
+/*
+ * SmartGWT Mobile
+ * Copyright 2008 and beyond, Isomorphic Software, Inc.
+ *
+ * SmartGWT Mobile is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License version 3
+ * as published by the Free Software Foundation.  SmartGWT Mobile is also
+ * available under typical commercial license terms - see
+ * http://smartclient.com/license
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ */
+
+@def popoverFadeOutAnimationName sc-popover_fadeOut;
+@def popoverFadeOutAnimationDurationMillis 300ms;
+
+@def verticalPopoverTipWrapperHeightPx 21px;
+@def verticalTipHalfWidthPx 16px;
+@def popoverBorderRadiusPx 7px;
+/* GWT has a bug with its CssResource support. The problem with using deferred binding
+   to vary the value of the `popoverOffsetWidthPx' @def is that the popoverOffsetWidthPx()
+   function returns the correct value, but when the variable is used in the CSS, none of
+   the conditional processing is applied. So, with the following,
+   @if user.agent ipad safari {
+       @def popoverOffsetWidthPx 334px;
+   } @else {
+       @def popoverOffsetWidthPx 300px;
+   }
+   The safari permutation would use 334 for the return value of popoverOffsetWidthPx(), but
+   wherever the variable is used, '300px' would be substituted.
+   http://code.google.com/p/google-web-toolkit/issues/detail?id=4697
+
+   A work-around is to define a separate variable for the ipad and safari permutations and
+   immediately after the variable is used, add another @if block to override the CSS property
+   value using the variable to one that uses the iPad and Safari-specific value instead. */
+@def popoverOffsetWidthPxIPadAndSafari 334px;
+@if user.agent ipad safari {
+    @def popoverOffsetWidthPx popoverOffsetWidthPxIPadAndSafari;
+} @else {
+    @def popoverOffsetWidthPx 300px;
+}
+@def smallFormFactorPopoverOffsetWidthPx 284px;
+@def popoverHeaderHeightPx 36px;
+@def popoverContentWrapperPaddingPx 7px;
+
+/*@if user.agent gecko1_8 {
+    
+} @else {
+    
+}*/
+
+.popoverModalMask {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+}
+
+.popoverWrapper {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    z-index: 3000;
+}
+
+.popoverWrapper.top {
+    padding-top: 19px;
+}
+
+.popoverWrapper.bottom {
+    padding-bottom: 19px;
+}
+
+.popoverWrapper.top > .bottomPopoverTipWrapper,
+.popoverWrapper.bottom > .topPopoverTipWrapper {
+    display: none;
+}
+
+.topPopoverTipWrapper,
+.bottomPopoverTipWrapper {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: verticalPopoverTipWrapperHeightPx;
+    overflow: hidden;
+    z-index: 3500;
+}
+
+.topPopoverTipWrapper > .popoverTip,
+.bottomPopoverTipWrapper > .popoverTip {
+    position: absolute;
+    top: 0;
+    width: 0;
+    height: 21px;
+}
+
+.topPopoverTipWrapper {
+    top: 0;
+}
+
+@if user.agent gecko1_8 {
+    .topPopoverTipWrapper > .popoverTip:before {
+        -moz-box-sizing: border-box;
+        background: literal("-moz-linear-gradient(-45deg,#b7b9c2 0%,#b7b9c2 12%,#7b8190 55%,#7b8190 100%)");
+        -moz-box-shadow: -1px -1px 1px rgba(255, 255, 255, 0.2), inset 0 0 1px rgba(255, 255, 255, 0.35);
+        -moz-transform: rotate(45deg) scale(0.95);
+    }
+} @else {
+    .topPopoverTipWrapper > .popoverTip:before {
+        -webkit-box-sizing: border-box;
+        background: literal("-webkit-gradient(linear,left top,right bottom,from(#b7b9c2),color-stop(.12,#b7b9c2),color-stop(.55, #7b8190),to(#7b8190))");
+        -webkit-box-shadow: -1px -1px 1px rgba(255, 255, 255, 0.2), inset 0 0 1px rgba(255, 255, 255, 0.35);
+        -webkit-transform: rotate(45deg) scale(0.95);
+    }
+}
+.topPopoverTipWrapper > .popoverTip:before {
+    content: "";
+    position: absolute;
+    top: 7px;
+    left: -13px;
+    display: block;
+    box-sizing: border-box;
+    width: 25px;
+    height: 25px;
+    border-top: 1px solid #4a4a4a;
+    border-left: 1px solid #4a4a4a;
+    background: literal("linear-gradient(-45deg,#b7b9c2 0%,#b7b9c2 12%,#7b8190 55%,#7b8190 100%)");
+    box-shadow: -1px -1px 1px rgba(255, 255, 255, 0.2), inset 0 0 1px rgba(255, 255, 255, 0.35);
+    transform: rotate(45deg) scale(0.95) /* Scaling to 95% lessens the thickness of the border and makes it appear crisper. */;
+}
+
+.bottomPopoverTipWrapper {
+    bottom: 0;
+}
+
+@if user.agent gecko1_8 {
+    .bottomPopoverTipWrapper > .popoverTip:before {
+        -moz-box-sizing: border-box;
+        -moz-box-shadow: -1px -1px 1px rgba(255, 255, 255, 0.2);
+        -moz-transform: rotate(-135deg) scale(0.95);
+    }
+} @else {
+    .bottomPopoverTipWrapper > .popoverTip:before {
+        -webkit-box-sizing: border-box;
+        -webkit-box-shadow: -1px -1px 1px rgba(255, 255, 255, 0.2);
+        -webkit-transform: rotate(-135deg) scale(0.95);
+    }
+}
+.bottomPopoverTipWrapper > .popoverTip:before {
+    content: "";
+    position: absolute;
+    bottom: 7px;
+    left: -13px;
+    display: block;
+    box-sizing: border-box;
+    width: 25px;
+    height: 25px;
+    border-top: 1px solid #0a0a0a;
+    border-left: 1px solid #0a0a0a;
+    background-color: #0a1734;
+    box-shadow: -1px -1px 1px rgba(255, 255, 255, 0.2);
+    transform: rotate(-135deg) scale(0.95) /* Scaling to 95% lessens the thickness of the border and makes it appear crisper. */;
+}
+
+@if user.agent gecko1_8 {
+    .sc-popover {
+        -moz-box-sizing: border-box;
+    }
+} @else {
+    .sc-popover {
+        -webkit-box-sizing: border-box;
+    }
+}
+.sc-popover {
+    box-sizing: border-box;
+    width: popoverOffsetWidthPx;
+    border-top: 1px solid #4a4a4a;
+    border-right: 1px solid #0f0f0f;
+    border-bottom: 1px solid #0a0a0a;
+    border-left: 1px solid #0f0f0f;
+    border-radius: popoverBorderRadiusPx;
+}
+@if user.agent ipad safari {
+    /* This is the other half of the work-around for a GWT bug.
+       http://code.google.com/p/google-web-toolkit/issues/detail?id=4697 */
+    .sc-popover {
+        width: popoverOffsetWidthPxIPadAndSafari;
+    }
+}
+
+.smallFormFactorPopover > .sc-popover {
+    width: smallFormFactorPopoverOffsetWidthPx;
+}
+
+@if user.agent gecko1_8 {
+    .popoverWrapper.top > .sc-popover {
+        -moz-box-shadow: 0 0 1px rgba(255, 255, 255, 0.45), 0 10px 50px rgba(0, 0, 0, 0.75);
+    }
+} @else {
+    .popoverWrapper.top > .sc-popover {
+        -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.45), 0 10px 50px rgba(0, 0, 0, 0.75);
+    }
+}
+.popoverWrapper.top > .sc-popover {
+    box-shadow: 0 0 1px rgba(255, 255, 255, 0.45), 0 10px 50px rgba(0, 0, 0, 0.75);
+}
+
+@if user.agent gecko1_8 {
+    .popoverWrapper.bottom > .sc-popover {
+        -moz-box-shadow: 0 0 1px rgba(255, 255, 255, 0.45), 0 -10px 50px rgba(0, 0, 0, 0.75);
+    }
+} @else {
+    .popoverWrapper.bottom > .sc-popover {
+        -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.45), 0 -10px 50px rgba(0, 0, 0, 0.75);
+    }
+}
+.popoverWrapper.bottom > .sc-popover {
+    box-shadow: 0 0 1px rgba(255, 255, 255, 0.45), 0 -10px 50px rgba(0, 0, 0, 0.75);
+}
+
+.headerless > .popoverHeader {
+    display: none;
+}
+
+@if user.agent gecko1_8 {
+    .popoverHeader {
+        display: -moz-box;
+        display: -moz-flexbox;
+        -moz-flex-flow: row nowrap;
+        -moz-justify-content: space-between;
+        background-image: literal("-moz-linear-gradient(top,#808797 0%,rgba(110,118,132,.9)10%,rgba(29,41,68,.95)50%,rgba(10,23,52,.95)50%)");
+        -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    }
+} @else {
+    .popoverHeader {
+        display: -webkit-box;
+        -webkit-box-lines: single;
+        -webkit-box-pack: justify;
+        background-image: literal("-webkit-gradient(linear,left top,left bottom,from(#808797),color-stop(.1,rgba(110,118,132,.9)),color-stop(.5,rgba(29,41,68,.95)),color-stop(.5,rgba(10,23,52,.95)))");
+        -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    }
+}
+@if user.agent android {
+    .popoverHeader {
+        /* The "blur" radius must be non-zero. */
+        -webkit-box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.5);
+    }
+}
+.popoverHeader {
+    display: flexbox;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    width: 100%;
+    height: popoverHeaderHeightPx;
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
+    padding-bottom: 3px;
+    background-image: literal("linear-gradient(to bottom,#808797 0%,rgba(110,118,132,.9)10%,rgba(29,41,68,.95)50%,rgba(10,23,52,.95)50%)");
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.popoverHeader > .sc-button.borderedButton {
+    margin-top: 4px;
+    margin-right: popoverContentWrapperPaddingPx;
+    margin-left: popoverContentWrapperPaddingPx;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+.popoverHeader > .windowHeaderLabel {
+    color: white;
+    font: bold 20px / 40px Helvetica, sans-serif;
+    text-align: center;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+@if user.agent gecko1_8 {
+    .popoverContentWrapper {
+        background-image: literal("-moz-linear-gradient(top,rgba(10,23,52,.95)0%,#0a1734 90%,#0a1734 100%)");
+    }
+} @else {
+    .popoverContentWrapper {
+        background-image: literal("-webkit-gradient(linear,left top,left bottom,from(rgba(10,23,52,.95)),color-stop(.9,#0a1734),to(#0a1734))");
+    }
+}
+.popoverContentWrapper {
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    padding: popoverContentWrapperPaddingPx;
+    padding-top: 4px /* The other 3px of the popoverContentWrapperPaddingPx is added to the popoverHeaderElem bottom padding. */;
+    background-image: literal("linear-gradient(to bottom,rgba(10,23,52,.95)0%,#0a1734 90%,#0a1734 100%)");
+}
+
+@if user.agent gecko1_8 {
+    .headerless > .popoverContentWrapper {
+        background-image: literal("-moz-linear-gradient(top,#808797 0%,rgba(110,118,132,.9)1%,rgba(29,41,68,.95)10%,rgba(10,23,52,.95)20%)");
+    }
+} @else {
+    .headerless > .popoverContentWrapper {
+        background-image: literal("-webkit-gradient(linear,left top,left bottom,from(#808797),color-stop(.01,rgba(110,118,132,.9)),color-stop(.1,rgba(29,41,68,.95)),color-stop(.2,rgba(10,23,52,.95)))");
+    }
+}
+.headerless > .popoverContentWrapper {
+    border-radius: 5px;
+    padding-top: 7px;
+    background-image: literal("linear-gradient(to bottom,#808797 0%,rgba(110,118,132,.9)1%,rgba(29,41,68,.95)10%,rgba(10,23,52,.95)20%)");
+}
+
+@if user.agent gecko1_8 {
+    .popoverContentWrapper > .windowBody {
+        background: #d0d2d8 literal("-moz-linear-gradient(top,#e2e5ea 0%,#d0d2d8 100%)");
+    }
+} @else {
+    .popoverContentWrapper > .windowBody {
+        background: #d0d2d8 literal("-webkit-gradient(linear, left top, left bottom, from(#e2e5ea), to(#d0d2d8))");
+    }
+}
+.popoverContentWrapper > .windowBody {
+    border-radius: 4px;
+    width: 100%;
+    background: #d0d2d8 literal("linear-gradient(to bottom,#e2e5ea 0%,#d0d2d8 100%)");
+    overflow: hidden;
+}
+@if !user.agent ipad {
+    .popoverContentWrapper > .windowBody {
+        background: #f7f7f7;
+    }
+}
+
+.popoverContentWrapper > .windowBody {
+    position: relative;
+    overflow: hidden;
+    -webkit-box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.4);
+    box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.4);
+}
+
+.smallFormFactorPopover > .sc-popover > .popoverContentWrapper > .windowBody {
+    background-color: transparent;
+    background: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}

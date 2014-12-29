@@ -1,0 +1,15 @@
+.sc-label {
+    color: #575D78;
+    line-height: 18px;
+    text-align: center;
+    text-shadow: 0 1px white;
+}
+.sc-img {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 0;
+    table-layout: fixed;
+}
+.sc-img > tbody > tr > td {
+    overflow: hidden;
+}

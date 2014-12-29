@@ -1,0 +1,53 @@
+/*
+ * SmartGWT Mobile
+ * Copyright 2008 and beyond, Isomorphic Software, Inc.
+ *
+ * SmartGWT Mobile is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License version 3
+ * as published by the Free Software Foundation.  SmartGWT Mobile is also
+ * available under typical commercial license terms - see
+ * http://smartclient.com/license
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ */
+
+package com.smartgwt.mobile.client.data;
+
+import java.util.Map;
+
+public class Criteria extends Record {
+
+    public Criteria() {
+    }
+
+    public Criteria(String field, Object value) {
+        setAttribute(field, value);
+    }
+
+    public Criteria(Criteria criteria) {
+        if (criteria != null) putAll(criteria);
+    }
+
+    public final Map<String, Object> getValues() {
+        return this;
+    }
+
+    public final boolean isAdvanced() {
+        return "AdvancedCriteria".equals(getAttributeAsObject("_constructor"));
+    }
+
+    public void addCriteria(String field, Object value) {
+        setAttribute(field, value);
+    }
+
+    public void addCriteria(Criteria otherCriteria) {
+        putAll(otherCriteria);
+    }
+
+    public void removeCriteria(String field) {
+        remove(field);
+    }
+}

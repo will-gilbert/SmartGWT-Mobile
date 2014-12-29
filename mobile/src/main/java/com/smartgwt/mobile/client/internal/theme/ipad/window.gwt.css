@@ -1,0 +1,46 @@
+/*
+ * SmartGWT Mobile
+ * Copyright 2008 and beyond, Isomorphic Software, Inc.
+ *
+ * SmartGWT Mobile is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License version 3
+ * as published by the Free Software Foundation.  SmartGWT Mobile is also
+ * available under typical commercial license terms - see
+ * http://smartclient.com/license
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ */
+
+ /* On iPad, a window looks like an alertview, except that the buttons are each on their own
+    line because there may be many more buttons than an alertview (which has either 0, 1, or 2
+    buttons), and iOS does not support box-lines to allow the buttons to wrap onto multiple lines:
+    http://stackoverflow.com/questions/17473983/css3-flexbox-compatibility-problems-with-firefox-and-safari/17474803#17474803 */
+
+@def windowBackgroundFadeInAnimationName sc-windowBackground-fadeIn;
+@def windowBackgroundFadeOutAnimationName sc-windowBackground-fadeOut;
+@def windowBackgroundFadeInAnimationDurationMillis 200ms;
+@def windowBackgroundFadeOutAnimationDurationMillis 200ms;
+
+@url alertViewBackgroundImageUrl alertViewBackgroundImageData;
+
+.modalMask {
+    background-image: literal("-webkit-radial-gradient(50% 53%,ellipse farthest-corner,rgba(255,255,255,.4),transparent 100%)");
+    background-image: literal("radial-gradient(50% 53%,ellipse farthest-corner,rgba(255,255,255,.4),transparent 100%)");
+}
+
+.dialogButtonsContainer {
+    margin-top: 10px;
+    width: 100%;
+}
+
+.dialogButtonsContainer .sc-button.actionButton,
+.dialogButtonsContainer .sc-button.borderedButton {
+    margin-right: 3px;
+    margin-left: 3px;
+    height: 42px;
+    border-color: #1a263e;
+    box-shadow: inset 0px 1px 0.5px #dbdde3, 0 1px 1px 0.1px #6a7791;
+}

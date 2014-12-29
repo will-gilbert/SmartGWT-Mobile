@@ -1,0 +1,125 @@
+/*
+ * SmartGWT Mobile
+ * Copyright 2008 and beyond, Isomorphic Software, Inc.
+ *
+ * SmartGWT Mobile is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License version 3
+ * as published by the Free Software Foundation.  SmartGWT Mobile is also
+ * available under typical commercial license terms - see
+ * http://smartclient.com/license
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ */
+
+/* The default appearance of a window is an action sheet. */
+
+@def windowBackgroundSlideInAnimationName sc-windowBackground-slideIn;
+@def windowBackgroundSlideOutAnimationName sc-windowBackground-slideOut;
+@def windowBackgroundSlideInAnimationDurationMillis 200ms;
+@def windowBackgroundSlideOutAnimationDurationMillis 200ms;
+
+@if user.agent gecko1_8 {
+    .windowBackground {
+        -moz-box-sizing: border-box;
+        background-image:
+            literal("-moz-linear-gradient(top,#000 0%,#000 50%,rgba(255,255,255,.6)50%,rgba(255,255,255,.6)100%)"),
+            literal("-moz-linear-gradient(top,rgba(255,255,255,.5)0%,rgba(255,255,255,.15)90%,rgba(255,255,255,.015)100%)"),
+            literal("-moz-linear-gradient(top,rgba(93,102,118,.85)0%,rgba(63,72,87,.9)100%)");
+        -moz-background-size: 100% 2px, 100% 22px, 100% 100%;
+        -moz-user-select: none;
+    }
+} @else {
+    .windowBackground {
+        -webkit-box-sizing: border-box;
+        background-image:
+            literal("-webkit-gradient(linear,left top,left bottom,from(#000),color-stop(.5,#000),color-stop(.5,rgba(255,255,255,.6)),to(rgba(255,255,255,.6)))"),
+            literal("-webkit-gradient(linear,left top,left bottom,from(rgba(255,255,255,.5)),color-stop(.9,rgba(255,255,255,.15)),to(rgba(255,255,255,.015)))"),
+            literal("-webkit-gradient(linear,left top,left bottom,from(rgba(93,102,118,.85)),to(rgba(63,72,87,.9)))");
+        -webkit-background-size: 100% 2px, 100% 22px, 100% 100%;
+        -webkit-user-select: none;
+    }
+}
+.windowBackground {
+    position: absolute;
+    bottom: 0px;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px 21px 0 21px;
+    background-image:
+        literal("linear-gradient(to bottom,#000 0%,#000 50%,rgba(255,255,255,.6)50%,rgba(255,255,255,.6)100%)"),
+        literal("linear-gradient(to bottom,rgba(255,255,255,.5)0%,rgba(255,255,255,.15)90%,rgba(255,255,255,.015)100%)"),
+        literal("linear-gradient(to bottom,rgba(93,102,118,.85)0%,rgba(63,72,87,.9)100%)");
+    background-size: 100% 2px, 100% 22px, 100% 100%;
+    background-repeat: repeat-x, repeat-x, repeat-x;
+    background-position: top left, top left, top left;
+    z-index: 1000;
+    user-select: none;
+}
+
+/* These styles are the same as the ones in `buttons.gwt.css', except that transparency is
+   removed. */
+
+@if user.agent gecko1_8 {
+    .windowBackground .sc-button.actionButton,
+    .windowBackground .sc-button.actionButton.disabled,
+    .windowBackground .sc-button.actionButton.disabled {
+        -moz-box-shadow: 0 -1px 1px #000, 0 1px 1px #717680, -1px 0 #2e3137, 1px 0 #2e3137;
+    }
+} @else {
+    .windowBackground .sc-button.actionButton,
+    .windowBackground .sc-button.actionButton.disabled,
+    .windowBackground .sc-button.actionButton.disabled {
+        -webkit-box-shadow: 0 -1px 1px #000, 0 1px 1px #717680, -1px 0 #2e3137, 1px 0 #2e3137;
+    }
+}
+.windowBackground .sc-button.actionButton,
+.windowBackground .sc-button.actionButton.disabled,
+.windowBackground .sc-button.actionButton.disabled.touchedButton {
+    border: 3px solid #3e434b;
+    box-shadow: 0 -1px 1px #000, 0 1px 1px #717680, -1px 0 #2e3137, 1px 0 #2e3137;
+}
+
+.windowBackground .sc-button.actionButton.cancelButton,
+.windowBackground .sc-button.actionButton.cancelButton.disabled.touchedButton {
+    margin: 22px 0;
+    background-image: literal("-webkit-gradient(linear,left top,left bottom,from(#585e64),color-stop(.5,#252b35),color-stop(.5,#171e28),to(#252d38))");
+    background-image: literal("-moz-linear-gradient(top,#585e64 0%,#252b35 50%,#171e28 50%,#252d38 100%)");
+    background-image: literal("linear-gradient(to bottom,#585e64 0%,#252b35 50%,#171e28 50%,#252d38 100%)");
+}
+
+.windowBackground .sc-button.actionButton.greenButton,
+.windowBackground .sc-button.actionButton.greenButton.disabled.touchedButton {
+    background-image: literal("-moz-linear-gradient(top,#4f9c4a 0%,#367f23 50%,#007100 50%,#009600 100%)");
+    background-image: literal("-webkit-gradient(linear,left top,left bottom,from(#4f9c4a),color-stop(.5,#367f23),color-stop(.5,#007100),to(#009600))");
+    background-image: literal("linear-gradient(top,#4f9c4a 0%,#367f23 50%,#007100 50%,#009600 100%)");
+    color: #fff;
+    text-shadow: 0 1px 1px #000;
+}
+
+.windowBackground .sc-button.actionButton.greenButton.touchedButton {
+    background-image: literal("-moz-linear-gradient(top,#8794cb 0%,#22389f 50%,#001b91 50%,#023b98 100%)");
+    background-image: literal("-webkit-gradient(linear,left top,left bottom,from(#8794cb),color-stop(.5,#22389f),color-stop(.5,#001b91),to(#023b98))");
+    background-image: literal("linear-gradient(top,#8794cb 0%,#22389f 50%,#001b91 50%,#023b98 100%)");
+    color: #fff;
+}
+
+.windowBackground .sc-button.actionButton,
+.windowBackground .sc-button.actionButton.disabled.touchedButton {
+    margin: 10px 0;
+    height: 45px;
+    background-image: literal("-webkit-gradient(linear,left top,left bottom,from(#efefef),color-stop(.5,#ceced0),color-stop(.5,#b9babd),to(#bbbec0))");
+    background-image: literal("-moz-linear-gradient(top,#efefef 0%,#ceced0 50%,#b9babd 50%,#bbbec0 100%)");
+    background-image: literal("linear-gradient(to bottom,#efefef 0%,#ceced0 50%,#b9babd 50%,#bbbec0 100%)");
+    font: bold 20px Helvetica, sans-serif;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.25);
+}
+
+.windowBackground .sc-button.actionButton.touchedButton {
+    color: #fff;
+    background-image: literal("-webkit-gradient(linear,left top,left bottom,from(rgba(135,148,203,.7)),color-stop(.5,rgba(34,56,159,.7)),color-stop(.5,rgba(0,27,145,.7)),to(rgba(2,59,152,.7)))");
+    background-image: literal("-moz-linear-gradient(top,rgba(135,148,203,.7)0%,rgba(34,56,159,.7)50%,rgba(0,27,145,.7)50%,rgba(2,59,152,.7)100%)");
+    text-shadow: 0 1px 1px #000;
+}

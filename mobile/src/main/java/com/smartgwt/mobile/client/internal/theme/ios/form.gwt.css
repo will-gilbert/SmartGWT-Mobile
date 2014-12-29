@@ -1,0 +1,478 @@
+/*
+ * SmartGWT Mobile
+ * Copyright 2008 and beyond, Isomorphic Software, Inc.
+ *
+ * SmartGWT Mobile is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License version 3
+ * as published by the Free Software Foundation.  SmartGWT Mobile is also
+ * available under typical commercial license terms - see
+ * http://smartclient.com/license
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ */
+
+@url searchItemIconImageUrl searchItemIconImageData;
+@url retinaSearchItemIconImageUrl retinaSearchItemIconImageData;
+
+@if user.agent gecko1_8 {
+    .formStyle1,
+    .formStyle2 {
+        -moz-margin-top-collapse: collapse;
+        -moz-margin-bottom-collapse: collapse;
+        -moz-box-sizing: border-box;
+    }
+} @else {
+    .formStyle1,
+    .formStyle2 {
+        -webkit-margin-top-collapse: collapse;
+        -webkit-margin-bottom-collapse: collapse;
+        -webkit-box-sizing: border-box;
+    }
+}
+.formStyle1,
+.formStyle2 {
+    margin-top-collapse: collapse;
+    margin-top: 17px !important;
+    margin-bottom-collapse: collapse;
+    margin-bottom: 5px !important;
+}
+
+.formStyle1:first-of-type,
+.formStyle2:first-of-type {
+    -moz-margin-top-collapse: separate;
+    -webkit-margin-top-collapse: separate;
+    margin-top-collapse: separate;
+}
+
+.formStyle1:last-child,
+.formStyle2:last-child {
+    margin-bottom: 17px !important;
+    -moz-margin-bottom-collapse: separate;
+    -webkit-margin-bottom-collapse: separate;
+    margin-bottom-collapse: separate;
+}
+
+.sc-form {
+    box-sizing: border-box;
+    width: 100%;
+}
+@if iOS.minVersion NA v1 v5 v6 {
+    .sc-form { padding: 0 9px 0 9px; }
+} @else {
+    .sc-form { position: relative; }
+    /*
+    HACK to add a white background to forms, but still allow our placeholder text trick to work
+    with DateItem/TimeItem/DateTimeItem on iOS 7.
+    */
+    .sc-form:before {
+        position: absolute;
+        content: "";
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background-color: White;
+        z-index: -1;
+    }
+}
+
+@if iOS.minVersion NA v1 v5 v6 {
+    .sc-form > tbody > tr > th,
+    .sc-form > tbody > tr > td {
+        border-top: 1px solid #ccc;
+        padding: 8px 0 8px 8px;
+        background-color: #f7f7f7;
+    }
+    .sc-form > tbody > tr.firstFormRowOrCell > th,
+    .sc-form > tbody > tr.firstFormRowOrCell > td,
+    .sc-form > tbody > tr.spacerItemFormRow + tr > th,
+    .sc-form > tbody > tr.spacerItemFormRow + tr > td {
+        border-top: 1px solid #a7a7a7;
+    }
+    .sc-form > tbody > tr.firstFormRowOrCell > .firstFormRowOrCell,
+    .sc-form > tbody > tr.spacerItemFormRow + tr > .firstFormRowOrCell {
+        border-top-left-radius: 10px;
+    }
+    .sc-form > tbody > tr.firstFormRowOrCell > .lastFormRowOrCell,
+    .sc-form > tbody > tr.spacerItemFormRow + tr > .lastFormRowOrCell {
+        border-top-right-radius: 10px;
+    }
+
+    .sc-form > tbody > tr > .firstFormRowOrCell { border-left: 1px solid #a7a7a7; }
+    .sc-form > tbody > tr > .lastFormRowOrCell { border-right: 1px solid #a7a7a7; }
+
+    .sc-form > tbody > tr > .lastFormRowOrCell { padding-right: 8px; }
+    .sc-form > tbody > tr > .sc-formitem-label-cell.lastFormRowOrCell { padding-right: 0; }
+
+    .sc-form > tbody > tr.lastFormRowOrCell > .firstFormRowOrCell,
+    .sc-form > tbody > tr.followedBySpacerItemFormRow > .firstFormRowOrCell {
+        border-bottom-left-radius: 10px;
+    }
+    .sc-form > tbody > tr.lastFormRowOrCell > .lastFormRowOrCell,
+    .sc-form > tbody > tr.followedBySpacerItemFormRow > .lastFormRowOrCell {
+        border-bottom-right-radius: 10px;
+    }
+
+    .sc-form > tbody > tr.lastFormRowOrCell > th,
+    .sc-form > tbody > tr.lastFormRowOrCell > td,
+    .sc-form > tbody > tr.followedBySpacerItemFormRow > th,
+    .sc-form > tbody > tr.followedBySpacerItemFormRow > td { border-bottom: 1px solid #a7a7a7; }
+} @else {
+    .sc-form > tbody > tr > th,
+    .sc-form > tbody > tr > td {
+        border-top: 1px solid #e1e0e6;
+        padding: 0.46rem 7.5px 0.56rem 7.5px;
+        /*
+        On iOS 7, we absolutely *cannot* apply a background to any ancestor element of the
+        DateItem/TimeItem/DateTimeItem elements because this stops the placeholder text from
+        showing through the date/time/datetime-local input element.
+
+        See the above hack for how we accomplish setting a white background.
+        */
+    }
+
+    .sc-form > tbody > tr > th.firstFormRowOrCell,
+    .sc-form > tbody > tr > td.firstFormRowOrCell {
+        padding-left: 15px;
+    }
+
+    .sc-form > tbody > tr > th.lastFormRowOrCell,
+    .sc-form > tbody > tr > td.lastFormRowOrCell {
+        padding-right: 15px;
+    }
+
+    .sc-form > tbody > tr.lastFormRowOrCell > th,
+    .sc-form > tbody > tr.lastFormRowOrCell > td,
+    .sc-form > tbody > tr.followedBySpacerItemFormRow > th,
+    .sc-form > tbody > tr.followedBySpacerItemFormRow > td { border-bottom: 1px solid #e1e0e6; }
+}
+
+.sc-form > tbody > tr.spacerItemFormRow + tr.spacerItemFormRow > th,
+.sc-form > tbody > tr.spacerItemFormRow + tr.spacerItemFormRow > td { border-top: 0; }
+.sc-form > tbody > tr > th {
+    vertical-align: top;
+}
+
+.sc-form > tbody > tr.spacerItemFormRow > th,
+.sc-form > tbody > tr.spacerItemFormRow > td {
+    border: none;
+    padding: 0;
+    background: none;
+}
+
+.sc-form .sc-formitem-label-cell {
+    font: bold 16px / 22px Helvetica, sans-serif;
+    font: -apple-system-body;
+    text-align: left;
+}
+
+.sc-form .sc-formitem-label-cell > label {
+    display: block;
+}
+@if iOS.minVersion NA v1 v5 v6 {
+    .sc-form .sc-formitem-label-cell { padding: 0; }
+    .sc-form .sc-formitem-label-cell > label { padding: 8px 0 8px 8px; }
+    .sc-form .sc-formitem-label-cell.lastFormRowOrCell > label { padding-right: 8px; }
+
+    .sc-form .sliderItemLabelCell > label,
+    .sc-form .switchItemLabelCell > label {
+        padding-top: 12px;
+    }
+
+    .sc-form .textAreaItemLabelCell { border-right: 1px solid #a7a7a7; }
+    .sc-form .textAreaItemLabelCell > label {
+        padding-bottom: 0;
+    }
+} @else {
+    .sc-form .sliderItemLabelCell,
+    .sc-form .switchItemLabelCell {
+        padding-top: 0.76rem;
+        padding-bottom: 0.86rem;
+    }
+}
+
+.sc-form .textAreaItemCell {
+    border-top: 0;
+    padding-top: 0;
+}
+
+.sc-form .sc-formitem-cell {
+    width: 200px;
+}
+
+.textItem {
+    text-overflow: ellipsis;
+}
+
+.dateItem,
+.dateItem > input,
+.timeItem,
+.timeItem > input,
+.textItem,
+/*
+Standardize the appearance of HTML5 input placeholders
+http://davidwalsh.name/html5-placeholder-css
+*/
+::-webkit-input-placeholder,
+.placeholderText {
+    font: normal 16px "Helvetica", sans-serif;
+    font: -apple-system-body;
+    white-space: nowrap;
+}
+
+@if android.disableInputGhosting yes {
+    /*
+    Apply the work-around to Android Issue 24780.
+    More information:
+    - http://code.google.com/p/android/issues/detail?id=24780
+    - https://github.com/cubiq/iscroll/issues/119
+    - http://stackoverflow.com/questions/13736817/android-text-input-in-a-webview-shows-a-second-box
+    - http://docs.kendoui.com/getting-started/mobile/forms
+    */
+    .textItem {
+        -webkit-user-modify: read-write-plaintext-only;
+    }
+}
+
+.dateItem,
+.timeItem,
+.textItem {
+    background: #f7f7f7;
+}
+
+@if iOS.minVersion NA v1 v5 v6 {
+} @else {
+    .dateItem,
+    .timeItem,
+    .textItem {
+        background: White;
+    }
+}
+
+.dateItem,
+.timeItem {
+    position: relative;
+    display: inline-block;
+    color: #a9a9a9;
+}
+
+::-webkit-input-placeholder,
+.placeholderText {
+    color: #a9a9a9;
+}
+
+.dateItem > input,
+.timeItem > input,
+.textItem {
+    margin: 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    border: 0;
+    padding: 0 0 0 9px;
+    outline: none;
+    color: #000;
+}
+
+.dateItem,
+.dateItem > input,
+.timeItem,
+.timeItem > input {
+    width: 100%;
+    min-width: 150px;
+    /* Clear the background so that the placeholderElement will show through in iOS 6+.
+       For iOS 5, this makes sure that the native date input does not have a different color.
+
+       Unfortunately, iOS 7 has a bug where changing a native date/time/datetime input's
+       background to transparent makes the input have no natural dimensions, so an explicit
+       width and height becomes necessary. Thus, we apply a width, but also a min-width to ensure
+       that a table column containing only DateItem/TimeItem/DateTimeItems will not collapse to
+       zero-width. */
+    background: transparent;
+}
+
+.dateItem > .placeholderText,
+.timeItem > .placeholderText {
+    display: inline-block;
+    position: absolute;
+    left: 10px; /* In iOS 6, this needs to be one more than the left padding on the INPUT. */
+    z-index: -1;
+}
+@if iOS.minVersion v5 {
+    .dateItem > .placeholderText,
+    .timeItem > .placeholderText {
+        left: 12px;
+    }
+}
+@if iOS.minVersion NA v1 v5 v6 {
+} @else {
+    .dateItem > .placeholderText,
+    .timeItem > .placeholderText {
+        left: 9px;
+    }
+}
+
+.sc-form input[type="button"] {
+    margin: 0;
+    font-family: "Helvetica", sans-serif;
+    font: -apple-system-body;
+    outline: none;
+}
+
+.uploadItem {
+    /* On iOS, file inputs have a large width that can cause the TABLE of the `DynamicForm'
+       to expand off screen. */
+    width: 150px;
+}
+.uploadItem > input[type="button"] {
+    vertical-align: middle;
+}
+.uploadPreviewImage {
+    margin-right: 4px;
+    margin-left: 4px;
+    border: 1px solid #4c4c4c;
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+}
+.sc-form input.sc-button {
+    font-size: 12px;
+    line-height: 28px;
+}
+textarea.textItem {
+    padding-right: 0;
+    padding-left: 0;
+    width: 100%;
+    resize: none;
+    white-space: normal;
+}
+
+.sc-form input:invalid {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.dateItem.formItemHasInvalidValue,
+.timeItem.formItemHasInvalidValue,
+.textItem.formItemHasInvalidValue {
+    -webkit-box-shadow: 0 0 2px 2px rgba(255, 0, 0, 0.5);
+    -moz-box-shadow: 0 0 2px 2px rgba(255, 0, 0, 0.5);
+    box-shadow: 0 0 2px 2px rgba(255, 0, 0, 0.5);
+}
+
+.sc-form .sc-error {
+    margin-top: 4px;
+    color: rgba(255, 0, 0, 0.95);
+    font-weight: bold;
+}
+
+.sc-form .searchItemCell {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+@if user.agent gecko1_8 {
+    .sc-form .sc-search-item {
+        -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.30);
+    }
+} @else {
+    .sc-form .sc-search-item {
+        -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.30);
+    }
+}
+.sc-form .sc-search-item {
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.30);
+    border: 1px solid #858585 !important;
+    border-bottom-color: #b0b0b0 !important;
+    border-radius: 13px;
+    padding-top: 1px !important;
+    padding-right: 8px !important;
+    padding-bottom: 0 !important;
+    padding-left: 8px !important;
+    height: 25px;
+    font: normal 14px "Helvetica", sans-serif;
+}
+
+@if (com.smartgwt.mobile.client.widgets.Canvas._isHDPIDisplay()) {
+    .sc-search-item.showSearchIcon {
+        background-image: retinaSearchItemIconImageUrl;
+        background-size: value('searchItemIconImage.getWidth', 'px') value('searchItemIconImage.getHeight', 'px');
+    }
+} @else {
+    .sc-search-item.showSearchIcon {
+        background-image: searchItemIconImageUrl;
+    }
+}
+.sc-search-item.showSearchIcon {
+    padding-left: 24px !important;
+    background-position: 8px center;
+    background-repeat: no-repeat;
+}
+
+@if iOS.minVersion NA v1 v5 v6 {
+} @else {
+    .dateItem,
+    .dateItem > input,
+    .timeItem,
+    .timeItem > input,
+    .textItem,
+    .sc-search-item {
+        color: #8E8E93;
+    }
+    ::-webkit-input-placeholder,
+    .placeholderText {
+        color: #C7C7CD;
+    }
+}
+
+@if iOS.minVersion NA v1 v5 v6 {
+    .formStyle2 > .sc-form .sc-formitem-label-cell {
+        border-right: 1px solid #ccc;
+        padding-right: 5px;
+        color: #516691;
+        font-size: 13px;
+    }
+    .formStyle2 > .sc-form .sc-formitem-label-cell[colspan="2"],
+    .formStyle2 > .sc-form .textAreaItemLabelCell { border-right-color: #a7a7a7; }
+    .formStyle2 > .sc-form .sc-formitem-label-cell > label {
+        text-align: right;
+    }
+    /* Label cells that span both columns should be left-aligned. */
+    .formStyle2 > .sc-form .sc-formitem-label-cell[colspan="2"] > label,
+    .formStyle2 > .sc-form .textAreaItemLabelCell > label {
+        text-align: left;
+    }
+} @else {
+    .formStyle2 > .sc-form .sc-formitem-label-cell > label {
+        color: #0076FF;
+        -webkit-transform: scale(0.85, 0.85);
+        -webkit-transform-origin: left bottom;
+    }
+}
+.formStyle2 > .sc-form .dateItem > input,
+.formStyle2 > .sc-form .timeItem > input,
+.formStyle2 > .sc-form .textItem {
+    padding: 0;
+}
+.formStyle2 > .sc-form .dateItem > .placeholderText,
+.formStyle2 > .sc-form .timeItem > .placeholderText {
+    left: 1px; /* In iOS 6+, this needs to be one more than the left padding on the INPUT. */
+}
+@if iOS.minVersion v5 {
+    .formStyle2 > .sc-form .dateItem > .placeholderText,
+    .formStyle2 > .sc-form .timeItem > .placeholderText {
+        left: 3px;
+    }
+}
+
+@if user.agent gecko1_8 {
+    :-moz-placeholder {
+        text-align: left;
+    }
+} @else {
+    ::-webkit-input-placeholder {
+        text-align: left;
+    }
+}

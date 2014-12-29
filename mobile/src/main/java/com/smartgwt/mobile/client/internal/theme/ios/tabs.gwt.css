@@ -1,0 +1,206 @@
+/*
+ * SmartGWT Mobile
+ * Copyright 2008 and beyond, Isomorphic Software, Inc.
+ *
+ * SmartGWT Mobile is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License version 3
+ * as published by the Free Software Foundation.  SmartGWT Mobile is also
+ * available under typical commercial license terms - see
+ * http://smartclient.com/license
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ */
+
+@def tabBarSlideOutAnimationDurationMillis 200ms;
+@def tabBarSlideOutAnimationDelayMillis 300ms;
+
+.sc-tabset {
+    position: absolute;
+}
+
+.tabPane {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 48px;
+    left: 0;
+    border-bottom: 1px solid #262626;
+    box-align: stretch;
+    -webkit-box-align: stretch;
+    -moz-box-align: stretch;
+    box-flex: 1;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    overflow: hidden;
+}
+
+.hideTabBarDuringFocus > .tabPane {
+    bottom: 0;
+}
+
+.tabBar {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 48px;
+    border-top: 1px solid #4b4b4b;
+    padding: 1px 2px 2px 2px;
+    background-image: literal("-webkit-gradient(linear,left top,left bottom,from(#2f2f2f),color-stop(.5,#141414),color-stop(.5,#000),to(#000))");
+    background-image: literal("-moz-linear-gradient(top,#2f2f2f 0%,#141414 50%,#000 50%,#000 100%)");
+    background-image: literal("linear-gradient(to bottom,#2f2f2f 0%,#141414 50%,#000 50%,#000 100%)");
+    font-size: 10px;
+    font-family: "Helvetica", sans-serif;
+    text-align: center;
+}
+
+.hideTabBarDuringFocus > .tabPane {
+    border-bottom: none;
+}
+
+/* On iOS, using display:none is very abrupt, so we slide the tab bar out of the way once we
+   know that the keyboard has finished showing itself.
+
+   On Android we can just use display:none. */
+@if user.agent ipad iphone {
+    .hideTabBarDuringFocus > .tabBar {
+        -webkit-animation: tabBarSlideOutAnimationName tabBarSlideOutAnimationDurationMillis ease tabBarSlideOutAnimationDelayMillis forwards;
+        animation: tabBarSlideOutAnimationName tabBarSlideOutAnimationDurationMillis ease tabBarSlideOutAnimationDelayMillis forwards;
+    }
+} @else {
+    .hideTabBarDuringFocus > .tabBar {
+        display: none;
+    }
+}
+
+@if isc.useFixedPositioningOnTabBars yes {
+    .tabBar {
+        position: fixed;
+    }
+}
+
+.tab {
+    display: block;
+    position: relative;
+    margin: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 25%; /* Setting a common width and `box-flex:1' will make the tabs have the same width. */
+    height: 100%;
+    padding: 0;
+    color: #fff;
+    text-align: center;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    box-flex: 1;
+}
+
+.activeTab {
+    background: rgba(255, 255, 255, 0.15);
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.tabTitle {
+    position: absolute;
+    right: 4px;
+    bottom: 1px;
+    left: 4px;
+    color: #999;
+    font-size: 10.5px;
+    font-weight: bold;
+    line-height: normal;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.activeTab .tabTitle {
+    color: #fff;
+}
+
+.tab:not\(.tabHasIcon \) .tabTitle {
+    line-height: 44px;
+}
+
+.tab:not\(.tabIconPrerendered \) img {
+    position: relative;
+    margin-top: 2px;
+    border: none;
+    width: 26px;
+    height: 26px;
+    background-image: literal("-webkit-gradient(linear,left top,left bottom,from(#8c8c8c),to(#4b4b4b))");
+    background-image: literal("-moz-linear-gradient(top,#8c8c8c 0%,#4b4b4b 100%)");
+    background-image: literal("linear-gradient(to bottom,#8c8c8c 0%,#4b4b4b 100%)");
+    -webkit-box-shadow: #000 0 1px 0px;
+    -moz-box-shadow: #000 0 1px 0px;
+    box-shadow: #000 0 1px 0px;
+    z-index: 1;
+}
+
+.activeTab:not\(.tabIconPrerendered \) img {
+    background-image: literal("-webkit-gradient(linear,45% 20%,55% 75%,from(#c9edfa),color-stop(.43,#7fa8e8),color-stop(.6,#006af1),to(#00befd))");
+    background-image: literal("-moz-linear-gradient(-75deg,#c9edfa 10%,#7fa8e8 43%,#006af1 60%,#00befd 100%)");
+    background-image: literal("linear-gradient(-75deg,#c9edfa 10%,#7fa8e8 43%,#006af1 60%,#00befd 100%)");
+}
+
+.tab.tabIconPrerendered .tabIconWrapper {
+    display: inline-block;
+    position: relative;
+    margin-top: 0;
+    border: none;
+    width: 32px;
+    height: 32px;
+    background-size: 32px 64px;
+    background-repeat: no-repeat;
+}
+
+.activeTab.tabIconPrerendered .tabIconWrapper {
+    background-position: 0 -32px;
+}
+
+.tabBadgeWrapper {
+    position: absolute;
+    top: 1px;
+    right: 50%;
+    margin-right: -28px;
+    min-width: 18px;
+    height: 18px;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    background: #fff;
+    text-align: center;
+    z-index: 10;
+}
+
+.tabBadge {
+    margin: 2px;
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
+    min-width: 14px;
+    height: 14px;
+    background: #ff0000;
+    background: literal("radial-gradient(ellipse at center,#ffffff 0,#ff0000 26px)");
+    background: literal("-webkit-gradient(radial,center center,0px,center center,100%,color-stop(0,#ffffff),color-stop(26px,#ff0000))");
+    background: literal("-webkit-radial-gradient(center -9px,circle,white 0,red 26px )");
+}
+
+.tabBadgeContent {
+    margin: 0;
+    padding: 0px 4px 0 4px;
+    color: #fff;
+    font-size: 12.5px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 12.5px;
+}

@@ -1,0 +1,56 @@
+/*
+ * SmartGWT Mobile
+ * Copyright 2008 and beyond, Isomorphic Software, Inc.
+ *
+ * SmartGWT Mobile is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License version 3
+ * as published by the Free Software Foundation.  SmartGWT Mobile is also
+ * available under typical commercial license terms - see
+ * http://smartclient.com/license
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ */
+
+@if user.agent gecko1_8 {
+    .sc-progressbar {
+        -moz-background-size: 100% 9px;
+    }
+} @else {
+    .sc-progressbar {
+        -webkit-background-size: 100% 9px;
+    }
+}
+.sc-progressbar {
+    margin: 0px auto;
+    width: 250px;
+    height: 7px;
+    border-radius: 4px;
+    background-image: literal("-webkit-gradient(linear,left top ,left bottom,from(#a3a3a3),color-stop(.5,#dbdbdb),color-stop(.5,#fff),color-stop(.8,#fff),color-stop(1,#a3a3a3))");
+    background-image: literal("-moz-linear-gradient(top,#a3a3a3 0%,#dbdbdb 50%,#fff 50%,#fff 80%,#a3a3a3 100%)");
+    background-repeat: no-repeat;
+    background-size: 100% 9px;
+}
+
+@if user.agent gecko1_8 {
+    .progressbarBar {
+        -moz-transition-timing-function: linear;
+    }
+} @else {
+    .progressbarBar {
+        -webkit-transition-timing-function: linear;
+    }
+}
+.progressbarBar {
+    float: left;
+    width: 0;
+    height: 7px;
+    border: 1px solid #828da9;
+    border-radius: 4px;
+    background-image: literal("-webkit-gradient(linear,left top ,left bottom,from(#aac8ec),color-stop(.5,#8fafe2),color-stop(.5,#2072d5),color-stop(.95,#3185dd),to(#3185dd))");
+    background-image: literal("-moz-linear-gradient(top,#aac8ec 0%,#8fafe2 50%,#2072d5 50%,#3185dd 95%,#3185dd 100%)");
+    background-repeat: no-repeat;
+    transition-timing-function: linear;
+}

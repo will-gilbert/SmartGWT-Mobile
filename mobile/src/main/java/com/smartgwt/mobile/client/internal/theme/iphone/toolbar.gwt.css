@@ -1,0 +1,63 @@
+/*
+ * SmartGWT Mobile
+ * Copyright 2008 and beyond, Isomorphic Software, Inc.
+ *
+ * SmartGWT Mobile is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License version 3
+ * as published by the Free Software Foundation.  SmartGWT Mobile is also
+ * available under typical commercial license terms - see
+ * http://smartclient.com/license
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ */
+
+@external .sc-*;
+
+@if iOS.min6_0 no {
+    .sc-toolbar {
+        border-top-color: #cdd5df;
+        border-bottom-color: #2d3642;
+        background-image: literal("-webkit-gradient(linear,left top,left bottom,from(#b0bccd),color-stop(.5,#879bb3),color-stop(.5,#8195af),to(#6c83a1))");
+        background-image: literal("-moz-linear-gradient(top,#b0bccd 0%,#879bb3 50%,#8195af 50%,#6c83a1 100%)");
+        background-image: literal("linear-gradient(to bottom,#b0bccd 0%,#879bb3 50%,#8195af 50%,#6c83a1 100%)");
+    }
+} @else {
+    .sc-toolbar {
+        border-top-color: #eef1f4;
+        border-bottom-color: #3e5b7e;
+        background-image: literal("-webkit-gradient(linear,left top,left bottom,color-stop(.025,#c1cedf),color-stop(.955,#597498))");
+    }
+}
+
+.sc-toolbar > h1 {
+    color: #fff;
+    text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.5);
+}
+
+@if iOS.min6_0 yes {
+    .sc-toolbar > .sc-button.borderedButton {
+        box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.1), 0 1px 0 #7c92b0;
+    }
+    .sc-toolbar > .sc-button.borderedButton,
+    .sc-toolbar > .sc-button.borderedButton.disabled.touchedButton {
+        background-image: literal("-webkit-gradient(linear,left top,left bottom,from(#96a8c0),to(#3f5f8d))");
+    }
+    .sc-toolbar > .sc-button.borderedButton.touchedButton,
+    .sc-toolbar > .sc-button.borderedButton.importantButton.touchedButton {
+        background-image: literal("-webkit-gradient(linear,left top,left bottom,from(#8b97af),to(#263d6c))");
+    }
+    .sc-toolbar > .sc-button.borderedButton.importantButton,
+    .sc-toolbar > .sc-button.borderedButton.importantButton.disabled.touchedButton {
+        background-image: literal("-webkit-gradient(linear,left top,left bottom,from(#88aaeb),to(#2663db))");
+    }
+    .sc-toolbar > .sc-button.borderedButton.warningButton,
+    .sc-toolbar > .sc-button.borderedButton.warningButton.disabled.touchedButton {
+        background-image: literal("-webkit-gradient(linear,left top,left bottom,from(#ed8288),to(#bd1421))");
+    }
+    .sc-toolbar > .sc-button.borderedButton.warningButton.touchedButton {
+        background-image: literal("-webkit-gradient(linear,left top,left bottom,from(#a65960),to(#8d131e))");
+    }
+}

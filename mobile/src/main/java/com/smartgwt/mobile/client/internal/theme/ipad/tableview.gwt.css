@@ -1,0 +1,51 @@
+/*
+ * SmartGWT Mobile
+ * Copyright 2008 and beyond, Isomorphic Software, Inc.
+ *
+ * SmartGWT Mobile is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License version 3
+ * as published by the Free Software Foundation.  SmartGWT Mobile is also
+ * available under typical commercial license terms - see
+ * http://smartclient.com/license
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ */
+
+.tableViewWrapper > .groupedTableView:first-child {
+    margin-top: 30px !important;
+}
+.tableViewWrapper > .groupedTableView:last-child {
+    margin-bottom: 30px !important;
+}
+
+ul.sc-table.groupedTableView {
+    margin: 30px;
+}
+
+@if iOS.minVersion NA v1 v5 v6 {
+} @else {
+    ul.sc-table.groupedTableView > li.sc-row.selectedTableViewRow.firstTableViewRow,
+    ul.sc-table.groupedTableView > li > ul.sc-table-group > li.sc-row.selectedTableViewRow.firstTableViewRow {
+        border-top-color: #d9d9d9;
+    }
+    ul.sc-table.groupedTableView > li.sc-row.selectedTableViewRow.lastTableViewRow,
+    ul.sc-table.groupedTableView > li > ul.sc-table-group > li.sc-row.selectedTableViewRow.lastTableViewRow {
+        border-bottom-color: #d9d9d9;
+    }
+
+    ul.sc-table.groupedTableView > li.sc-row.firstTableViewRow,
+    ul.sc-table.groupedTableView > li > ul.sc-table-group > li.sc-row.firstTableViewRow {
+        border-top: 1px solid White;
+        border-top-right-radius: 4px;
+        border-top-left-radius: 4px;
+    }
+    ul.sc-table.groupedTableView > li.sc-row.lastTableViewRow,
+    ul.sc-table.groupedTableView > li > ul.sc-table-group > li.sc-row.lastTableViewRow {
+        border-bottom: 1px solid White;
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+    }
+}

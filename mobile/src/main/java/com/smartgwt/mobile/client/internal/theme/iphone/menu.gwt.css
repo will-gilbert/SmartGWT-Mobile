@@ -1,0 +1,363 @@
+/*
+ * SmartGWT Mobile
+ * Copyright 2008 and beyond, Isomorphic Software, Inc.
+ *
+ * SmartGWT Mobile is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License version 3
+ * as published by the Free Software Foundation.  SmartGWT Mobile is also
+ * available under typical commercial license terms - see
+ * http://smartclient.com/license
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ */
+
+@url menuItemBorderRightImageUrl menuItemBorderRightImageData;
+@url menuItemBorderLeftImageUrl menuItemBorderLeftImageData;
+
+@def menuOffsetHeightPx 38px;
+@def menuBorderRightWidthPx 1px;
+@def menuBorderLeftWidthPx 1px;
+@def menuBorderRadiusPx 7px;
+@def menuTipWrapperOffsetHeight 15px;
+@def menuTipBeforePseudoelementLeftPx -8px;
+@def arrowItemWidthPx 32px;
+
+@def menuFadeInAnimationName sc-menu-fadeIn;
+@def menuFadeInAnimationDurationMillis 150ms;
+@def menuFadeOutAnimationName sc-menu-fadeOut;
+@def menuFadeOutAnimationDurationMillis 300ms;
+
+@def pageFlipAnimationDurationMillis 200ms;
+
+/* We need to use literal() with CSS3 gradients because the GWT compiler removes all spaces
+   within the parentheses leading to invalid syntax (e.g. `-webkit-gradient(linear,lefttop,leftbottom'
+   and `#8e8e8e0%').
+   http://code.google.com/p/google-web-toolkit/issues/detail?id=5771 */
+@if user.agent gecko1_8 {
+    @def vendorUnselectedMenuItemGradient
+        literal("-moz-linear-gradient(top,#8e8e8e 0%,#525252 50%,#3b3b3b 50%,#141414 100%)");
+    @def vendorSelectedMenuItemGradient
+        literal("-moz-linear-gradient(top,#7285ff 0%,#495eff 50%,#314aff 50%,#2e47ff 100%)");
+} @else {
+    @def vendorUnselectedMenuItemGradient
+        literal("-webkit-gradient(linear,left top,left bottom,from(#8e8e8e),color-stop(.5,#525252),color-stop(.5,#3b3b3b),to(#141414))");
+    @def vendorSelectedMenuItemGradient
+        literal("-webkit-gradient(linear,left top,left bottom,from(#7285ff),color-stop(.5,#495eff),color-stop(.5,#314aff),to(#2e47ff))");
+}
+@def standardUnselectedMenuItemGradient
+    literal("linear-gradient(to bottom,#8e8e8e 0%,#525252 50%,#3b3b3b 50%,#141414 100%)");
+@def standardSelectedMenuItemGradient
+    literal("linear-gradient(to bottom,#7285ff 0%,#495eff 50%,#314aff 50%,#2e47ff 100%)");
+
+.label{}
+
+.contentMeasurerClass {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    visibility: hidden;
+    z-index: -1000;
+}
+
+.screenCoverClass {
+    z-index: 2000;
+}
+
+@if user.agent gecko1_8 {
+    .sc-menu {
+        -moz-transition: top 200ms ease-in-out;
+    }
+} @else {
+    .sc-menu {
+        -webkit-transition: top 200ms ease-in-out;
+    }
+}
+.sc-menu {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    transition: top 200ms ease-in-out;
+}
+
+@if user.agent gecko1_8 {
+    .sc-menu.fadeInClass {
+        -moz-animation: menuFadeInAnimationName menuFadeInAnimationDurationMillis ease-in-out;
+        -moz-transition: none;
+    }
+    .sc-menu.fadeOutClass {
+        -moz-animation: menuFadeOutAnimationName menuFadeOutAnimationDurationMillis ease-in-out;
+    }
+} @else {
+    .sc-menu.fadeInClass {
+        -webkit-animation: menuFadeInAnimationName menuFadeInAnimationDurationMillis ease-in-out;
+        -webkit-transition: none;
+    }
+    .sc-menu.fadeOutClass {
+        -webkit-animation: menuFadeOutAnimationName menuFadeOutAnimationDurationMillis ease-in-out;
+    }
+}
+.sc-menu.fadeInClass {
+    animation: menuFadeInAnimationName menuFadeInAnimationDurationMillis ease-in-out;
+    /* Don't transition `top' when the menu is first appearing on screen. */
+    transition: none;
+    opacity: 1;
+}
+.sc-menu.fadeOutClass {
+    animation: menuFadeOutAnimationName menuFadeOutAnimationDurationMillis ease-in-out;
+    opacity: 0;
+}
+
+@if user.agent gecko1_8 {
+    .menuPageClass {
+        -moz-user-select: none;
+        display: -moz-box;
+        -moz-box-orient: horizontal;
+        -moz-box-align: stretch;
+        -moz-box-pack: center;
+        -moz-box-sizing: border-box;
+        -moz-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    }
+} @else {
+    .menuPageClass {
+        -webkit-user-select: none;
+        display: -webkit-box;
+        -webkit-box-orient: horizontal;
+        -webkit-box-align: stretch;
+        -webkit-box-pack: center;
+        -webkit-box-sizing: border-box;
+        -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    }
+}
+.menuPageClass {
+    cursor: pointer;
+    user-select: none;
+    position: absolute;
+    top: 0;
+    display: box;
+    box-orient: horizontal;
+    box-align: stretch;
+    box-pack: center;
+    background: none;
+    box-sizing: border-box;
+    height: menuOffsetHeightPx;
+    border-top: 1px solid #383838;
+    border-right: menuBorderRightWidthPx solid #353535;
+    border-bottom: 1px solid #333333;
+    border-left: menuBorderLeftWidthPx solid #353535;
+    border-radius: menuBorderRadiusPx;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    z-index: 100;
+}
+
+@if user.agent gecko1_8 {
+    .menuPageClass > .sc-menuitem {
+        -moz-box-flex: 1;
+        -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+} @else {
+    .menuPageClass > .sc-menuitem {
+        -webkit-box-flex: 1;
+        -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    }
+}
+@if user.agent android {
+    .menuPageClass > .sc-menuitem {
+        /* Tested Android 2.3.3 Browser and found that the box shadow "blur" must be non-zero.
+           http://code.google.com/p/android/issues/detail?id=15935
+
+           Affected Android devices use the -webkit prefix.
+           http://caniuse.com/#feat=css-boxshadow */
+        -webkit-box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.6);
+    }
+}
+.menuPageClass > .sc-menuitem,
+.contentMeasurerClass {
+    padding-right: 10px;
+    padding-left: 10px;
+}
+.menuPageClass > .sc-menuitem {
+    /*border-right: 1px solid rgba(0, 0, 0, 0.2);
+    border-left: 1px solid rgba(255, 255, 255, 0.2);*/
+    background:
+        menuItemBorderRightImageUrl right no-repeat,
+        menuItemBorderLeftImageUrl left no-repeat,
+        vendorUnselectedMenuItemGradient;
+    background:
+        menuItemBorderRightImageUrl right no-repeat,
+        menuItemBorderLeftImageUrl left no-repeat,
+        standardUnselectedMenuItemGradient;
+    box-flex: 1;
+    line-height: 36px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.menuPageClass > .sc-menuitem.first {
+    border-top-left-radius: 6px; /* menuBorderRadiusPx - 1px */
+    border-bottom-left-radius: 6px; /* menuBorderRadiusPx - 1px */
+    background:
+        menuItemBorderRightImageUrl right no-repeat,
+        vendorUnselectedMenuItemGradient;
+    background:
+        menuItemBorderRightImageUrl right no-repeat,
+        standardUnselectedMenuItemGradient;
+}
+.menuPageClass > .sc-menuitem.last {
+    border-top-right-radius: 6px; /* menuBorderRadiusPx - 1px */
+    border-bottom-right-radius: 6px; /* menuBorderRadiusPx - 1px */
+    background:
+        menuItemBorderLeftImageUrl left no-repeat,
+        vendorUnselectedMenuItemGradient;
+    background:
+        menuItemBorderLeftImageUrl left no-repeat,
+        standardUnselectedMenuItemGradient;
+}
+.menuPageClass > .sc-menuitem.first.last {
+    background: vendorUnselectedMenuItemGradient;
+    background: standardUnselectedMenuItemGradient;
+}
+
+.menuPageClass > .sc-menuitem.selected {
+    background:
+        menuItemBorderRightImageUrl right no-repeat,
+        menuItemBorderLeftImageUrl left no-repeat,
+        vendorSelectedMenuItemGradient;
+    background:
+        menuItemBorderRightImageUrl right no-repeat,
+        menuItemBorderLeftImageUrl left no-repeat,
+        standardSelectedMenuItemGradient;
+}
+.menuPageClass > .sc-menuitem.first.selected {
+    background:
+        menuItemBorderRightImageUrl right no-repeat,
+        vendorSelectedMenuItemGradient;
+    background:
+        menuItemBorderRightImageUrl right no-repeat,
+        standardSelectedMenuItemGradient;
+}
+.menuPageClass > .sc-menuitem.last.selected {
+    background:
+        menuItemBorderLeftImageUrl left no-repeat,
+        vendorSelectedMenuItemGradient;
+    background:
+        menuItemBorderLeftImageUrl left no-repeat,
+        standardSelectedMenuItemGradient;
+}
+.menuPageClass > .sc-menuitem.first.last.selected {
+    background: vendorSelectedMenuItemGradient;
+    background: standardSelectedMenuItemGradient;
+}
+
+.menuPageClass > .sc-menuitem > .content,
+.contentMeasurerClass {
+    font-family: "Helvetica", sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 36px;
+}
+.menuPageClass > .sc-menuitem > .content {
+    color: white;
+    text-align: center;
+    text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.55);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@if user.agent gecko1_8 {
+    .menuPageClass > .sc-menuitem.arrowItemClass {
+        -moz-box-flex: 0;
+    }
+} @else {
+    .menuPageClass > .sc-menuitem.arrowItemClass {
+        -webkit-box-flex: 0;
+    }
+}
+.menuPageClass > .sc-menuitem.arrowItemClass {
+    padding: 0;
+    width: arrowItemWidthPx;
+    box-flex: 0;
+}
+
+.menuPageClass > .sc-menuitem.arrowItemClass > .content {
+    text-shadow: 0px -1px 1px rgba(0, 0, 0, 0.75);
+}
+
+.menuPageClass > .sc-menuitem.disabled { cursor: default; }
+.menuPageClass > .sc-menuitem.disabled > .content {
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.menuTipWrapperClass {
+    position: absolute;
+    top: 37px; /* menuOffsetHeightPx - 1px */
+    left: 0;
+    width: 100%;
+    height: menuTipWrapperOffsetHeight;
+    overflow: hidden;
+    z-index: 101;
+}
+
+@if user.agent gecko1_8 {
+    .menuTipClass {
+        -moz-transition: left pageFlipAnimationDurationMillis steps(1, end);
+    }
+} @else {
+    .menuTipClass {
+        -webkit-transition: left pageFlipAnimationDurationMillis steps(1, end);
+    }
+}
+.menuTipClass {
+    position: absolute;
+    top: 0;
+    width: 0;
+    height: 100%;
+    transition: left pageFlipAnimationDurationMillis steps(1, end);
+}
+
+@if user.agent gecko1_8 {
+    .sc-menu.fadeInClass .menuTipClass {
+        -moz-transition: none;
+    }
+} @else {
+    .sc-menu.fadeInClass .menuTipClass {
+        -webkit-transition: none;
+    }
+}
+.sc-menu.fadeInClass .menuTipClass {
+    /* Don't transition the menu tip `left' when the menu is first appearing on screen. */
+    transition: none;
+}
+
+@if user.agent gecko1_8 {
+    .menuTipClass:before {
+        -moz-box-sizing: border-box;
+        -moz-transform: rotate(-45deg);
+        -moz-box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.35);
+    }
+} @else {
+    .menuTipClass:before {
+        -webkit-box-sizing: border-box;
+        -webkit-transform: rotate(-45deg);
+        -webkit-box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.35);
+    }
+}
+.menuTipClass:before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: -9px;
+    left: menuTipBeforePseudoelementLeftPx;
+    box-sizing: border-box;
+    width: 16px;
+    height: 16px;
+    border-left: 1px solid #333333;
+    border-bottom: 1px solid #333333;
+    transform: rotate(-45deg);
+    background-color: #151515;
+    box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.35);
+}
+.menuTipClass.selected:before { background-color: #2e47ff; }

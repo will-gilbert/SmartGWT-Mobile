@@ -1,0 +1,14 @@
+@external .sc-*;
+
+._popupContainer{}
+._popupModalMask{}
+._showing{}
+._hiding{}
+
+.modalMask{}
+.windowContainer{}
+.windowBackground{}
+.headerless{}
+.windowHeader{}
+.windowHeaderLabel{}
+.windowBody{}

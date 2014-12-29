@@ -1,0 +1,718 @@
+ <!--
+  ~ SmartGWT Mobile
+  ~ Copyright 2008 and beyond, Isomorphic Software, Inc.
+  ~
+  ~ SmartGWT Mobile is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License version 3
+  ~ as published by the Free Software Foundation.  SmartGWT Mobile is also
+  ~ available under typical commercial license terms - see
+  ~ http://smartclient.com/license
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  -->
+
+<module>
+    <inherits name="com.google.gwt.user.DOM"/>
+    <inherits name="com.google.gwt.user.User"/>
+    <inherits name="com.google.gwt.xml.XML"/>
+    <inherits name="com.google.gwt.i18n.I18N"/>
+    <inherits name="com.google.gwt.json.JSON"/>
+    <inherits name="com.google.gwt.http.HTTP"/>
+    <inherits name="com.google.gwt.event.Event"/>
+    <inherits name="com.google.gwt.resources.Resources"/>
+
+    <!-- Patch the differences between GWT 2.4.0 and 2.5.0 with respect to the UserAgentAsserter,
+         which was moved to a different package in GWT 2.5.0. -->
+    <inherits name="com.google.gwt.SmartGwtMobilePatch"/>
+
+    <extend-configuration-property name="CssResource.reservedClassPrefixes" value="app"/>
+    <extend-configuration-property name="CssResource.reservedClassPrefixes" value="my"/>
+    <extend-configuration-property name="CssResource.reservedClassPrefixes" value="sc-"/>
+    <extend-configuration-property name="CssResource.reservedClassPrefixes" value="x-"/>
+
+    <!-- Property isc.enableHistory - whether the history feature is enabled. -->
+    <define-property name="isc.enableHistory" values="yes,no"/>
+    <!-- Enable the history feature by default. -->
+    <set-property name="isc.enableHistory" value="yes"/>
+
+    <!-- Extend 'user.agent' to support "android", "ipad", and "iphone". -->
+    <extend-property name="user.agent" values="android" fallback-value="safari"/>
+    <extend-property name="user.agent" values="ipad" fallback-value="safari"/>
+    <extend-property name="user.agent" values="iphone" fallback-value="safari"/>
+    <property-provider name="user.agent" generator="com.smartgwt.mobile.internal.gwt.useragent.rebind.CustomUserAgentPropertyGenerator"/>
+
+    <!-- GWT 2.4 and earlier -->
+    <generate-with class="com.smartgwt.mobile.internal.gwt.user.rebind.CustomUserAgentAsserterGenerator">
+        <when-type-is class="com.google.gwt.user.client.UserAgentAsserter" />
+    </generate-with>
+    <generate-with class="com.smartgwt.mobile.internal.gwt.useragent.rebind.CustomUserAgentGenerator">
+        <when-type-assignable class="com.google.gwt.user.client.UserAgentAsserter.UserAgentProperty"/>
+    </generate-with>
+
+    <!-- GWT 2.5 and newer -->
+    <generate-with class="com.smartgwt.mobile.internal.gwt.useragent.rebind.CustomUserAgentAsserterGenerator">
+        <when-type-is class="com.google.gwt.useragent.client.UserAgentAsserter" />
+    </generate-with>
+    <generate-with class="com.smartgwt.mobile.internal.gwt.useragent.rebind.CustomUserAgentGenerator">
+        <when-type-assignable class="com.google.gwt.useragent.client.UserAgentAsserter.UserAgentProperty"/>
+    </generate-with>
+
+    <!-- Use `find . -name '*.gwt.xml' -not -wholename '*/.svn/*' -exec grep -q '"safari"' '{}' \; -print` to locate all uses
+         of deferred binding that select for user.agent "safari".  The same overrides should
+         be used with "android", "ipad", and "iphone". -->
+    <replace-with class="com.google.gwt.animation.client.AnimationSchedulerImplWebkit">
+        <when-type-is class="com.google.gwt.animation.client.AnimationScheduler"/>
+        <any>
+            <when-property-is name="user.agent" value="android"/>
+            <when-property-is name="user.agent" value="ipad"/>
+            <when-property-is name="user.agent" value="iphone"/>
+        </any>
+    </replace-with>
+    <replace-with class="com.google.gwt.core.client.impl.StackTraceCreator.CollectorChrome">
+        <when-type-is class="com.google.gwt.core.client.impl.StackTraceCreator.Collector"/>
+        <any>
+            <when-property-is name="user.agent" value="android"/>
+            <when-property-is name="user.agent" value="ipad"/>
+            <when-property-is name="user.agent" value="iphone"/>
+        </any>
+    </replace-with>
+    <replace-with class="com.google.gwt.dom.builder.client.DomBuilderFactory">
+        <when-type-is class="com.google.gwt.dom.builder.shared.ElementBuilderFactory"/>
+        <any>
+            <when-property-is name="user.agent" value="android"/>
+            <when-property-is name="user.agent" value="ipad"/>
+            <when-property-is name="user.agent" value="iphone"/>
+        </any>
+    </replace-with>
+    <replace-with class="com.google.gwt.dom.client.DOMImplWebkit">
+        <when-type-is class="com.google.gwt.dom.client.DOMImpl"/>
+        <any>
+            <when-property-is name="user.agent" value="android"/>
+            <when-property-is name="user.agent" value="ipad"/>
+            <when-property-is name="user.agent" value="iphone"/>
+        </any>
+    </replace-with>
+    <generate-with class="com.google.gwt.resources.rebind.context.InlineClientBundleGenerator">
+        <all>
+            <when-property-is name="ClientBundle.enableInlining" value="true"/>
+            <when-type-assignable class="com.google.gwt.resources.client.ClientBundle"/>
+            <any>
+                <when-property-is name="user.agent" value="android"/>
+                <when-property-is name="user.agent" value="ipad"/>
+                <when-property-is name="user.agent" value="iphone"/>
+            </any>
+        </all>
+    </generate-with>
+    <replace-with class="com.google.gwt.storage.client.StorageImplNonNativeEvents">
+        <when-type-is class="com.google.gwt.storage.client.StorageImpl" />
+        <any>
+            <when-property-is name="user.agent" value="android"/>
+            <when-property-is name="user.agent" value="ipad"/>
+            <when-property-is name="user.agent" value="iphone"/>
+        </any>
+    </replace-with>
+    <replace-with class="com.google.gwt.typedarrays.client.NativeImplEmulClamped">
+        <when-type-is class="com.google.gwt.typedarrays.client.NativeImpl"/>
+        <any>
+            <when-property-is name="user.agent" value="android"/>
+            <when-property-is name="user.agent" value="ipad"/>
+            <when-property-is name="user.agent" value="iphone"/>
+        </any>
+    </replace-with>
+    <replace-with class="com.google.gwt.user.cellview.client.CellBasedWidgetImplStandardBase">
+        <when-type-is class="com.google.gwt.user.cellview.client.CellBasedWidgetImpl"/>
+        <any>
+            <when-property-is name="user.agent" value="android"/>
+            <when-property-is name="user.agent" value="ipad"/>
+            <when-property-is name="user.agent" value="iphone"/>
+        </any>
+    </replace-with>
+    <replace-with class="com.google.gwt.user.client.impl.DOMImplWebkit">
+        <when-type-is class="com.google.gwt.user.client.impl.DOMImpl"/>
+        <any>
+            <when-property-is name="user.agent" value="android"/>
+            <when-property-is name="user.agent" value="ipad"/>
+            <when-property-is name="user.agent" value="iphone"/>
+        </any>
+    </replace-with>
+    <replace-with class="com.google.gwt.user.client.impl.HistoryImplSafari">
+        <when-type-is class="com.google.gwt.user.client.impl.HistoryImpl"/>
+        <any>
+            <when-property-is name="user.agent" value="android"/>
+            <when-property-is name="user.agent" value="ipad"/>
+            <when-property-is name="user.agent" value="iphone"/>
+        </any>
+    </replace-with>
+    <replace-with class="com.google.gwt.user.client.ui.CaptionPanel.CaptionPanelImplSafari">
+        <when-type-is class="com.google.gwt.user.client.ui.CaptionPanel.CaptionPanelImpl"/>
+        <any>
+            <when-property-is name="user.agent" value="android"/>
+            <when-property-is name="user.agent" value="ipad"/>
+            <when-property-is name="user.agent" value="iphone"/>
+        </any>
+    </replace-with>
+    <replace-with class="com.google.gwt.user.client.ui.HorizontalSplitPanel.ImplSafari">
+        <when-type-is class="com.google.gwt.user.client.ui.HorizontalSplitPanel.Impl"/>
+        <any>
+            <when-property-is name="user.agent" value="android"/>
+            <when-property-is name="user.agent" value="ipad"/>
+            <when-property-is name="user.agent" value="iphone"/>
+        </any>
+    </replace-with>
+    <replace-with class="com.google.gwt.user.client.ui.impl.FocusImplSafari">
+        <when-type-is class="com.google.gwt.user.client.ui.impl.FocusImpl"/>
+        <any>
+            <when-property-is name="user.agent" value="android"/>
+            <when-property-is name="user.agent" value="ipad"/>
+            <when-property-is name="user.agent" value="iphone"/>
+        </any>
+    </replace-with>
+    <replace-with class="com.google.gwt.user.client.ui.impl.HyperlinkImplSafari">
+        <when-type-is class="com.google.gwt.user.client.ui.impl.HyperlinkImpl"/>
+        <any>
+            <when-property-is name="user.agent" value="android"/>
+            <when-property-is name="user.agent" value="ipad"/>
+            <when-property-is name="user.agent" value="iphone"/>
+        </any>
+    </replace-with>
+    <replace-with class="com.google.gwt.user.client.ui.impl.RichTextAreaImplSafari">
+        <when-type-is class="com.google.gwt.user.client.ui.impl.RichTextAreaImpl"/>
+        <any>
+            <when-property-is name="user.agent" value="android"/>
+            <when-property-is name="user.agent" value="ipad"/>
+            <when-property-is name="user.agent" value="iphone"/>
+        </any>
+    </replace-with>
+    <replace-with class="com.google.gwt.xml.client.impl.XMLParserImplSafari">
+        <when-type-is class="com.google.gwt.xml.client.impl.XMLParserImpl"/>
+        <any>
+            <when-property-is name="user.agent" value="android"/>
+            <when-property-is name="user.agent" value="ipad"/>
+            <when-property-is name="user.agent" value="iphone"/>
+        </any>
+    </replace-with>
+
+    <!-- Only the following user.agent values are supported. -->
+    <set-property name="user.agent" value="android,ipad,iphone,safari,gecko1_8"/>
+
+    <!-- Internal property android.minVersion - lower bound on the real Android version -->
+    <define-property name="android.minVersion" values="NA,v1,v4_0,v4_1"/>
+    <property-provider name="android.minVersion"><![CDATA[
+        var ua = navigator.userAgent.toLowerCase();
+        if (ua.indexOf('android') != -1) {
+            // http://en.wikipedia.org/wiki/Android_version_history
+            var oldAndroidVersionsRegExp = /android\s*(1|2|3|4\.0)/;
+            var result = oldAndroidVersionsRegExp.exec(ua);
+            if (result != null) {
+                var group1 = result[1];
+                if (group1[0] == '4') return 'v4_0';
+                else return 'v1';
+            }
+            return 'v4_1';
+        }
+        return 'NA';
+    ]]></property-provider>
+    <set-property name="android.minVersion" value="NA">
+        <none>
+            <when-property-is name="user.agent" value="android"/>
+        </none>
+    </set-property>
+    <collapse-property name="android.minVersion" values="*"/>
+
+    <!-- Should the work-around for Android Issue 24780 be enabled?
+         http://code.google.com/p/android/issues/detail?id=24780
+
+         When a text-type <input> element has keyboard focus, Android 4.0-4.0.4 ("Ice Cream Sandwich")
+         by default places a fake input ("ghost") on top that does not stay on top of the <input> when
+         the page is scrolled. A work-around to this problem can be enabled, but note that the
+         work-around disables the ability of PhoneItem to display the special numeric keypad. -->
+    <define-property name="android.disableInputGhosting" values="yes,no"/>
+    <set-property name="android.disableInputGhosting" value="no"/>
+    <set-property name="android.disableInputGhosting" value="yes">
+        <!-- Android 4.0.x -->
+        <when-property-is name="android.minVersion" value="v4_0"/>
+    </set-property>
+    <collapse-property name="android.disableInputGhosting" values="*"/>
+
+    <!-- Value of the android:windowSoftInputMode attribute in the manifest.
+         For the default Android Browser, this is probably adjustResize, although there are
+         reports that this could be different on select devices or older Android versions
+         (e.g. Android 2.3.5): http://stackoverflow.com/questions/16276306/android-web-application-application-is-displaying-above-keyboard  -->
+    <define-property name="android.windowSoftInputMode" values="NA,adjustResize,adjustPan"/>
+    <set-property name="android.windowSoftInputMode" value="NA"/>
+    <set-property name="android.windowSoftInputMode" value="adjustResize">
+        <when-property-is name="user.agent" value="android"/>
+    </set-property>
+    <collapse-property name="android.windowSoftInputMode" values="*"/>
+
+    <!-- Define the 'iOS.agentIsUIWebView' property. -->
+    <define-property name="iOS.agentIsUIWebView" values="yes,no"/>
+    <property-provider name="iOS.agentIsUIWebView"><![CDATA[
+        // The UIWebView user agent is different from the Mobile Safari user agent in that it
+        // does not contain the word "Safari".
+        var ua = navigator.userAgent.toLowerCase();
+        if (ua.indexOf('ipad') != -1 ||
+            ua.indexOf('iphone') != -1)
+        {
+            if (ua.indexOf('safari') == -1) return 'yes';
+        }
+        return 'no';
+    ]]></property-provider>
+    <set-property name="iOS.agentIsUIWebView" value="no">
+        <none>
+            <when-property-is name="user.agent" value="ipad"/>
+            <when-property-is name="user.agent" value="iphone"/>
+        </none>
+    </set-property>
+
+    <!-- Internal property 'iOS.isStandaloneMode' - whether the iOS device is running in
+         standalone mode.
+
+         "You can determine whether a webpage is displaying in standalone mode using the window.navigator.standalone
+         read-only Boolean JavaScript property."
+         https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html -->
+    <define-property name="iOS.isStandaloneMode" values="yes,no"/>
+    <property-provider name="iOS.isStandaloneMode"><![CDATA[
+        return window.navigator.standalone ? 'yes' : 'no';
+    ]]></property-provider>
+    <set-property name="iOS.isStandaloneMode" value="no">
+        <none>
+            <when-property-is name="user.agent" value="ipad"/>
+            <when-property-is name="user.agent" value="iphone"/>
+        </none>
+    </set-property>
+
+    <!-- Internal property iOS.minVersion - lower bound on the real iOS version -->
+    <define-property name="iOS.minVersion" values="NA,v1,v5,v6,v7,v7_1"/>
+    <property-provider name="iOS.minVersion"><![CDATA[
+        var ua = navigator.userAgent.toLowerCase();
+        if (ua.indexOf('ipad') != -1 ||
+            ua.indexOf('iphone') != -1)
+        {
+            // http://en.wikipedia.org/wiki/IOS_version_history
+            // http://www.useragentstring.com/_uas_Safari_version_.php
+            // http://www.enterpriseios.com/wiki/Complete_List_of_iOS_User_Agent_Strings
+            var oldIOSVersionsRegExp = /cpu\s+(?:iphone\s+)?os\s*(1_|2_|3_|4_|5_|6_|7_0)/;
+            var result = oldIOSVersionsRegExp.exec(ua);
+            if (result != null) {
+                var group1 = result[1];
+                if (group1[0] === '7') return 'v7';
+                if (group1[0] === '6') return 'v6';
+                if (group1[0] === '5') return 'v5';
+                else return 'v1';
+            }
+            return 'v7_1';
+        }
+        return 'NA';
+    ]]></property-provider>
+    <set-property name="iOS.minVersion" value="NA">
+        <none>
+            <when-property-is name="user.agent" value="ipad"/>
+            <when-property-is name="user.agent" value="iphone"/>
+        </none>
+    </set-property>
+
+    <!-- Internal property iOS.min6_0 - whether the iOS version is 6.0 or higher. -->
+    <define-property name="iOS.min6_0" values="yes,no"/>
+    <set-property name="iOS.min6_0" value="no"/>
+    <set-property name="iOS.min6_0" value="yes">
+        <!-- iOS 6+ -->
+        <none>
+            <when-property-is name="iOS.minVersion" value="NA"/>
+            <when-property-is name="iOS.minVersion" value="v1"/>
+            <when-property-is name="iOS.minVersion" value="v5"/>
+        </none>
+    </set-property>
+
+    <!-- Property iOS.useNativeScrolling - whether to use native scrolling. -->
+    <define-property name="iOS.useNativeScrolling" values="yes,no"/>
+    <set-property name="iOS.useNativeScrolling" value="no"/>
+    <set-property name="iOS.useNativeScrolling" value="yes">
+        <when-property-is name="iOS.min6_0" value="yes"/>
+    </set-property>
+
+    <!-- Internal property isc.useFixedPositioningOnTabBars - whether to use position:fixed on tabBars
+
+         One downside to this is that without custom styling, certain assumptions are made
+         that might not be true for an app. Currently the only assumption made is that if TabSets
+         are being used, then there is only one and it is the top-most widget. -->
+    <define-property name="isc.useFixedPositioningOnTabBars" values="yes,no"/>
+    <set-property name="isc.useFixedPositioningOnTabBars" value="no"/>
+    <set-property name="isc.useFixedPositioningOnTabBars" value="yes">
+        <any>
+            <!-- Android 4.0+ -->
+            <none>
+                <when-property-is name="android.minVersion" value="NA"/>
+                <when-property-is name="android.minVersion" value="v1"/>
+            </none>
+        </any>
+    </set-property>
+    <collapse-property name="isc.useFixedPositioningOnTabBars" values="*"/>
+
+    <!-- Internal property isc.hideTabBarDuringKeyboardFocus - whether to hide a TabSet's tabBar
+         when an input, select, or textarea element has keyboard focus, which generally means that
+         the soft keyboard is showing or will be shown. -->
+    <define-property name="isc.hideTabBarDuringKeyboardFocus" values="yes,no"/>
+    <set-property name="isc.hideTabBarDuringKeyboardFocus" value="no"/>
+    <set-property name="isc.hideTabBarDuringKeyboardFocus" value="yes">
+        <any>
+            <!-- Android 4.0+ -->
+            <all>
+                <when-property-is name="isc.useFixedPositioningOnTabBars" value="yes"/>
+                <none>
+                    <when-property-is name="android.minVersion" value="NA"/>
+                    <when-property-is name="android.minVersion" value="v1"/>
+                </none>
+                <when-property-is name="android.windowSoftInputMode" value="adjustResize"/>
+            </all>
+
+            <!-- On iOS 7 in landscape, we need to set the viewport height to device-*width* (see comments
+                 in SmartGwtMobileEntryPoint). However, doing so re-introduces the problem that
+                 the TabSet tabBar stays above the virtual keyboard when a text <input> has keyboard
+                 focus (http://forums.smartclient.com/showthread.php?t=29005). -->
+            <all>
+                <none>
+                    <when-property-is name="iOS.minVersion" value="NA"/>
+                    <when-property-is name="iOS.minVersion" value="v1"/>
+                    <when-property-is name="iOS.minVersion" value="v5"/>
+                    <when-property-is name="iOS.minVersion" value="v6"/>
+                </none>
+            </all>
+        </any>
+    </set-property>
+    <collapse-property name="isc.hideTabBarDuringKeyboardFocus" values="*"/>
+
+    <define-property name="isc.fixNavigationBarPositionDuringKeyboardFocus" values="yes,no"/>
+    <set-property name="isc.fixNavigationBarPositionDuringKeyboardFocus" value="no"/>
+    <set-property name="isc.fixNavigationBarPositionDuringKeyboardFocus" value="yes">
+        <any>
+            <!-- iOS 5+ -->
+            <none>
+                <when-property-is name="iOS.minVersion" value="NA"/>
+                <when-property-is name="iOS.minVersion" value="v1"/>
+            </none>
+        </any>
+    </set-property>
+    <collapse-property name="isc.fixNavigationBarPositionDuringKeyboardFocus" values="*"/>
+
+    <!-- Internal property isc.usingAutoTest -->
+    <define-property name="isc.usingAutoTest" values="yes,no"/>
+    <set-property name="isc.usingAutoTest" value="no"/>
+
+    <!-- Define property isc.usingCordova - whether the app is being compiled for use
+         with PhoneGap / Apache Cordova. -->
+    <define-property name="isc.usingCordova" values="yes,no"/>
+    <set-property name="isc.usingCordova" value="no"/>
+    <!-- Cordova sets android:windowSoftInputMode to "adjustPan" by default.
+         When the app is in fullscreen mode, this can't be changed to "adjustResize" anyway:
+         - https://code.google.com/p/android/issues/detail?id=5497
+         - https://issues.apache.org/jira/browse/CB-4404 -->
+    <set-property name="android.windowSoftInputMode" value="adjustPan">
+        <when-property-is name="isc.usingCordova" value="yes"/>
+        <when-property-is name="user.agent" value="android"/>
+    </set-property>
+    <set-property name="iOS.agentIsUIWebView" value="yes">
+        <when-property-is name="isc.usingCordova" value="yes"/>
+        <any>
+            <when-property-is name="user.agent" value="ipad"/>
+            <when-property-is name="user.agent" value="iphone"/>
+        </any>
+    </set-property>
+
+    <collapse-property name="iOS.agentIsUIWebView" values="*"/>
+    <collapse-property name="iOS.isStandaloneMode" values="*"/>
+    <collapse-property name="iOS.minVersion" values="NA,v1,v5,v6"/>
+    <collapse-property name="iOS.minVersion" values="v7,v7_1"/>
+
+    <replace-with class="com.smartgwt.mobile.client.cordova.CordovaEntryPointImplCordova">
+        <when-type-is class="com.smartgwt.mobile.client.cordova.CordovaEntryPointImpl"/>
+        <when-property-is name="isc.usingCordova" value="yes"/>
+    </replace-with>
+
+    <replace-with class="com.smartgwt.mobile.client.internal.data.StorageImplSafari">
+        <when-type-is class="com.smartgwt.mobile.client.internal.data.StorageImpl"/>
+        <any>
+            <when-property-is name="user.agent" value="android"/>
+            <when-property-is name="user.agent" value="ipad"/>
+            <when-property-is name="user.agent" value="iphone"/>
+            <when-property-is name="user.agent" value="safari"/>
+        </any>
+    </replace-with>
+
+    <replace-with class="com.smartgwt.mobile.client.internal.theme.ThemeResourcesFactoryIPhone">
+        <when-type-is class="com.smartgwt.mobile.client.internal.theme.ThemeResourcesFactory"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.theme.ThemeResourcesFactoryIPad">
+        <when-type-assignable class="com.smartgwt.mobile.client.internal.theme.ThemeResourcesFactory"/>
+        <when-property-is name="user.agent" value="ipad"/>
+    </replace-with>
+
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.ActivityIndicatorImplAndroid">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.ActivityIndicatorImpl"/>
+        <when-property-is name="user.agent" value="android"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.ActivityIndicatorImplBlades">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.ActivityIndicatorImpl"/>
+        <any>
+            <when-property-is name="user.agent" value="ipad"/>
+            <when-property-is name="user.agent" value="iphone"/>
+            <when-property-is name="user.agent" value="safari"/>
+            <when-property-is name="user.agent" value="gecko1_8"/>
+        </any>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.AlertViewImplIOS">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.AlertViewImpl"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImplAndroid">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl"/>
+        <when-property-is name="user.agent" value="android"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImplIPad">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl"/>
+        <when-property-is name="user.agent" value="ipad"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImplIPhone">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl"/>
+        <when-property-is name="user.agent" value="iphone"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImplSafari">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl"/>
+        <when-property-is name="user.agent" value="safari"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl.IsHistoryEnabledImplHistoryEnabled">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl.IsHistoryEnabledImpl"/>
+        <when-property-is name="isc.enableHistory" value="yes"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl.GetAndroidWindowSoftInputModeImplAdjustResize">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl.GetAndroidWindowSoftInputModeImpl"/>
+        <when-property-is name="android.windowSoftInputMode" value="adjustResize"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl.GetAndroidWindowSoftInputModeImplAdjustPan">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl.GetAndroidWindowSoftInputModeImpl"/>
+        <when-property-is name="android.windowSoftInputMode" value="adjustPan"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl.GetHideTabBarDuringKeyboardFocusImplYes">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl.GetHideTabBarDuringKeyboardFocusImpl"/>
+        <when-property-is name="isc.hideTabBarDuringKeyboardFocus" value="yes"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl.GetFixNavigationBarPositionDuringKeyboardFocusImplYes">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl.GetFixNavigationBarPositionDuringKeyboardFocusImpl"/>
+        <when-property-is name="isc.fixNavigationBarPositionDuringKeyboardFocus" value="yes"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl.IsUIWebViewImplUIWebView">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl.IsUIWebViewImpl"/>
+        <when-property-is name="iOS.agentIsUIWebView" value="yes"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl.IsIOS5ImplIOS5">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl.IsIOS5Impl"/>
+        <!-- iOS 5.x -->
+        <when-property-is name="iOS.minVersion" value="v5"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl.IsIOSMin6_0ImplIOSMin6_0">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl.IsIOSMin6_0Impl"/>
+        <when-property-is name="iOS.min6_0" value="yes"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl.IsIOSMin7_0ImplIOSMin7_0">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl.IsIOSMin7_0Impl"/>
+        <!-- iOS 7+ -->
+        <none>
+            <when-property-is name="iOS.minVersion" value="NA"/>
+            <when-property-is name="iOS.minVersion" value="v1"/>
+            <when-property-is name="iOS.minVersion" value="v5"/>
+            <when-property-is name="iOS.minVersion" value="v6"/>
+        </none>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl.IsIOSMin7_1ImplIOSMin7_1">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl.IsIOSMin7_1Impl"/>
+        <!-- iOS 7.1+ -->
+        <none>
+            <when-property-is name="iOS.minVersion" value="NA"/>
+            <when-property-is name="iOS.minVersion" value="v1"/>
+            <when-property-is name="iOS.minVersion" value="v5"/>
+            <when-property-is name="iOS.minVersion" value="v6"/>
+            <when-property-is name="iOS.minVersion" value="v7"/>
+        </none>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl.IsStandaloneModeImplYes">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl.IsStandaloneModeImpl"/>
+        <when-property-is name="iOS.isStandaloneMode" value="yes"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl.UseIOSNativeScrollingImplUseNativeScrolling">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl.UseIOSNativeScrollingImpl"/>
+        <when-property-is name="iOS.useNativeScrolling" value="yes"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl.UsingAutoTestImplUsingAutoTest">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.CanvasStaticImpl.UsingAutoTestImpl"/>
+        <when-property-is name="isc.usingAutoTest" value="yes"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.DialogImplIPhone">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.DialogImpl"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.DialogImplIPad">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.DialogImpl"/>
+        <when-property-is name="user.agent" value="ipad"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.PickerImplIOS">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.PickerImpl"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.PickerDialImplIOS">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.PickerDialImpl"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.PopoverImplIPad">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.PopoverImpl"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.WindowImplIPhone">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.WindowImpl"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.WindowImplIPad">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.WindowImpl"/>
+        <when-property-is name="user.agent" value="ipad"/>
+    </replace-with>
+
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.form.fields.DateItemImplDefault">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.form.fields.DateItemImpl"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.form.fields.DateItemImplNative">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.form.fields.DateItemImpl"/>
+        <any>
+            <!-- iOS 5+ -->
+            <none>
+                <when-property-is name="iOS.minVersion" value="NA"/>
+                <when-property-is name="iOS.minVersion" value="v1"/>
+            </none>
+        </any>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.form.fields.DateTimeItemImplDefault">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.form.fields.DateTimeItemImpl"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.form.fields.DateTimeItemImplNative">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.form.fields.DateTimeItemImpl"/>
+        <any>
+            <!-- iOS 5+ -->
+            <none>
+                <when-property-is name="iOS.minVersion" value="NA"/>
+                <when-property-is name="iOS.minVersion" value="v1"/>
+            </none>
+        </any>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.form.fields.TimeItemImplDefault">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.form.fields.TimeItemImpl"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.form.fields.TimeItemImplNative">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.form.fields.TimeItemImpl"/>
+        <any>
+            <!-- iOS 5+ -->
+            <none>
+                <when-property-is name="iOS.minVersion" value="NA"/>
+                <when-property-is name="iOS.minVersion" value="v1"/>
+            </none>
+        </any>
+    </replace-with>
+
+    <replace-with class="com.smartgwt.mobile.client.internal.widgets.tableview.TableViewImplAndroid">
+        <when-type-is class="com.smartgwt.mobile.client.internal.widgets.tableview.TableViewImpl"/>
+        <when-property-is name="user.agent" value="android"/>
+    </replace-with>
+
+    <replace-with class="com.smartgwt.mobile.client.internal.util.AnimationUtilStaticImplCSSAnimations">
+        <when-type-is class="com.smartgwt.mobile.client.internal.util.AnimationUtilStaticImpl"/>
+        <any>
+            <when-property-is name="user.agent" value="android"/>
+            <when-property-is name="user.agent" value="ipad"/>
+            <when-property-is name="user.agent" value="iphone"/>
+            <when-property-is name="user.agent" value="safari"/>
+            <when-property-is name="user.agent" value="gecko1_8"/>
+        </any>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.util.PageStaticImplDefault">
+        <when-type-is class="com.smartgwt.mobile.client.internal.util.PageStaticImpl"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.util.PageStaticImplIOS">
+        <when-type-is class="com.smartgwt.mobile.client.internal.util.PageStaticImpl"/>
+        <any>
+            <when-property-is name="user.agent" value="ipad"/>
+            <when-property-is name="user.agent" value="iphone"/>
+        </any>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.util.SCStaticImplBasic">
+        <when-type-is class="com.smartgwt.mobile.client.internal.util.SCStaticImpl"/>
+        <any>
+            <when-property-is name="user.agent" value="android"/>
+            <when-property-is name="user.agent" value="ipad"/>
+            <when-property-is name="user.agent" value="iphone"/>
+        </any>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.internal.util.SCStaticImplModern">
+        <when-type-is class="com.smartgwt.mobile.client.internal.util.SCStaticImpl"/>
+        <any>
+            <when-property-is name="user.agent" value="safari"/>
+            <when-property-is name="user.agent" value="gecko1_8"/>
+        </any>
+    </replace-with>
+
+    <replace-with class="com.smartgwt.mobile.client.widgets.ScrollablePanelImplNonNative">
+        <when-type-is class="com.smartgwt.mobile.client.widgets.ScrollablePanelImpl"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.widgets.ScrollablePanelImplIOSNative">
+        <when-type-is class="com.smartgwt.mobile.client.widgets.ScrollablePanelImpl"/>
+        <when-property-is name="iOS.useNativeScrolling" value="yes"/>
+    </replace-with>
+
+    <replace-with class="com.smartgwt.mobile.client.widgets.form.DynamicFormImplIOS">
+        <when-type-is class="com.smartgwt.mobile.client.widgets.form.DynamicFormImpl"/>
+    </replace-with>
+
+    <replace-with class="com.smartgwt.mobile.client.widgets.form.fields.SwitchItemImplDefault">
+        <when-type-is class="com.smartgwt.mobile.client.widgets.form.fields.SwitchItemImpl"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.widgets.form.fields.SwitchItemImplRAF">
+        <when-type-is class="com.smartgwt.mobile.client.widgets.form.fields.SwitchItemImpl"/>
+        <!-- If the following conditions are changed, be sure to update SwitchItemImplRAF.willWork(). -->
+        <any>
+            <when-property-is name="user.agent" value="safari"/>
+            <when-property-is name="iOS.min6_0" value="yes"/>
+        </any>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.widgets.form.fields.UploadItemImplDefault">
+        <when-type-is class="com.smartgwt.mobile.client.widgets.form.fields.UploadItemImpl"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.widgets.form.fields.UploadItemImplCordovaDefault">
+        <when-type-is class="com.smartgwt.mobile.client.widgets.form.fields.UploadItemImpl"/>
+        <when-property-is name="isc.usingCordova" value="yes"/>
+        <when-property-is name="user.agent" value="iphone"/>
+        <when-property-is name="iOS.min6_0" value="no"/>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.client.widgets.form.fields.UploadItemImplCordovaIPad">
+        <when-type-is class="com.smartgwt.mobile.client.widgets.form.fields.UploadItemImpl"/>
+        <when-property-is name="isc.usingCordova" value="yes"/>
+        <when-property-is name="user.agent" value="ipad"/>
+        <when-property-is name="iOS.min6_0" value="no"/>
+    </replace-with>
+
+    <replace-with class="com.smartgwt.mobile.client.widgets.menu.MenuImplIPhone">
+        <when-type-is class="com.smartgwt.mobile.client.widgets.menu.MenuImpl"/>
+    </replace-with>
+
+    <replace-with class="com.smartgwt.mobile.internal.gwt.dom.client.DOMConstantsWebKit">
+        <when-type-is class="com.smartgwt.mobile.internal.gwt.dom.client.DOMConstants"/>
+        <any>
+            <when-property-is name="user.agent" value="android"/>
+            <when-property-is name="user.agent" value="ipad"/>
+            <when-property-is name="user.agent" value="iphone"/>
+            <when-property-is name="user.agent" value="safari"/>
+        </any>
+    </replace-with>
+    <replace-with class="com.smartgwt.mobile.internal.gwt.dom.client.DOMConstantsGecko">
+        <when-type-is class="com.smartgwt.mobile.internal.gwt.dom.client.DOMConstants"/>
+        <when-property-is name="user.agent" value="gecko1_8"/>
+    </replace-with>
+
+    <entry-point class="com.smartgwt.mobile.client.SmartGwtMobileEntryPoint"/>
+
+    <source path="client"/>
+    <source path="internal/gwt/dom/client"/>
+    <source path="internal/gwt/useragent/client"/>
+</module>

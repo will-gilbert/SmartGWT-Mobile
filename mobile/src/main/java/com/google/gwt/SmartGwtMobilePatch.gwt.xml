@@ -1,0 +1,4 @@
+<module>
+    <source path="user/client"/>
+    <source path="useragent/client"/>
+</module>

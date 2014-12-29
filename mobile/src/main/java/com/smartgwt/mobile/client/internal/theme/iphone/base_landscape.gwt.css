@@ -1,0 +1,11 @@
+@if iOS.minVersion NA v1 v5 v6 v7 {
+} @elif iOS.agentIsUIWebView no {
+    body {
+        /*
+        On iPhone running iOS 7.1 using the 'minimal-ui' viewport parameter, the top 20 CSS pixels
+        in landscape mode should not be used because tapping within this area causes the browser
+        chrome to be revealed: http://www.mobilexweb.com/blog/ios-7-1-safari-minimal-ui-bugs
+        */
+        border-top: 20px solid Black;
+    }
+}

@@ -1,0 +1,30 @@
+/*
+ * SmartGWT Mobile
+ * Copyright 2008 and beyond, Isomorphic Software, Inc.
+ *
+ * SmartGWT Mobile is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License version 3
+ * as published by the Free Software Foundation.  SmartGWT Mobile is also
+ * available under typical commercial license terms - see
+ * http://smartclient.com/license
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ */
+
+@url pinstripeBackgroundTileImageUrl pinstripeBackgroundTileImageData;
+@url iOS6PinstripeBackgroundTileImageUrl iOS6PinstripeBackgroundTileImageData;
+
+@if iOS.minVersion NA v1 v5 {
+    body {
+        background-image: pinstripeBackgroundTileImageUrl;
+    }
+} @elif iOS.minVersion v6 {
+    body {
+        background-image: iOS6PinstripeBackgroundTileImageUrl;
+    }
+} @else {
+    /*empty*/
+}

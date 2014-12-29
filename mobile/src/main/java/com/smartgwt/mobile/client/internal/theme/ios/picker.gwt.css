@@ -1,0 +1,285 @@
+/*
+ * SmartGWT Mobile
+ * Copyright 2008 and beyond, Isomorphic Software, Inc.
+ *
+ * SmartGWT Mobile is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License version 3
+ * as published by the Free Software Foundation.  SmartGWT Mobile is also
+ * available under typical commercial license terms - see
+ * http://smartclient.com/license
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ */
+
+@def pickerFadeInAnimationName sc-picker_fadeIn;
+@def pickerFadeOutAnimationName sc-picker_fadeOut;
+
+@def pickerFadeInAnimationDurationMillis 250ms;
+@def pickerFadeOutAnimationDurationMillis 300ms;
+
+@def pickerSlotHeightPx 44px;
+@def topPickerCoverHeightPx 77px;
+
+.pickerWrapper {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 260px;
+}
+
+@if iOS.min6_0 yes {
+    .pickerWrapper {
+        box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.25);
+    }
+}
+
+@if user.agent gecko1_8 {
+    ._showing > .pickerWrapper {
+        -moz-animation: pickerFadeInAnimationName pickerFadeInAnimationDurationMillis;
+    }
+} @else {
+    ._showing > .pickerWrapper {
+        -webkit-animation: pickerFadeInAnimationName pickerFadeInAnimationDurationMillis;
+    }
+}
+._showing > .pickerWrapper {
+    animation: pickerFadeInAnimationName pickerFadeInAnimationDurationMillis;
+}
+
+@if user.agent gecko1_8 {
+    ._hiding > .pickerWrapper {
+        -moz-animation: pickerFadeOutAnimationName pickerFadeOutAnimationDurationMillis;
+        -moz-transform: translateY(100%);
+    }
+} @else {
+    ._hiding > .pickerWrapper {
+        -webkit-animation: pickerFadeOutAnimationName pickerFadeOutAnimationDurationMillis;
+        -webkit-transform: translateY(100%);
+    }
+}
+._hiding > .pickerWrapper {
+    animation: pickerFadeOutAnimationName pickerFadeOutAnimationDurationMillis;
+    transform: translateY(100%);
+}
+
+.pickerFrameWrapper {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    box-sizing: border-box;
+    height: 215px;
+    padding: 9px 10px 10px 10px;
+    background-image: literal("-webkit-gradient(linear,left top,left bottom,color-stop(.02,#a2a3aa),color-stop(.125,#80828b),color-stop(.25,#73737d),color-stop(.495,#484a55),color-stop(.495,#272836),to(#282a39))");
+    background-image: literal("-moz-linear-gradient(top,#a2a3aa 2%,#80828b 12.5%,#73737d 25%,#484a55 49.5%,#272836 49.5%,#282a39 100%)");
+    background-image: literal("linear-gradient(to bottom,#a2a3aa 2%,#80828b 12.5%,#73737d 25%,#484a55 49.5%,#272836 49.5%,#282a39 100%)");
+    box-shadow: inset 0 1px 0 #d9d9dc;
+    z-index: 1;
+}
+
+.timePicker .pickerFrameWrapper {
+    padding-right: 70px;
+    padding-left: 70px;
+}
+
+.pickerFrame {
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    background-color: #fcfcfc;
+    overflow: hidden;
+}
+
+.topPickerCover, .centerPickerCover, .bottomPickerCover {
+    position: absolute;
+    box-sizing: border-box;
+    width: 100%;
+    z-index: 1;
+}
+
+.topPickerCover {
+    top: 0;
+    height: topPickerCoverHeightPx;
+    border-right: 1px solid #0c0d0e;
+    border-bottom: 1px solid #7a8697;
+    border-left: 1px solid #0c0d0e;
+    background-image: literal("-webkit-gradient(linear,left top,left bottom,from(rgba(0,0,15,.8)),color-stop(.15,rgba(0,0,15,.45)),color-stop(.4,rgba(0,0,15,.15)),color-stop(.6,rgba(0,0,40,0)))");
+    background-image: literal("-moz-linear-gradient(top,rgba(0,0,15,.8)0%,rgba(0,0,15,.45)15%,rgba(0,0,15,.15)40%,rgba(0,0,40,0)60%)");
+    background-image: literal("linear-gradient(to bottom,rgba(0,0,15,.8)0%,rgba(0,0,15,.45)15%,rgba(0,0,15,.15)40%,rgba(0,0,40,0)60%)");
+}
+.centerPickerCover {
+    top: 77px;
+    width: 100%;
+    height: 42px;
+    border-right: 1px solid #666;
+    border-left: 1px solid #666;
+    background-image: literal("-webkit-gradient(linear,left top,left bottom,from(rgba(210,215,229,.55)),color-stop(.5,rgba(148,157,189,.65)),color-stop(.5,rgba(90,106,152,.55)),to(rgba(100,113,163,.55)))");
+    background-image: literal("-moz-linear-gradient(top,rgba(210,215,229,.55)0%,rgba(148,157,189,.65)50%,rgba(90,106,152,.55)50%,rgba(100,113,163,.55)100%)");
+    background-image: literal("linear-gradient(to bottom,rgba(210,215,229,.55)0%,rgba(148,157,189,.65)50%,rgba(90,106,152,.55)50%,rgba(100,113,163,.55)100%)");
+    box-shadow: inset 0 1px 0 #eceef2;
+    z-index: 1;
+}
+.bottomPickerCover {
+    top: 119px;
+    height: 77px;
+    border-top: 1px solid #606e82;
+    border-right: 1px solid #0c0d0e;
+    border-left: 1px solid #0c0d0e;
+    background-image: literal("-webkit-gradient(linear,left top,left bottom,from(rgba(25,25,70,.5)),color-stop(.25,rgba(252,252,252,0)),color-stop(.25,rgba(0,0,40,0)),color-stop(.55,rgba(0,0,30,.18)),color-stop(.85,rgba(0,0,15,.45)),to(rgba(0,0,15,.6)))");
+    background-image: literal("-moz-linear-gradient(top,rgba(25,25,70,.5)0%,rgba(252,252,252,0)25%,rgba(0,0,40,0)25%,rgba(0,0,30,.18)55%,rgba(0,0,15,.45)85%,rgba(0,0,15,.6)100%)");
+    background-image: literal("linear-gradient(to bottom,rgba(25,25,70,.5)0%,rgba(252,252,252,0)25%,rgba(0,0,40,0)25%,rgba(0,0,30,.18)55%,rgba(0,0,15,.45)85%,rgba(0,0,15,.6)100%)");
+}
+
+.pickerDialsWrapper {
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+    width: 100%;
+    height: 100%;
+}
+
+.pickerDialWrapper {
+    box-sizing: border-box;
+    width: 150px;
+    height: 100%;
+    border-left: 2px solid #0c0d0e;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    box-flex: 1;
+}
+.pickerDialWrapper:first-child {
+    border-left-width: 0;
+}
+
+.pickerDial {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    border-right: 3px solid #a8a9bc;
+    border-left: 3px solid #a8a9bc;
+}
+.pickerDialWrapper:first-child > .pickerDial {
+    border-left-width: 3px;
+}
+.pickerDialWrapper:last-child > .pickerDial {
+    border-right-width: 3px;
+}
+
+.pickerDial > ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.pickerDial > ul > li {
+    margin: 0;
+    padding: 0 7px;
+}
+
+.pickerDial > table {
+    margin: 0;
+    border-collapse: collapse;
+    padding: 0;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.pickerCell,
+.firstPickerCell {
+    border-right: 7px solid transparent;
+    border-left: 7px solid transparent;
+    padding: 0;
+    height: pickerSlotHeightPx;
+    font: bold 25px / pickerSlotHeightPx Helvetica, sans-serif;
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    -o-text-overflow: ellipsis; /* http://caniuse.com/#feat=text-overflow */
+    text-overflow: ellipsis;
+}
+.firstPickerCell {
+    text-align: left;
+}
+
+.emptyDisplayValueCell {
+    opacity: 0.5;
+}
+
+.yearPickerDial {
+    width: 75px;
+}
+
+.datePickerDial {
+    width: 50px;
+}
+
+.hoursPickerDial,
+.minutesPickerDial {
+    width: 90px;
+}
+.ampmPickerDial {
+    width: 120px;
+}
+
+.dtYearPickerDial {
+    width: 64px;
+}
+.dtDatePickerDial {
+    width: 54px;
+}
+.dtMonthPickerDial {
+    width: 84px;
+}
+.dtHoursPickerDial,
+.dtMinutesPickerDial {
+    width: 49px;
+}
+
+.monthPickerDial .pickerCell,
+.monthPickerDial .firstPickerCell,
+.hoursPickerDial .pickerCell,
+.hoursPickerDial .firstPickerCell,
+.dtMonthPickerDial .pickerCell,
+.dtMonthPickerDial .firstPickerCell,
+.dtHoursPickerDial .pickerCell,
+.dtHoursPickerDial .firstPickerCell {
+    text-align: right;
+    text-overflow: clip;
+}
+
+.yearPickerDial .pickerCell,
+.yearPickerDial .firstPickerCell,
+.datePickerDial .pickerCell,
+.datePickerDial .firstPickerCell,
+.minutesPickerDial .pickerCell,
+.minutesPickerDial .firstPickerCell,
+.ampmPickerDial .pickerCell,
+.ampmPickerDial .firstPickerCell,
+
+.dtYearPickerDial .pickerCell,
+.dtYearPickerDial .firstPickerCell,
+.dtDatePickerDial .pickerCell,
+.dtDatePickerDial .firstPickerCell {
+    text-align: center;
+    text-overflow: clip;
+}
+
+.dtMinutesPickerDial .pickerCell,
+.dtMinutesPickerDial .firstPickerCell {
+    text-align: left;
+    text-overflow: clip;
+}
+
+.dtHoursPickerDial .pickerCell,
+.dtHoursPickerDial .firstPickerCell,
+.dtMinutesPickerDial .pickerCell,
+.dtMinutesPickerDial .firstPickerCell {
+    color: #777;
+    font-size: 14pt;
+}

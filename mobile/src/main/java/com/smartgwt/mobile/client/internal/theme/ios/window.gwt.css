@@ -1,0 +1,79 @@
+/*
+ * SmartGWT Mobile
+ * Copyright 2008 and beyond, Isomorphic Software, Inc.
+ *
+ * SmartGWT Mobile is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License version 3
+ * as published by the Free Software Foundation.  SmartGWT Mobile is also
+ * available under typical commercial license terms - see
+ * http://smartclient.com/license
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ */
+
+@def modalMaskFadeInAnimationName sc-modalMask-fadeIn;
+@def modalMaskFadeOutAnimationName sc-modalMask-fadeOut;
+@def modalMaskFadeInAnimationDurationMillis 200ms;
+@def modalMaskFadeOutAnimationDurationMillis 200ms;
+
+.modalMask {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+._showing > .modalMask {
+    -moz-animation: modalMaskFadeInAnimationName modalMaskFadeInAnimationDurationMillis both;
+    -webkit-animation: modalMaskFadeInAnimationName modalMaskFadeInAnimationDurationMillis both;
+    animation: modalMaskFadeInAnimationName modalMaskFadeInAnimationDurationMillis both;
+}
+
+._hiding > .modalMask {
+    -moz-animation: modalMaskFadeOutAnimationName modalMaskFadeOutAnimationDurationMillis both;
+    -webkit-animation: modalMaskFadeOutAnimationName modalMaskFadeOutAnimationDurationMillis both;
+    animation: modalMaskFadeOutAnimationName modalMaskFadeOutAnimationDurationMillis both;
+}
+
+.headerless > .windowHeader {
+    display: none;
+}
+
+.windowHeaderLabel {
+    -moz-box-flex: 1;
+    -webkit-box-flex: 1;
+    box-flex: 1;
+    margin: 0px;
+    color: #fff;
+    font: bold 20px / 32px "Helvetica", sans-serif;
+    letter-spacing: -1px;
+    text-align: center;
+    text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.5);
+}
+
+.windowHeaderLabel a[href],
+.windowHeaderLabel a[href]:active,
+.windowHeaderLabel a[href]:visited {
+    color: #fff;
+}
+
+@if user.agent gecko1_8 {
+    .windowHeaderLabel p {
+        -moz-margin-before: 8px;
+        -moz-margin-after: 8px;
+    }
+} @else {
+    .windowHeaderLabel p {
+        -webkit-margin-before: 8px;
+        -webkit-margin-after: 8px;
+    }
+}
+.windowHeaderLabel p {
+    margin-before: 8px;
+    margin-after: 8px;
+}

@@ -1,0 +1,14 @@
+@external .sc-*;
+
+.sc-tabset{}
+.tabPane{}
+.tabBar{}
+.tab{}
+.activeTab{}
+.tabHasIcon{}
+.tabIconPrerendered{}
+.tabIconWrapper{}
+.tabTitle{}
+.tabBadgeWrapper{}
+.tabBadge{}
+.tabBadgeContent{}

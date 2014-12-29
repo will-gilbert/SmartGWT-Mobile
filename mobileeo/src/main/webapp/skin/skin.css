@@ -1,0 +1,660 @@
+﻿
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    border: none;
+    background-image: url('images/background.png');
+    background-repeat: repeat;
+    font-family: helvetica, tahoma, arial, sans-serif;
+    font-size: 10pt;
+    overflow: auto;
+
+  /* On WebKit browser disallow these functions -- might move this to mobile platforms only */
+  -webkit-text-size-adjust: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+
+}
+
+
+
+.topBorder {
+    border-top: 1px solid #878787;
+}
+
+.bottomBorder {
+    border-bottom: 1px solid #878787;
+}
+
+
+/* Header ================================================================================= */
+
+
+.Mobile-Header {
+	position: relative;
+	left: 0; top: 0;
+	height: 44px;
+	width: auto;
+	background: url("images/header.png") repeat;
+}
+
+
+
+.Mobile-Header-title {
+    margin-right: auto;
+    margin-left: auto;
+	text-align: center;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	height: 44px;
+	line-height: 44px;
+	font-weight: bold;
+	color: #ffffff;
+	text-shadow: rgba(0,0,0,0.6) 0 -1px 0;
+	font-size: 16pt;
+}
+
+.Mobile-NavigationBar {
+    position: absolute;
+    top: 7px;
+    left: 9px;
+    right: 9px;
+    z-index: 1000;
+    width: auto;
+}
+
+
+
+/* Box, GroupBox, RoundedBox =============================================================== */
+
+.Mobile-Box {
+	position: relative;
+	background-color: #ffffff;
+	border: #878787 solid 1px;
+	font-size: 12pt;
+	overflow: hidden;
+	padding: 0;
+	display: block;
+	height: auto;
+	width: auto;
+	margin: 3px 9px 17px;
+}
+
+
+.Mobile-Box-GroupBox {
+    padding: 0;
+    margin: 0;
+	background-color: transparent;
+	border: none;
+}
+
+
+/* Safari, Chrome and FireFox 3.1+, Others will be rendered as Mobile-Box */
+.Mobile-Box-RoundedBox {
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+}
+
+
+/*  Hover highlighting support for rounded boxes; Safari and Chrome  */
+
+.Mobile-Box-RoundedBox:hover > div:first-child {
+	-moz-border-radius-topleft: 8px 8px;
+	-moz-border-radius-topright: 8px 8px;
+	-webkit-border-top-left-radius: 8px 8px;
+	-webkit-border-top-right-radius: 8px 8px;
+}
+
+.Mobile-Box-RoundedBox:hover > div:last-child {
+	-moz-border-radius-bottomleft: 8px 8px;
+	-moz-border-radius-bottomright: 8px 8px;
+	-webkit-border-bottom-left-radius: 8px 8px;
+	-webkit-border-bottom-right-radius: 8px 8px;
+}
+
+
+/* TextBox, not a subclass of Box ---------------------------------------------------------- */
+
+.Mobile-TextBox {
+	color: #000000;
+	padding: 0px 5px 5px 5px;
+    -webkit-user-select: text;
+}
+
+
+.Mobile-TextBox-heading {
+	display: block;
+	font-weight: bold;
+	color: #4b6691;
+	font-size: 12pt;
+    margin-top: 3px;
+	margin-bottom: 6px;
+	line-height: 14pt;
+}
+
+
+/* Menu =================================================================================== */
+
+/* Menu Container */
+
+.Mobile-Menu {
+	font-size: 17px;
+	text-overflow: ellipsis;
+	height: 43px;
+	min-height: 43px;
+	overflow: hidden;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+.Mobile-Menu-Text  {
+    float:left;
+	margin: 11px 0px 0px 7px;
+	font-weight: bold;
+	color: #000000;
+}
+
+.Mobile-Menu-Icon {
+    float: left;
+	margin: 5px 0 5px 5px;
+	width: auto;
+	height: auto;
+}
+
+.Mobile-Menu-Comment {
+    float: right;
+	margin: 11px 13px 0 0;
+	color: #324f85;
+}
+
+.Mobile-Menu-Arrow {
+    float: right;
+	margin: 16px 9px 0 0;
+	width:   8px !important;
+	height: 13px !important;
+	background: url("images/arrow.png") no-repeat;
+}
+
+.Mobile-Menu-topBorder {
+    border-top: 1px solid #878787;
+}
+
+.Mobile-Menu-bottomBorder {
+    border-bottom: 1px solid #878787;
+}
+
+
+/* Menu hover behavior for menu and arrow */
+.Mobile-Menu:hover {
+	background: url("images/menuhover.png") repeat-x #aac9f6!important;
+}
+
+.Mobile-Menu:hover .Mobile-Menu-Arrow {
+	background: url("images/arrow-hover.png") no-repeat;
+}
+
+
+
+/* ========================================================================================= */
+
+div.Mobile-Heading {
+	position: static;
+	padding: 1px 0 3px 12px;
+	font-weight: bold;
+	font-size: 17px;
+	color: #4c4c4c;
+	text-shadow: #ffffff 0 1px 0;
+}
+
+.Mobile-GroupTitle {
+    position: relative;
+	height: 22px!important;
+	color: #ffffff;
+	font-weight: bold;
+	font-size: 16px;
+	text-shadow: gray 0 1px 0;
+	line-height: 24px;
+	border-bottom: none!important;
+ 	background: url("images/grouptitle.gif") repeat-x #95a3ad; 
+}
+
+.Mobile-Box-RoundedBox > .Mobile-GroupTitle:first-child {
+	-moz-border-radius-topleft: 8px 8px;
+	-moz-border-radius-topright: 8px 8px;
+	-webkit-border-top-left-radius: 8px 8px;
+	-webkit-border-top-right-radius: 8px 8px;
+}
+
+.Mobile-Box-RoundedBox > .Mobile-GroupTitle:last-child {
+	-moz-border-radius-bottomleft: 8px 8px;
+	-moz-border-radius-bottomright: 8px 8px;
+	-webkit-border-bottom-left-radius: 8px 8px;
+	-webkit-border-bottom-right-radius: 8px 8px;
+}
+
+/*  Header Navigation buttons ============================================================= */
+
+
+.Mobile-NavigationButton {
+    display: inline;
+    min-height: 30px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #ffffff;
+    line-height: 30px;
+    text-shadow: rgba(0,0,0,0.6) 0 -1px 0;
+    background: #5f7da6;
+	cursor: pointer;
+}
+
+.Mobile-NavigationButton img {
+    padding-top: 5px;
+}
+
+
+.Mobile-NavigationButton-LeftNav {
+    float: left;
+    padding-right: 4px;
+    margin-left: 0px;
+    border-width: 0 5px 0 13px;
+    -moz-border-image: url("images/navleft.png") 0 5 0 13 stretch stretch;
+	-webkit-border-image: url("images/navleft.png") 0 5 0 13 stretch stretch;
+}
+
+.Mobile-NavigationButton-LeftLink {
+    float: left;
+    padding-right: 4px;
+    margin-left: -4px;
+    border-width: 0 5px 0 13px;
+    -moz-border-image: url("images/navlinkleft.png") 0 5 0 13 stretch stretch;
+	-webkit-border-image: url("images/navlinkleft.png") 0 5 0 13 stretch stretch;
+}
+
+.Mobile-NavigationButton-RightNav {
+    float: right;
+    padding-left: 4px;
+    margin-left: 0px;
+    border-width: 0 13px 0 5px;
+    -moz-border-image: url("images/navright.png") 0 13 0 5 stretch stretch;
+	-webkit-border-image: url("images/navright.png") 0 13 0 5 stretch stretch;
+}
+
+.Mobile-NavigationButton-RightLink {
+    float: right;
+    padding-left: 4px;
+    margin-right: -4px;
+    border-width: 0 13px 0 5px;
+    -moz-border-image: url("images/navlinkright.png") 0 13 0 5 stretch stretch;
+	-webkit-border-image: url("images/navlinkright.png") 0 13 0 5 stretch stretch;
+}
+
+.Mobile-NavigationButton-LeftButton {
+    float: left;
+    padding-right: 4px;
+    padding-left: 4px;
+    margin-left: 7px;
+    -webkit-border-radius: 6px;
+    border-width: 0 5px;
+	-moz-border-radius: 6px;
+    -moz-border-image: url("images/navbutton.png") 0 5 0 5 stretch stretch;
+	-webkit-border-image: url("images/navbutton.png") 0 5 0 5 stretch stretch;
+}
+
+.Mobile-NavigationButton-RightButton {
+    float: right;
+    padding-right: 4px;
+    padding-left: 4px;
+    margin-left: 7px;
+    -webkit-border-radius: 6px;
+    border-width: 0 5px;
+	-moz-border-radius: 6px;
+    -moz-border-image: url("images/navbutton.png") 0 5 0 5 stretch stretch;
+	-webkit-border-image: url("images/navbutton.png") 0 5 0 5 stretch stretch;
+}
+
+
+.pressed {
+    -moz-border-image: url("images/navbutton-pressed.png") 0 5 0 5 stretch stretch;
+	-webkit-border-image: url("images/navbutton-pressed.png") 0 5 0 5;
+}
+
+
+
+
+/* GroupTitle ============================================================================== */
+
+.Mobile-groupTitle {
+    position: relative;
+	height: 22px!important;
+	color: #ffffff;
+	font-weight: bold;
+	font-size: 16px;
+	text-shadow: gray 0 1px 0;
+	line-height: 24px;
+	border-bottom: none!important;
+ 	background: url("images/grouptitle.gif") repeat-x #95a3ad; 
+}
+
+/*	
+Some alternate backrounds:
+    background: #b4bec5; 
+	background: #909faa; 
+	background: #95a3ad; 
+*/
+
+
+/* Footer ================================================================================= */
+
+div.Mobile-Footer {
+	position: relative;
+	text-align: center;
+	margin: 6px auto 0 auto;
+}
+
+.Mobile-Footer a {
+	text-decoration: none;
+	font-size: 9pt;
+	color: #4c4c4c;
+	text-shadow: #ffffff 0 1px 0;
+}
+
+div.Mobile-Footer a:hover {
+	color: #ffffff;
+}
+
+
+
+/*  Form elements ========================================================================== */
+
+/* Common form widget container styles */
+div.Mobile-BigTextField, 
+div.Mobile-LabeledTextField,
+div.Mobile-TextArea,
+div.Mobile-ToggleButton,
+div.Mobile-SelectField {
+	position: relative;
+	padding: 5px 5px 5px 5px;
+	height: 37px!important;
+	overflow: hidden;
+}
+
+
+/* TextArea container  */
+
+div.Mobile-TextArea {
+	padding-right: 12px !important;
+    height: auto !important;
+}
+
+/* BigTextField container */
+
+div.Mobile-BigTextField {
+	padding-right: 15px !important;
+}
+
+
+
+/*  Text elements, input and textarea */
+
+.Mobile-TextArea  textarea,
+.Mobile-LabeledTextField input,
+.Mobile-BigTextField input {
+	position: relative;
+    width:100%;
+	border-width: 7px 3px;
+	margin: 0!important;
+	padding: 0!important;
+	font-size: 18px;
+	font-weight: bold;
+    -webkit-user-select: text;
+    -moz-border-image: url("images/textfield.png") 7 3 7 3 stretch stretch;
+	-webkit-border-image: url("images/textfield.png") 7 3 7 3 stretch stretch;
+	-webkit-appearance: none;
+}
+
+/* Text input element specializations */
+ 
+.Mobile-LabeledTextField input {
+	position: absolute;
+	top: 5px;
+	right: 8px;
+	width: 250px;  /* Is usually will set in application */
+}
+
+.Mobile-BigTextField input {
+    /* placeholder,  */
+}
+
+div.Mobile-TextArea  textarea {
+ /* Placeholder */
+}
+
+/* LabeledTextField and ToggleButton labels */
+
+.Mobile-CheckBox-label,
+.Mobile-RadioButton-label,
+.Mobile-LabeledTextField-label,
+.Mobile-SelectField-label {
+	margin-top: 7px;
+	margin-right: 260px;  /* Default, will set in application, input width + 10px */
+	margin-bottom:0;
+	margin-left:5px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	font-size: 18px;
+	font-weight: bold;
+	color: #000000;
+	overflow: hidden;
+}
+
+.Mobile-CheckBox-label {
+	margin-right: 115px !important;
+}
+
+.Mobile-RadioButton-label {
+	margin-right: 45px !important;
+}
+
+.Mobile-CheckBox-image {
+	position: absolute;
+	right: 7px;
+	top: 7px;
+	width: 110px !important;
+	height: 32px !important;
+}
+
+.Mobile-RadioButton-image {
+	position: absolute;
+	right: 7px;
+	top: 7px;
+	width: 32px !important;
+	height: 32px !important;
+}
+
+
+/* Selectfield i.e. a dropdown/popup menu of choices */
+
+.Mobile-SelectField-label {
+	margin-right: 25px !important;
+}
+
+
+.Mobile-SelectField-image {
+	position: absolute;
+	right: 10px;
+	top: 20px;
+	width: 13px !important;
+	height: 8px !important;
+	margin: 0 !important;
+}
+
+.Mobile-SelectField-listbox {
+	position: absolute;
+	top:0;
+	left:0;
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+	opacity: 0;
+	cursor:pointer;
+	-webkit-appearance: none;
+}
+
+
+
+.Mobile-SelectField-listbox option {
+	font-size: 18px;
+	color: #000000;
+	font-weight: bold;
+}
+
+
+/* ======================================================================================== */
+
+div.Mobile-Button {
+	position: relative;
+	display: block;
+	min-height: 43px;
+	overflow: hidden;
+	width: auto;
+}
+
+.Mobile-Button-text {
+    position: relative;
+	margin-top: 3px;
+	width: 100%;
+	min-height: 40px;
+	line-height: 40px;
+	z-index: 9999;
+	color: #000000;
+	font-weight: bold;
+	font-size: 25px;
+	text-align: center;
+	background: transparent;
+	display: block;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+	-webkit-appearance: none;
+}
+
+.Mobile-Button:hover,
+.Mobile-ToggleButton:hover,
+.Mobile-SelectField:hover {
+    cursor: pointer;
+	background: url("images/menuhover.png") repeat-x #aac9f6!important;
+}
+
+
+/* ======================================================================================== */
+
+
+div.Mobile-GlassButton {
+	position: relative;
+	display: block;
+	width: 80%;
+	height: 48px;
+	margin: 5px auto;
+	border-width: 0 14px;
+	cursor: pointer;
+}
+
+.Mobile-Glassbutton a {
+	text-decoration: none;
+	color: inherit;
+}
+
+
+.Mobile-GlassButton-label {
+	padding-top: 5px;
+	width: 100%;
+	min-height: 40px;
+	line-height: 40px;
+	z-index: 9999;
+	color: inherit;
+	text-shadow: #ffffff 0 1px 0;
+	font-weight: bold;
+	font-size: 25px;
+	text-align: center;
+	display: block;
+}
+
+.Mobile-GlassButton:hover {
+    -- color: #ffffff;
+    opacity: 0.7;
+}
+
+
+div.Mobile-GlassButton-red {
+	color: #000000;
+    -moz-border-image: url("images/glassbuttons/red.png") 0 14 0 14 stretch stretch;
+	-webkit-border-image: url("images/glassbuttons/red.png") 0 14 0 14 stretch stretch;
+}
+
+.Mobile-GlassButton-green {
+	color: #000000;
+    -moz-border-image: url("images/glassbuttons/green.png") 0 14 0 14 stretch stretch;
+	-webkit-border-image: url("images/glassbuttons/green.png") 0 14 0 14 stretch stretch;
+}
+
+div.Mobile-GlassButton-blue {
+	color: #000000;
+    -moz-border-image: url("images/glassbuttons/blue.png") 0 14 0 14 stretch stretch;
+	-webkit-border-image: url("images/glassbuttons/blue.png") 0 14 0 14 stretch stretch;
+}
+
+div.Mobile-GlassButton-lightblue {
+	color: #000000;
+    -moz-border-image: url("images/glassbuttons/lightblue.png") 0 14 0 14 stretch stretch;
+	-webkit-border-image: url("images/glassbuttons/lightblue.png") 0 14 0 14 stretch stretch;
+}
+
+.Mobile-GlassButton-yellow {
+    color: #888888;
+    -moz-border-image: url("images/glassbuttons/yellow.png") 0 14 0 14 stretch stretch;
+	-webkit-border-image: url("images/glassbuttons/yellow.png") 0 14 0 14 stretch stretch;
+}
+
+.Mobile-GlassButton-gray,
+.Mobile-GlassButton-grey{
+	color: #444444;
+    -moz-border-image: url("images/glassbuttons/gray.png") 0 14 0 14 stretch stretch;
+	-webkit-border-image: url("images/glassbuttons/gray.png") 0 14 0 14 stretch stretch;
+}
+
+.Mobile-GlassButton-darkred {
+	color: #ffffff;
+    -moz-border-image: url('images/glassbuttons/darkred.png') 0 14 0 14 stretch stretch;
+	-webkit-border-image: url('images/glassbuttons/darkred.png') 0 14 0 14 stretch stretch;
+}
+
+.Mobile-GlassButton-darkred > .Mobile-GlassButton-label{
+	color: #ffffff;
+	text-shadow: #000000 0 1px 0;
+}
+
+.Mobile-GlassButton-blue > .Mobile-GlassButton-label{
+	color: #ffffff;
+	text-shadow: #000000 0 1px 0;
+}
+
+
+.Mobile-GlassButton-black {
+	color: #000000;
+    -moz-border-image: url("images/glassbuttons/black.png") 0 14 0 14 stretch stretch;
+	-webkit-border-image: url("images/glassbuttons/black.png") 0 14 0 14 stretch stretch;
+}
+
+/* Static Image ========================================================================== */
+
+/* Convenience styling adding a image to a Mobile application */
+
+div.Mobile-StaticImage {
+    width: 100%;
+    padding: 5px 0 5px 0;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+}

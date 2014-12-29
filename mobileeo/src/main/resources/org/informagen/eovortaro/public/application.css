@@ -1,0 +1,68 @@
+
+/* HTML tag styling ------------------------------- */
+
+div.Mobile-TextBox-text h2 {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+	font-weight: bold;
+	font-size: 22px;
+	color: #324f85;
+}
+
+div.Mobile-TextBox-text h3 {
+    margin: 0;
+    padding: 3px;
+    text-align: center;
+	font-weight: normal;
+	font-size: 18px;
+	color: #4C4C4C;
+}
+
+.Mobile-TextBox-text p {
+    margin-top: 0.8em;
+    margin-bottom: 0.8em;
+}
+
+
+.Mobile-TextBox-text p.question {
+    font-family:serif;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+    font-size:175%;
+    font-weight:normal;
+    min-height:3.5em;
+}
+
+
+.Mobile-TextBox-text ul {
+    margin: 3px 0 1px 0;
+    list-style: circle!important;
+}
+
+.Mobile-TextBox-text ul > li,
+.Mobile-TextBox-text ol > li{ 
+    margin-left: -1.4em;
+    margin-bottom: 0.2em;
+    font-size:inherit; 
+}
+
+
+div.Mobile-TextBox-text li li {
+    margin-left:-20px; 
+    margin-bottom:0.2em; 
+}
+
+
+div.drug-table > table tr:nth-child(even) { background-color:#e6f2f3;}
+div.drug-table > table tr:nth-child(odd)  { background-color:#ffffff;}
+div.drug-table > table tr:nth-child(1)    { background-color:#e6f2f3;}
+div.drug-table > table tr:nth-child(2)    { background-color:#93acd3;}
+
+div.health-information table tr:nth-child(even) { background-color:#e6f2f3;}
+div.health-information table tr:nth-child(odd)  { background-color:#ffffff;}
+div.health-information table tr:nth-child(1)    { background-color:#e6f2f3;}
+div.health-information table td[colspan]        { background-color:#93acd3;}
+
+
+

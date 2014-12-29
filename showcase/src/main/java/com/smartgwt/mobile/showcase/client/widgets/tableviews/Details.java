@@ -11,8 +11,16 @@ public class Details extends ScrollablePanel {
 
     public Details(String title) {
         super(title);
+
         setWidth("100%");
+
         TableView tableView = new TableView();
+        tableView.setTitleField("title");
+        tableView.setShowNavigation(false);
+        tableView.setShowIcons(true);
+        tableView.setTableMode(TableMode.GROUPED);
+
+
         @SuppressWarnings({"serial"})
         RecordList recordList = new RecordList(
                 new Record() {
@@ -33,10 +41,7 @@ public class Details extends ScrollablePanel {
                         setAttribute("description", "Would you like it in yearly installments or a lump sum?");
                     }
                 });
-        tableView.setTitleField("title");
-        tableView.setShowNavigation(false);
-        tableView.setShowIcons(true);
-        tableView.setTableMode(TableMode.GROUPED);
+        
         tableView.setData(recordList);
         addMember(tableView);
     }

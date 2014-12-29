@@ -78,8 +78,11 @@ public class SimpleTablesWithEdit extends ScrollablePanel {
                 }
             }
         });
+
         setActions(new Action[]{
+
             new Action("Edit") {
+                
                 @Override
                 public void execute(ActionContext context) {
                     if (context.getControl().getTitle().equals("Edit")) {

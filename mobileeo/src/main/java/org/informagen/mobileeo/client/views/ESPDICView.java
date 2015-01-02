@@ -98,7 +98,7 @@ public class ESPDICView implements ESPDICPresenter.View {
         form.setFields(searchItem);
         panel.addMember(form);
 
-        displayPanel.setStyleName("sc-rounded-panel");
+        displayPanel.setStyleName("espdic-panel");
         displayPanel.setMargin(10);
         panel.addMember(displayPanel);
 

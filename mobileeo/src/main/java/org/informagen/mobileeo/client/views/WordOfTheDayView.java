@@ -25,7 +25,7 @@ public class WordOfTheDayView implements WordOfTheDayPresenter.View {
     
 	public WordOfTheDayView() {
 
-        roundedPanel.setStyleName("sc-rounded-panel");
+        roundedPanel.setStyleName("word-of-the-day-panel");
         roundedPanel.setMargin(10);
 
         panel.addMember(roundedPanel);

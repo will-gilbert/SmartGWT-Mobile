@@ -111,7 +111,7 @@ public class EOGlossaryView implements EOGlossaryPresenter.View {
         form.setFields(searchItem);
         panel.addMember(form);
 
-        displayPanel.setStyleName("sc-rounded-panel");
+        displayPanel.setStyleName("eo-glossary-panel");
         displayPanel.setMargin(10);
         panel.addMember(displayPanel);
 

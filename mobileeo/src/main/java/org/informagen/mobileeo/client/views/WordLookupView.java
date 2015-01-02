@@ -105,7 +105,7 @@ public class WordLookupView implements WordLookupPresenter.View {
         form.setFields(searchItem);
         panel.addMember(form);
 
-        displayPanel.setStyleName("sc-rounded-panel");
+        displayPanel.setStyleName("word-lookup-panel");
         displayPanel.setMargin(10);
 
         panel.addMember(displayPanel);

@@ -1,4 +1,4 @@
-package org.informagen.mobileeo.client.resources;
+package org.informagen.mobileeo.client.icons;
 
 import com.google.gwt.core.client.GWT;
 
@@ -6,9 +6,9 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.ImageResource.ImageOptions;
 
-public interface AppResources extends ClientBundle {
+public interface Icons extends ClientBundle {
 
-    public static final AppResources INSTANCE = GWT.create(AppResources.class);
+    public static final Icons INSTANCE = GWT.create(Icons.class);
 
 
     // NB: These images MUST be in the same directory as this file; The same

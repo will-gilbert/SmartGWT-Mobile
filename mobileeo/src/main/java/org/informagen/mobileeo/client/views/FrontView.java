@@ -34,7 +34,7 @@ import com.smartgwt.mobile.client.widgets.layout.NavStack;
 import com.smartgwt.mobile.client.widgets.tableview.events.RecordNavigationClickHandler;
 import com.smartgwt.mobile.client.widgets.tableview.events.RecordNavigationClickEvent;
 
-import org.informagen.mobileeo.client.resources.AppResources;
+import org.informagen.mobileeo.client.icons.Icons;
 
 // GWT
 import com.google.gwt.core.client.GWT;
@@ -118,31 +118,31 @@ public class FrontView implements FrontPresenter.View, RecordNavigationClickHand
         recordList.add(createTableRecord(
             "lernu", 
             "Lernu.net", 
-            AppResources.INSTANCE.lernu()
+            Icons.INSTANCE.lernu()
             ));
 
         recordList.add(createTableRecord(
             "WordOfTheDay", 
             "Vorto de l' Tago", 
-            AppResources.INSTANCE.calendar()
+            Icons.INSTANCE.calendar()
         ));
 
         recordList.add(createTableRecord(
             "EOGlossaryPage", 
             "Esperanto Vortaro", 
-            AppResources.INSTANCE.dictionary()
+            Icons.INSTANCE.dictionary()
         ));
 
         recordList.add(createTableRecord(
             "WordLookup", 
             "Interŝanĝilo", 
-            AppResources.INSTANCE.eoGlossary()
+            Icons.INSTANCE.eoGlossary()
         ));
 
         recordList.add(createTableRecord(
             "ESPDICLookup", 
             "ESPDIC Glosaro", 
-            AppResources.INSTANCE.espdic()
+            Icons.INSTANCE.espdic()
         ));
 
         tableView.setData(recordList);
@@ -162,13 +162,13 @@ public class FrontView implements FrontPresenter.View, RecordNavigationClickHand
         recordList.add(createTableRecord(
             "radioverda", 
             "Radio Verda", 
-            AppResources.INSTANCE.radioVerda()
+            Icons.INSTANCE.radioVerda()
         ));
 
         recordList.add(createTableRecord(
             "esperanta-retradio", 
             "Esperanta Retradio", 
-            AppResources.INSTANCE.esperantaRetradio()
+            Icons.INSTANCE.esperantaRetradio()
         ));
 
         tableView.setData(recordList);
@@ -184,9 +184,10 @@ public class FrontView implements FrontPresenter.View, RecordNavigationClickHand
         final TableView tableView = createTableView();
         final RecordList recordList = new RecordList();
 
-        recordList.add(createTableRecord("settings", 
+        recordList.add(createTableRecord(
+            "settings", 
             "Preferoj", 
-            AppResources.INSTANCE.settings()
+            Icons.INSTANCE.settings()
         ));
 
         tableView.setData(recordList);

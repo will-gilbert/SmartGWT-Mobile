@@ -68,9 +68,9 @@ ext.gwtModuleRenamedTo = 'app'                    // 'rename-to' within module d
 ext.gwtRunTarget = 'index.html'                   // HTML launching file
 ext.gwtBuildDir = "${buildDir}-gwt"               // GWT build directory
 
-// Dont't add Java compiled client side classes to the WAR
+// Remove the Java GWT client classes and GWT configurations from the WAR
 ext.excludedClasses = [
- '**/client/**',
+ 'com/smartgwt/mobile/showcase/client/**',
  '**/*.gwt.xml'
 ]
 
@@ -131,17 +131,17 @@ dependencies {
     
     runtime ([
         // GWT Validation API (since GWT 2.3.0) ============================
-        "com.google.gwt:validation-api:1.0.0.GA",
-        "com.google.gwt:validation-sources:1.0.0.GA",        
     ])
 
     testCompile([  /* TBD*/ ])
 
     testRuntime([ /* TBD*/ ])
 
-    // The GWT cross compiler; Not needed for production or testing
+    // The GWT cross compiler; Not used testing or deployment
     gwtCompile([
         "com.google.gwt:gwt-dev:$gwtSDK", 
+        "com.google.gwt:validation-api:1.0.0.GA",
+        "com.google.gwt:validation-sources:1.0.0.GA",        
     ])
 
 }
@@ -263,20 +263,25 @@ war {
     classpath = [] 
 
     // Copy everything except the excluded classes and the jars which are going into 'lib'
+
     from (sourceSets.main.runtimeClasspath) {
         into 'WEB-INF/classes'
         excludes = excludedClasses
         exclude  '*.jar'
-
     }
 
-    // Put all of the JAR files into 'lib' except those used by the GWT DevMode and
-    //   the Java/JavaScript cross compiler
+    // Put all of the JAR files into 'lib' ignore those used  by the GWT 
+    //    Java/JavaScript cross compiler; Also ignore SmartGWT-Mobile library
+
     from (sourceSets.main.runtimeClasspath) {
         into 'WEB-INF/lib'
         include '*.jar'
+        exclude  'asm-*.jar'
         exclude  'gwt-dev-*.jar'
         exclude  'gwt-user-*.jar'
+        exclude  'validation-api-*.jar'
+        exclude  'validation-sources-*.jar'
+        exclude  'smartgwt-mobile-*.jar'
     }
 
     // Exclude resources which we don't want in the WAR

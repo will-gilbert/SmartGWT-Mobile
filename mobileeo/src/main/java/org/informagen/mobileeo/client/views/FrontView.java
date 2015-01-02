@@ -34,9 +34,11 @@ import com.smartgwt.mobile.client.widgets.layout.NavStack;
 import com.smartgwt.mobile.client.widgets.tableview.events.RecordNavigationClickHandler;
 import com.smartgwt.mobile.client.widgets.tableview.events.RecordNavigationClickEvent;
 
+import org.informagen.mobileeo.client.resources.AppResources;
 
-// GWT - Simple Logging
+// GWT
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.resources.client.ImageResource;
 
 // Google Inject Annotation
 import com.google.inject.Inject;
@@ -113,11 +115,35 @@ public class FrontView implements FrontPresenter.View, RecordNavigationClickHand
         final TableView tableView = createTableView();
         final RecordList recordList = new RecordList();
 
-        recordList.add(createTableRecord("lernu", "Lernu.net"));
-        recordList.add(createTableRecord("WordOfTheDay", "Vorto de l' Tago"));
-        recordList.add(createTableRecord("EOGlossaryPage", "Esperanto Vortaro"));
-        recordList.add(createTableRecord("WordLookup", "Interŝanĝilo"));
-        recordList.add(createTableRecord("ESPDICLookup", "ESPDIC Glosaro"));
+        recordList.add(createTableRecord(
+            "lernu", 
+            "Lernu.net", 
+            AppResources.INSTANCE.lernu()
+            ));
+
+        recordList.add(createTableRecord(
+            "WordOfTheDay", 
+            "Vorto de l' Tago", 
+            AppResources.INSTANCE.calendar()
+        ));
+
+        recordList.add(createTableRecord(
+            "EOGlossaryPage", 
+            "Esperanto Vortaro", 
+            AppResources.INSTANCE.dictionary()
+        ));
+
+        recordList.add(createTableRecord(
+            "WordLookup", 
+            "Interŝanĝilo", 
+            AppResources.INSTANCE.eoGlossary()
+        ));
+
+        recordList.add(createTableRecord(
+            "ESPDICLookup", 
+            "ESPDIC Glosaro", 
+            AppResources.INSTANCE.espdic()
+        ));
 
         tableView.setData(recordList);
 
@@ -133,8 +159,17 @@ public class FrontView implements FrontPresenter.View, RecordNavigationClickHand
         final TableView tableView = createTableView();
         final RecordList recordList = new RecordList();
 
-        recordList.add(createTableRecord("radioverda", "Radio Verda"));
-        recordList.add(createTableRecord("esperanta-retradio", "Esperanta Retradio"));
+        recordList.add(createTableRecord(
+            "radioverda", 
+            "Radio Verda", 
+            AppResources.INSTANCE.radioVerda()
+        ));
+
+        recordList.add(createTableRecord(
+            "esperanta-retradio", 
+            "Esperanta Retradio", 
+            AppResources.INSTANCE.esperantaRetradio()
+        ));
 
         tableView.setData(recordList);
 
@@ -149,7 +184,10 @@ public class FrontView implements FrontPresenter.View, RecordNavigationClickHand
         final TableView tableView = createTableView();
         final RecordList recordList = new RecordList();
 
-        recordList.add(createTableRecord("settings", "Preferoj"));
+        recordList.add(createTableRecord("settings", 
+            "Preferoj", 
+            AppResources.INSTANCE.settings()
+        ));
 
         tableView.setData(recordList);
 
@@ -218,15 +256,18 @@ public class FrontView implements FrontPresenter.View, RecordNavigationClickHand
         tableView.setParentNavStack(navigationStack);
         tableView.setTableMode(TableMode.GROUPED);
         tableView.setHiliteOnTouch(true);
+        tableView.setShowIcons(true);
 
         return tableView;
     }
 
 
-    private Record createTableRecord(String key, String title) {
+    private Record createTableRecord(String key, String title, ImageResource imageResource) {
         Record record = new Record();
         record.setAttribute("key", key);
         record.setAttribute("title", title);
+        if(imageResource != null)
+            record.setAttribute("icon", imageResource);
         return record;
     }
 

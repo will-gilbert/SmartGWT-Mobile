@@ -35,22 +35,26 @@ group = 'client'
 version = '1.0'
 
 // GWT Configuration
-ext.gwtModule = 'org.informagen.mobileeo.Application'  // Path to module descriptor
+ext.gwtModule = 'org.informagen.mobileeo.Application'   // Path to module descriptor
 ext.gwtModuleRenamedTo = 'app'                          // 'rename-to' within module descriptor
 ext.gwtRunTarget = 'index.html'                         // HTML launching file
 ext.gwtBuildDir = 'build-gwt'                           // GWT build directory
 
 
 // Version Dependencies
-ext.gwtSDK   = '2.6.1'
+ext.gwtSDK   = '2.7.0'
 ext.smartgwtMobile  = '1.0d-SNAPSHOT' // '1.0d_2014-12-06'
 ext.ginVersion   = '2.1.2' //'1.5.0'
 ext.guiceVersion = '3.0'
 
-// Java SDK version,  Compiler flags
+// Java SDK
 sourceCompatibility = 1.7
 targetCompatibility = sourceCompatibility
-compileJava.options.compilerArgs = []  // To invoke Xlint use: ['-Xlint:unchecked']
+compileJava.options.compilerArgs = [
+    "-Xbootclasspath:${bootclasspath_17}", 
+//    '-Xlint:unchecked', 
+    '-Xlint:deprecation',
+] 
 
 // Properties Configuration -------------------------------------------------------------------
 
@@ -66,7 +70,9 @@ configurations { [gwtCompile] }
 
 repositories {
 
-    maven { url "http://informagen.org/maven" }      // Informagen repository; mobile-gwt
+    maven {
+        url "http://informagen.org/maven"              // Remote maven
+    }
 
     mavenLocal()                                       // User's local
     mavenCentral()                                     // Maven Central repository; GWT
@@ -81,15 +87,13 @@ dependencies {
 
         // GWT =============================================================
         "com.google.gwt:gwt-user:$gwtSDK",
+        "com.google.gwt:gwt-servlet:$gwtSDK",
 
         "com.google.gwt.inject:gin:$ginVersion",
         "com.google.inject:guice:$guiceVersion"
     ])
     
     runtime ([
-        "com.google.gwt:gwt-servlet:$gwtSDK",
-        "com.google.gwt:validation-api:1.0.0.GA",
-        "com.google.gwt:validation-sources:1.0.0.GA"
     ])
 
     testCompile([  /* TBD*/ ])
@@ -99,6 +103,8 @@ dependencies {
     // The GWT cross compiler; Not needed for production or testing
     gwtCompile([
         "com.google.gwt:gwt-dev:$gwtSDK", 
+        "com.google.gwt:validation-api:1.0.0.GA",
+        "com.google.gwt:validation-sources:1.0.0.GA"
     ])
 
 }

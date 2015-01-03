@@ -17,7 +17,7 @@ import org.informagen.mobileeo.client.models.DictionaryModel;
 // EOVortaro - Events
 import org.informagen.mobileeo.client.events.HandlerFor;
 import org.informagen.mobileeo.client.events.SwitchToPageEvent;
-import org.informagen.mobileeo.client.events.PlayMP3Event;
+import org.informagen.mobileeo.client.events.VisitWebPageEvent;
 
 // import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
@@ -32,6 +32,9 @@ import com.smartgwt.mobile.client.widgets.toolbar.ToolStrip;
 import com.smartgwt.mobile.client.widgets.toolbar.ToolStripButton;
 import com.smartgwt.mobile.client.util.SC;
 
+// SmartGWT Mobile
+import com.smartgwt.mobile.client.util.SC;
+import com.smartgwt.mobile.client.util.BooleanCallback;
 
 // GWT - Widgets
 import com.google.gwt.user.client.ui.HasWidgets;
@@ -48,7 +51,6 @@ import com.google.gwt.core.client.Scheduler;
 
 // GWT - Simple Logging
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
 
 // Java - util
 import java.util.Map;
@@ -96,6 +98,21 @@ public class ApplicationController  {
             new HandlerFor.SwitchToPageEvent() {
                 public void process(SwitchToPageEvent event) {
                    switchToPage(event.getPageName(), event.getEvent());
+                }
+            }
+        );  
+
+        eventBus.addHandler(VisitWebPageEvent.TYPE, 
+            new HandlerFor.VisitWebPageEvent() {
+                public void process(final VisitWebPageEvent event) {
+                    SC.confirm("You are about to leave this application?", new BooleanCallback() {
+                        @Override
+                        public void execute(Boolean value) {
+                            if(value != null && value.booleanValue())
+                                //SC.say(event.getURL());
+                                Window.open(event.getURL(), "_blank", "");
+                        }
+                    });
                 }
             }
         );  
@@ -149,9 +166,9 @@ public class ApplicationController  {
         
         //      presenter = injector.getRVPodcastPresenter();
              
-        // } else if("EsperantaRetradioPage".equals(pageName)) {
+        } else if("esperanta-retradio".equals(pageName)) {
         
-        //      presenter = injector.getEsperantaRetradioPresenter();
+             presenter = injector.getEsperantaRetradioPresenter();
              
         // } else if("PlayMP3Page".equals(pageName)) {
 

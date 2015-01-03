@@ -4,6 +4,7 @@ package org.informagen.mobileeo.client.models;
 import org.informagen.mobileeo.client.application.Callback;
 
 // EOVortaro - Podcast Presenters
+import org.informagen.mobileeo.client.presenters.EsperantaRetradioPresenter;
 
 // EOVortaro - Services
 import org.informagen.mobileeo.service.RVPodcastService;
@@ -22,7 +23,7 @@ import java.util.LinkedHashMap;
 // Google Inject Annotation
 import com.google.inject.Inject;
 
-public class PodcastModel  {
+public class PodcastModel implements  EsperantaRetradioPresenter.Model  {
 
     // Podcast Services
     final RVPodcastService rvPodcastService;

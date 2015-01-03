@@ -52,7 +52,6 @@ public class FrontPresenter implements Presenter {
     public FrontPresenter(EventBus eventBus, View view /*, Model model*/) {
         this.eventBus = eventBus;
         this.view = view;
-        // this.model = model;
         
         bindCallbacks();
         bindEventBusHandlers();
@@ -62,7 +61,6 @@ public class FrontPresenter implements Presenter {
 
     @Override
     public Panel getPanel() {
-        // updateHeader(Configuration.getProperty("windowTitle","Esperanto"), false);
         return view.asPanel();
     }
 

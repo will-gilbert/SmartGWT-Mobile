@@ -94,9 +94,7 @@ public class WordOfTheDayView implements WordOfTheDayPresenter.View {
     }
     
     void displaySuccess(WordOfTheDay wordOfTheDay) {
-            
-        // Box box = new RoundedBox().backgroundColor("#f5f5dc");
-        
+                    
         String word = new StringBuilder()
             .append("<span style='font-weight:bold;font-size:x-large;'>")
             .append(wordOfTheDay.word())

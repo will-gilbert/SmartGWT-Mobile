@@ -40,7 +40,7 @@ public interface Injector extends Ginjector {
     // MP3PlayerPresenter getMP3PlayerPresenter();
     WordOfTheDayPresenter getWordOfTheDayPresenter();
     ESPDICPresenter getESPDICPresenter();
-    // EsperantaRetradioPresenter getEsperantaRetradioPresenter();
+    EsperantaRetradioPresenter getEsperantaRetradioPresenter();
 
     // Models
     DictionaryModel getDictionaryModel();

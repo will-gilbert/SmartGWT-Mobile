@@ -31,7 +31,8 @@ body {
 .eo-glossary-panel,
 .word-lookup-panel,
 .word-of-the-day-panel,
-.espdic-panel {
+.espdic-panel,
+.esperanta-retradio-panel {
     border-radius: 10px;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;

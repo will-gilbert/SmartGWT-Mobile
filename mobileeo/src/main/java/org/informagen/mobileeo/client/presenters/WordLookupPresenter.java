@@ -87,8 +87,7 @@ public class WordLookupPresenter implements Presenter {
 
         view.setTitle("EO -> EN");
         view.setAttribution(attributionText, attributionURL);
-
-      
+    
     }
 
 

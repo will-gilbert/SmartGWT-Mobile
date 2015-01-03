@@ -9,7 +9,6 @@ import org.informagen.mobileeo.jso.WordOfTheDay;
 
 // SmartGWT Mobile
 import com.smartgwt.mobile.client.widgets.Panel;
-import com.smartgwt.mobile.client.util.SC;
 
 
 // Google Inject Annotation

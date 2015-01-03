@@ -4,6 +4,10 @@ import com.google.gwt.event.shared.EventHandler;
 
 public interface HandlerFor {
 
+    public interface VisitWebPageEvent extends EventHandler {
+        void process(org.informagen.mobileeo.client.events.VisitWebPageEvent event);
+    }
+
     public interface SwitchToPageEvent extends EventHandler {
         void process(org.informagen.mobileeo.client.events.SwitchToPageEvent event);
     }

@@ -60,6 +60,11 @@ public class InjectorModule extends AbstractGinModule {
         bind(EOGlossaryPresenter.class).in(Singleton.class);
         bind(EOGlossaryPresenter.View.class).to(EOGlossaryView.class);
         bind(EOGlossaryPresenter.Model.class).to(DictionaryModel.class);
+
+         // RetRadio Panel
+        bind(EsperantaRetradioPresenter.class).in(Singleton.class);
+        bind(EsperantaRetradioPresenter.View.class).to(EsperantaRetradioView.class);
+        bind(EsperantaRetradioPresenter.Model.class).to(PodcastModel.class);
        
     }
  

@@ -16,22 +16,22 @@ import org.informagen.mobileeo.jso.WordOfTheDay;
 import com.smartgwt.mobile.client.widgets.Panel;
 import com.smartgwt.mobile.client.widgets.ScrollablePanel;
 
+// GWT - UI
+import com.google.gwt.user.client.ui.Anchor;
 
 
 public class WordOfTheDayView implements WordOfTheDayPresenter.View {
 
     final Panel panel = new ScrollablePanel("Vorto de l' Tago");
     final Panel roundedPanel = new Panel();
+    final Panel attibutionPanel = new Panel();
     
 	public WordOfTheDayView() {
 
-        roundedPanel.setStyleName("word-of-the-day-panel");
-        roundedPanel.setMargin(10);
-
-        panel.addMember(roundedPanel);
-
+        buildUI();
         clear();
 
+        attibutionPanel.setVisible(false);
 	}
 
     // WordOfTheDayView.View ---------------------------------------------------------------------
@@ -54,12 +54,38 @@ public class WordOfTheDayView implements WordOfTheDayPresenter.View {
     }
 
     @Override
+    public void setAttribution(String text, String url) {
+
+        if ( text != null && text.trim().length() > 0 ) {
+            Anchor anchor = new Anchor();;
+            anchor.setText(text != null ? text : "");
+
+            if ( url != null && url.trim().length() > 0 )
+                anchor.setHref(url);
+
+            attibutionPanel.addMember(anchor);
+            attibutionPanel.setVisible(true);
+        } else
+            attibutionPanel.setVisible(false);
+
+    }
+
+    @Override
     public Panel asPanel() {        
         return panel;
     }
 
 
     //-----------------------------------------------------------------------------------------
+
+    void buildUI() {
+        roundedPanel.setStyleName("word-of-the-day-panel");
+        roundedPanel.setMargin(10);
+        attibutionPanel.setStyleName("footer-panel");
+
+        panel.addMember(roundedPanel);
+        panel.addMember(attibutionPanel);
+    }
 
 
     void displayFailure() {

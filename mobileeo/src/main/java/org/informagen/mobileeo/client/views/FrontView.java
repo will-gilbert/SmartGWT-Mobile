@@ -111,15 +111,17 @@ public class FrontView implements FrontPresenter.View, RecordNavigationClickHand
 
     void addDictionaries() {
 
-        final Label title = new Label("Dictionaries");
+        final Label title = new Label("Vortoj per Retservoj");
         final TableView tableView = createTableView();
         final RecordList recordList = new RecordList();
 
-        recordList.add(createTableRecord(
-            "lernu", 
-            "Lernu.net", 
-            Icons.INSTANCE.lernu()
-            ));
+        title.setStyleName("Mobile-Heading");
+
+        // recordList.add(createTableRecord(
+        //     "lernu", 
+        //     "Lernu.net", 
+        //     Icons.INSTANCE.lernu()
+        //     ));
 
         recordList.add(createTableRecord(
             "WordOfTheDay", 
@@ -155,9 +157,11 @@ public class FrontView implements FrontPresenter.View, RecordNavigationClickHand
 
     void addPodcasts() {
 
-        final Label title = new Label("Podcasts");
+        final Label title = new Label("Podkastoj kaj Aŭdvidoj");
         final TableView tableView = createTableView();
         final RecordList recordList = new RecordList();
+
+        title.setStyleName("Mobile-Heading");
 
         recordList.add(createTableRecord(
             "radioverda", 
@@ -198,27 +202,6 @@ public class FrontView implements FrontPresenter.View, RecordNavigationClickHand
     }
 
 /*        
-		// Lernu! or EO Logo
-        //add(new StaticImage("images/lernu.png"));
- 
-        // Top Level jump menus grouped by source or content
-	    RoundedBox roundedBox;
-
-        // Lernu! Services --------------------------------------------------------------------
-        roundedBox = new RoundedBox();
-
-        roundedBox.add(createDownloadMenu("lernu", "Lernu.net", "http://lernu.net", "Vizitu") );
-        roundedBox.add(createMenu("calendar", "Vorto de l' Tago", "WordOfTheDayPage") );
-        roundedBox.add(createMenu("dictionary", "Esperanto Vortaro", "EOGlossaryPage") );
-        roundedBox.add(interchangeMenu);
-        roundedBox.add(createMenu("dictionary", "ESPDIC Glosaro", "ESPDICPage") );
-
-        if(roundedBox.getWidgetCount() > 0) {
-            add(new Heading("Retservoj per Retservoj"));
-            roundedBox.showLastBorder(false);
-            add(roundedBox);
-        }
-
         // Podcasts/Audio-Visual --------------------------------------------------------------
         roundedBox = new RoundedBox();
 
@@ -229,19 +212,6 @@ public class FrontView implements FrontPresenter.View, RecordNavigationClickHand
             roundedBox.add(createDownloadMenu("radioverda", "Radio Verda", "http://radioverda.com/", "Vizitu") );
             roundedBox.add(createDownloadMenu("esperanta-retradio", "Esperanta Retradio", "http://peranto.posterous.com/", "Vizitu") );
         }
-
-        if(roundedBox.getWidgetCount() > 0) {
-            add(new Heading("Podkastoj kaj Aŭdvidoj"));
-            roundedBox.showLastBorder(false);
-            add(roundedBox);
-        }
-
-        // Preferences
-        roundedBox = new RoundedBox();
-        roundedBox.add(createMenu("settings",   "Preferoj", "SettingsPage"));
-        roundedBox.showLastBorder(false);
-        add(roundedBox);
-
 
 
     }

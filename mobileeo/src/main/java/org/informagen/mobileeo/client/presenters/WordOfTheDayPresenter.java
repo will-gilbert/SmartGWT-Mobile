@@ -16,13 +16,17 @@ import com.smartgwt.mobile.client.util.SC;
 import com.google.inject.Inject;
 
 
-public class WordOfTheDayPresenter implements Presenter {  
+public class WordOfTheDayPresenter implements Presenter {
+
+    private static final String attributionText = "Difinoj provizatas per Lernu.net";
+    private static final String attributionURL = "http://lernu.net/lernado/vortoj/tagovortoj/";
 
 //---------------------------------------------------------------------------------------------
 
     public interface View {
         void clear();
         void display(WordOfTheDay wordOfTheDay);
+        void setAttribution(String text, String url);
         Panel asPanel();
     }
 
@@ -39,6 +43,8 @@ public class WordOfTheDayPresenter implements Presenter {
      public WordOfTheDayPresenter(View view, Model model ) {
         this.view = view;
         this.model = model;
+
+        view.setAttribution(attributionText, attributionURL);
 
         fetchWordOfTheDay();       
     }

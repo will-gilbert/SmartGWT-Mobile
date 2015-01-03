@@ -44,7 +44,7 @@ ext.gwtBuildDir = 'build-gwt'                           // GWT build directory
 // Version Dependencies
 ext.gwtSDK   = '2.7.0'
 ext.smartgwtMobile  = '1.0d-SNAPSHOT' // '1.0d_2014-12-06'
-ext.ginVersion   = '2.1.2' //'1.5.0'
+ext.ginVersion   = '2.1.2'
 ext.guiceVersion = '3.0'
 
 // Java SDK
@@ -59,9 +59,9 @@ compileJava.options.compilerArgs = [
 // Properties Configuration -------------------------------------------------------------------
 
 ext.localityProperties = [
-    'project.version'                : project.version,
-    'project.name'                   : applicationName,
-    'user.agent'                     : project.hasProperty('tomcat')  ? 'safari,gecko1_8' : findProperty('user.agent', 'safari'),
+    'project.version' : project.version,
+    'project.name'    : applicationName,
+    'user.agent'      : findProperty('user.agent', 'safari'),
 ]
 
 // R e p o s i t o r i e s   &   D e p e n d e n c i e s --------------------------------------

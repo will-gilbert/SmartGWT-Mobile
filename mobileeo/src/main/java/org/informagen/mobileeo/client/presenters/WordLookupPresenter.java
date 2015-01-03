@@ -39,7 +39,10 @@ import com.smartgwt.mobile.client.util.SC;
 import com.google.inject.Inject;
 
 
-public class WordLookupPresenter implements Presenter {  
+public class WordLookupPresenter implements Presenter {
+
+    private static final String attributionText = "Vortaraj servoj provizatas per Lernu.net";
+    private static final String attributionURL = "http://lernu.net/";
 
 //---------------------------------------------------------------------------------------------
 
@@ -49,6 +52,8 @@ public class WordLookupPresenter implements Presenter {
         void setTitle(String title);
 
         void setSearchTermCallback(Callback<String> callback);
+
+        void setAttribution(String text, String url);
 
         // NavigationButton swapButton();
 
@@ -81,6 +86,8 @@ public class WordLookupPresenter implements Presenter {
         bindEventBusHandlers(); 
 
         view.setTitle("EO -> EN");
+        view.setAttribution(attributionText, attributionURL);
+
       
     }
 

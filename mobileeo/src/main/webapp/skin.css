@@ -54,3 +54,35 @@ body {
      -webkit-user-select: text;
 }
 
+/* Footer ================================================================================= */
+
+div.footer-panel {
+    position: relative;
+    text-align: center;
+    margin: 6px auto 0 auto;
+}
+
+div.footer-panel a {
+    text-decoration: none;
+    font-size: 9pt;
+    color: #4c4c4c;
+    text-shadow: #ffffff 0 1px 0;
+}
+
+div.footer-panel a:hover {
+    color: #ffffff;
+}
+
+/* ========================================================================================= */
+
+div.Mobile-Heading {
+    position: static;
+    padding: 1px 0 3px 12px;
+    font-weight: bold;
+    font-size: 17px;
+    color: #4c4c4c;
+    text-shadow: #ffffff 0 1px 0;
+}
+
+
+

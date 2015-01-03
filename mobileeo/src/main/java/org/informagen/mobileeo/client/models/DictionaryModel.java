@@ -47,6 +47,8 @@ public class DictionaryModel implements WordOfTheDayPresenter.Model,
 
     Map<String,String> dictionaries = null;
 
+    WordOfTheDay cachedWordOfTheDay = null;
+
     String from;
     String to;
     
@@ -105,8 +107,23 @@ public class DictionaryModel implements WordOfTheDayPresenter.Model,
     }
 
     public void wordOfTheDay(final Callback<WordOfTheDay> callback) {
+
+        // If the 'WordOfTheDay' has been fetched, return it
+
+        if ( cachedWordOfTheDay != null) {
+            callback.onSuccess(cachedWordOfTheDay);
+            return;
+        }
+
+        // Otherwise, fetch it, cache it and then return it
         Analytics.track(Analytics.GLOSSARY, "lernu", "word of the day");
-        service.wordOfTheDay(callback);
+
+        service.wordOfTheDay(new Callback<WordOfTheDay>() {
+            public void onSuccess(WordOfTheDay wordOfTheDay) {
+                cachedWordOfTheDay = wordOfTheDay;
+                callback.onSuccess(cachedWordOfTheDay);
+            }
+        });
     }
 
     public void fetchDictionaries() {

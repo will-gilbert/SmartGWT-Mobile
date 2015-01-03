@@ -20,15 +20,7 @@ import com.smartgwt.mobile.client.widgets.form.fields.events.BlurEvent;
 import com.smartgwt.mobile.client.widgets.form.fields.events.BlurHandler;
 
 // GWT - UI
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.HasText;
-
-// GWT - Core
-import com.google.gwt.core.client.JsArray;
-
-// GWT - Simple Logging
-import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.ui.Anchor;
 
 
 public class EOGlossaryView implements EOGlossaryPresenter.View {
@@ -64,8 +56,17 @@ public class EOGlossaryView implements EOGlossaryPresenter.View {
 
     @Override
     public void setAttribution(String text, String url) {
-        attibutionPanel.setContents(text);
-        attibutionPanel.setVisible(true);
+        if ( text != null && text.trim().length() > 0 ) {
+            Anchor anchor = new Anchor();;
+            anchor.setText(text != null ? text : "");
+
+            if ( url != null && url.trim().length() > 0 )
+                anchor.setHref(url);
+
+            attibutionPanel.addMember(anchor);
+            attibutionPanel.setVisible(true);
+        } else
+            attibutionPanel.setVisible(false);
     }
 
     @Override
@@ -115,7 +116,7 @@ public class EOGlossaryView implements EOGlossaryPresenter.View {
         displayPanel.setMargin(10);
         panel.addMember(displayPanel);
 
-        attibutionPanel.setStyleName("sc-rounded-panel");
+        attibutionPanel.setStyleName("footer-panel");
         panel.addMember(attibutionPanel);
         
     }

@@ -7,10 +7,6 @@ Configuration.windowTitle   = "EO Retaĵaroj";
 Configuration.analyticsKey  = "";
 //Configuration.analyticsKey  = "UA-13220092-1";
 
-//Configuration.footerMessage  = "Vortaraj servoj provizatas per Lernu!";
-//Configuration.footerURL      = "http://lernu.net/";
-
-
 // Server connection configuration
 Configuration.serviceType   = "jsonp";
 

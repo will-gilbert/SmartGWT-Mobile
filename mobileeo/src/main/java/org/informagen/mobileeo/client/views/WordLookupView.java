@@ -28,14 +28,7 @@ import com.smartgwt.mobile.client.widgets.form.fields.events.BlurEvent;
 import com.smartgwt.mobile.client.widgets.form.fields.events.BlurHandler;
 
 // GWT - UI
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.HasText;
-import com.google.gwt.event.dom.client.KeyPressHandler;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-
-// Alert Logging
-import com.smartgwt.mobile.client.util.SC;
+import com.google.gwt.user.client.ui.Anchor;
 
 
 public class WordLookupView implements WordLookupPresenter.View {
@@ -47,6 +40,7 @@ public class WordLookupView implements WordLookupPresenter.View {
     final private DynamicForm form = new DynamicForm();
     final private SearchItem searchItem = new SearchItem("search", "Search", "Search Term");
     final private Panel displayPanel = new Panel();
+    final private Panel attibutionPanel = new Panel();
 
 
     Callback<String> searchTermCallback = null;
@@ -55,6 +49,9 @@ public class WordLookupView implements WordLookupPresenter.View {
         buildUI();
         wireUI();
         clear();
+
+        attibutionPanel.setVisible(false);
+
 	}
 
     // WordLookupPresenter.View ---------------------------------------------------------------------
@@ -75,6 +72,24 @@ public class WordLookupView implements WordLookupPresenter.View {
         this.searchTermCallback = callback;
     }
 
+    @Override
+    public void setAttribution(String text, String url) {
+
+        if ( text != null && text.trim().length() > 0 ) {
+            Anchor anchor = new Anchor();;
+            anchor.setText(text != null ? text : "");
+
+            if ( url != null && url.trim().length() > 0 )
+                anchor.setHref(url);
+
+            attibutionPanel.addMember(anchor);
+            attibutionPanel.setVisible(true);
+        } else
+            attibutionPanel.setVisible(false);
+
+    }
+
+    @Override
     public void clear() {
         searchItem.setValue("");
         displayPanel.setContents("");
@@ -101,14 +116,17 @@ public class WordLookupView implements WordLookupPresenter.View {
     void buildUI() {
 
         form.setFormStyle(FormStyle.STYLE1);
-
         form.setFields(searchItem);
-        panel.addMember(form);
 
         displayPanel.setStyleName("word-lookup-panel");
         displayPanel.setMargin(10);
 
+        attibutionPanel.setStyleName("footer-panel");
+
+        // Assemble UI
+        panel.addMember(form);
         panel.addMember(displayPanel);
+        panel.addMember(attibutionPanel);
     }
 
     void wireUI() {
@@ -122,23 +140,7 @@ public class WordLookupView implements WordLookupPresenter.View {
             }
         });
 
-        // This handler does not work
-        searchItem.addKeyPressHandler( new KeyPressHandler() {
-            @Override
-            public void onKeyPress(KeyPressEvent event) {
-
-                //SC.say(event.toDebugString());
-
-                // if(event.getCharCode().equals( )) {
-                //     if (searchItem.getValue() != null && searchTermCallback != null) {
-                //         searchTermCallback.onSuccess(searchItem.getValueAsString());
-                //     }
-                // }
-            }
-        });
-
     }
-
 
 
     void displayFailure() {

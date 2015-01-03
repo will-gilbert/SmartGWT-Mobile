@@ -8,8 +8,6 @@ import org.informagen.mobileeo.client.application.Analytics;
 // GWT - Core, UI, Command
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.RootPanel;
-// import com.google.gwt.user.client.Command;
-// import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.core.client.Scheduler;
@@ -19,8 +17,8 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
 
 /**
- * Entry point for the application.  Name it 'EntryPoint' so that it pretty
- *   obvious this is where you start
+ * Entry point for the application.  Name it 'EntryPoint' so that it's pretty
+ *   obvious this is where it starts.
  */
  
 public class EntryPoint implements com.google.gwt.core.client.EntryPoint {

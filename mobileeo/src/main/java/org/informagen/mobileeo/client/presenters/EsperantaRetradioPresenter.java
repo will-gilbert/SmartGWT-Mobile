@@ -33,8 +33,8 @@ public class EsperantaRetradioPresenter implements Presenter {
     public interface View {
         void clear();
         void display(EsperantaRetradio esperantaRetradio);
-        void setAttribution(String text, String url);
-        void setGoToWebSiteCallback(Callback<Void> callback);
+        void setAttribution(String text);
+        void setDelegate(EsperantaRetradioPresenter delegate);
         Panel asPanel();
     }
 
@@ -49,25 +49,19 @@ public class EsperantaRetradioPresenter implements Presenter {
     final Model model;
     
     @Inject
-     public EsperantaRetradioPresenter(EventBus eventBus, View view, Model model) {
+    public EsperantaRetradioPresenter(EventBus eventBus, View view, Model model) {
         this.eventBus = eventBus;
         this.view = view;
         this.model = model;
 
-        view.setAttribution(attributionText, attributionURL);
-        bindViewCallbacks();
+        view.setDelegate(this);
+        view.setAttribution(attributionText);
 
         fetchEsperantaRetradio();
     }
 
-    void bindViewCallbacks() {
-
-        view.setGoToWebSiteCallback(new Callback<Void>(){
-            public void onSuccess(Void nothing) {
-                eventBus.fireEvent(new VisitWebPageEvent(webSiteURL));
-            } 
-        });
-
+    public void visitWebPage() {
+        eventBus.fireEvent(new VisitWebPageEvent(webSiteURL));
     }
 
 

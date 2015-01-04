@@ -1,9 +1,9 @@
 package org.informagen.mobileeo.client.presenters;
 
 // EO Vortaro - Application
-import org.informagen.mobileeo.client.application.Configuration;
 import org.informagen.mobileeo.client.application.Callback;
 import org.informagen.mobileeo.client.application.Presenter;
+import org.informagen.mobileeo.client.events.VisitWebPageEvent;
 
 // EO Vortaro - JSO
 import org.informagen.mobileeo.jso.Definition;
@@ -11,9 +11,8 @@ import org.informagen.mobileeo.jso.Definition;
 // SmartGWT Mobile - Widgets
 import com.smartgwt.mobile.client.widgets.Panel;
 
-
-// Alert Logging
-import com.smartgwt.mobile.client.util.SC;
+// GWT - EventBus
+import com.google.gwt.event.shared.EventBus;
 
 // Google Inject Annotation
 import com.google.inject.Inject;
@@ -26,12 +25,10 @@ public class EOGlossaryPresenter implements Presenter {
 //---------------------------------------------------------------------------------------------
 
     public interface View {
+        void setDelegate(EOGlossaryPresenter delegate);
         void clear();
         void display(Definition definition);
-        void setSearchTermCallback(Callback<String> callback);
-
-        void setAttribution(String text, String url);
-        
+        void setAttribution(String text);
         Panel asPanel();
    }
 
@@ -41,17 +38,18 @@ public class EOGlossaryPresenter implements Presenter {
 
 //---------------------------------------------------------------------------------------------
     
+    final EventBus eventBus;
     final View view;
     final Model model;
     
     @Inject
-     public EOGlossaryPresenter(View view, Model model) {
+     public EOGlossaryPresenter(EventBus eventBus, View view, Model model) {
+        this.eventBus = eventBus;
         this.view = view;
         this.model = model;
 
-        view.setAttribution(attributionText, attributionURL);
-
-        bindViewCallbacks();
+        view.setDelegate(this);
+        view.setAttribution(attributionText);
     }
 
 
@@ -61,19 +59,11 @@ public class EOGlossaryPresenter implements Presenter {
         return view.asPanel();
     }
 
-    void bindViewCallbacks() {
-
-        view.setSearchTermCallback(new Callback<String>() {
-            public void onSuccess(String searchTerm) {
-                view.clear();
-                lookupWord(searchTerm);
-            }
-        });
-
+    public void visitWebPage() {
+        eventBus.fireEvent(new VisitWebPageEvent(attributionURL));
     }
 
-
-    void lookupWord(String word) {
+    public void lookupWord(String word) {
                 
         if(word.trim().length() == 0)
             return;

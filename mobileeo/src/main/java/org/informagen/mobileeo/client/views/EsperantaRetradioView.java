@@ -12,27 +12,26 @@ import org.informagen.mobileeo.jso.EsperantaRetradio;
 import com.smartgwt.mobile.client.widgets.Panel;
 import com.smartgwt.mobile.client.widgets.ScrollablePanel;
 import com.smartgwt.mobile.client.widgets.Button;
-
-import com.smartgwt.mobile.client.widgets.events.HasClickHandlers;
-import com.smartgwt.mobile.client.widgets.events.ClickHandler;
-import com.smartgwt.mobile.client.widgets.events.ClickEvent;
-
 import com.smartgwt.mobile.client.types.IconAlign;
 
 // GWT - UI
 import com.google.gwt.user.client.ui.Anchor;
 
+
 public class EsperantaRetradioView implements EsperantaRetradioPresenter.View {
     
     final Panel panel = new ScrollablePanel("Vorto de l' Tago");
+    final Button goToWebsiteButton = new Button("Visit Esperanta Retradio", Button.ButtonType.ROUNDED_RECTANGLE);
     final Panel roundedPanel = new Panel();
     final Panel attibutionPanel = new Panel();
+    final Anchor anchor = new Anchor();
 
-    Callback<Void> goToWebSiteCallback = null;
+    EsperantaRetradioPresenter delegate = null;
 
     
 	public EsperantaRetradioView() {
         buildUI();
+        wireUI();
         clear();
 
         attibutionPanel.setVisible(false);
@@ -43,15 +42,16 @@ public class EsperantaRetradioView implements EsperantaRetradioPresenter.View {
     // WordOfTheDayView.View ---------------------------------------------------------------------
 
     @Override
+    public void setDelegate(EsperantaRetradioPresenter delegate) {
+        this.delegate = delegate;
+    }
+
+    @Override
     public void clear() {
         roundedPanel.setContents("");
         roundedPanel.setVisible(false);
     }
 
-    @Override
-    public void setGoToWebSiteCallback(Callback<Void> callback) {
-        this.goToWebSiteCallback = callback;
-    }
 
     @Override
     public void display(EsperantaRetradio esperantaRetradio) {  
@@ -65,15 +65,10 @@ public class EsperantaRetradioView implements EsperantaRetradioPresenter.View {
     }
 
     @Override
-    public void setAttribution(String text, String url) {
+    public void setAttribution(String text) {
 
         if ( text != null && text.trim().length() > 0 ) {
-            Anchor anchor = new Anchor();;
             anchor.setText(text != null ? text : "");
-
-            if ( url != null && url.trim().length() > 0 )
-                anchor.setHref(url);
-
             attibutionPanel.addMember(anchor);
             attibutionPanel.setVisible(true);
         } else
@@ -93,25 +88,36 @@ public class EsperantaRetradioView implements EsperantaRetradioPresenter.View {
         roundedPanel.setMargin(10);
         attibutionPanel.setStyleName("footer-panel");
 
-        panel.addMember(createWebSitePanel());
+        panel.addMember(buildWebSitePanel());
         panel.addMember(roundedPanel);
         panel.addMember(attibutionPanel);
     }
 
-    private Panel createWebSitePanel() {
-        Panel webSitePanel = new Panel();
-        Button button = new Button("Visit Esperanta Retradio", Button.ButtonType.ROUNDED_RECTANGLE);
-        button.setIcon(Icons.INSTANCE.esperantaRetradio(), false);
+   void wireUI() {
 
-        webSitePanel.addMember(button);
-
-        button.addClickHandler(new ClickHandler() {
+        goToWebsiteButton.addClickHandler(new com.smartgwt.mobile.client.widgets.events.ClickHandler() {
             @Override
-            public void onClick(ClickEvent event) {
-                if(goToWebSiteCallback != null)
-                    goToWebSiteCallback.onSuccess(null);
+            public void onClick(com.smartgwt.mobile.client.widgets.events.ClickEvent event) {
+                if(delegate != null)
+                    delegate.visitWebPage();
             }
         });
+
+        anchor.addClickHandler(new com.google.gwt.event.dom.client.ClickHandler(){
+            @Override
+            public void onClick(com.google.gwt.event.dom.client.ClickEvent event) {
+                if(delegate != null)
+                    delegate.visitWebPage();
+            }
+
+        });
+
+    }
+
+    private Panel buildWebSitePanel() {
+        Panel webSitePanel = new Panel();
+        goToWebsiteButton.setIcon(Icons.INSTANCE.esperantaRetradio(), false);
+        webSitePanel.addMember(goToWebsiteButton);
 
         // webSitePanel.add(createDownloadMenu("esperanta-retradio", "Esperanta Retradio", "http://aldone.de/retradio/", "Vizitu") );
         return webSitePanel;
@@ -141,8 +147,6 @@ public class EsperantaRetradioView implements EsperantaRetradioPresenter.View {
         roundedPanel.setContents(word + description);
       
     }
-
-    
 
 
 }

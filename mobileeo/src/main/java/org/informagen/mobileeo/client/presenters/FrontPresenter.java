@@ -1,41 +1,32 @@
 package org.informagen.mobileeo.client.presenters;
 
-// EO Vortaro - UI
+// Mobile EO  - Application
 import org.informagen.mobileeo.client.application.Presenter;
-import org.informagen.mobileeo.client.application.Callback;
 
+// Mobile EO - Events
 import org.informagen.mobileeo.client.events.SwitchToPageEvent;
 import org.informagen.mobileeo.client.events.VisitWebPageEvent;
-
-
 
 // SmartGWT Mobile
 import com.smartgwt.mobile.client.widgets.Panel;
 
-
 // GWT - EventBus
 import com.google.gwt.event.shared.EventBus;
-
-// GWT - Simple Logging
-import com.google.gwt.core.client.GWT;
-
-// Java - Util
-import java.util.List;
-import java.util.ArrayList;
 
 // Google Inject Annotation
 import com.google.inject.Inject;
 
 public class FrontPresenter implements Presenter {  
 
-//---------------------------------------------------------------------------------------------
+    private static final String attributionText = "Konstruita kun SmartGWT Mobile®";
+    private static final String attributionURL  = "http://www.smartclient.com/product/smartgwtMobile.jsp";
 
+    //---------------------------------------------------------------------------------------------
 
     public interface View {
         // void setInterchangeTitle(String title);       
-        void setRecordClickedCallback(Callback<String> recordClickedCallback);
-        void setGoToWebSiteCallback(Callback<String> goToWebSiteCallback);
-
+        void setDelegate(FrontPresenter delegate);
+        void setAttribution(String text);
         Panel asPanel();
     }
 
@@ -46,18 +37,19 @@ public class FrontPresenter implements Presenter {
         String dictionary(String iso);
     }
 
-//---------------------------------------------------------------------------------------------
+    //---------------------------------------------------------------------------------------------
    
+    final EventBus eventBus;
     final View view;
     // final Model model;
-    final EventBus eventBus;
 
     @Inject
     public FrontPresenter(EventBus eventBus, View view /*, Model model*/) {
         this.eventBus = eventBus;
         this.view = view;
         
-        bindCallbacks();
+        view.setDelegate(this);
+        view.setAttribution(attributionText);
         bindEventBusHandlers();
                 
         // view.setInterchangeTitle(createInterchangeTitle(model.from(), model.to()));
@@ -68,20 +60,16 @@ public class FrontPresenter implements Presenter {
         return view.asPanel();
     }
 
-    void bindCallbacks() {
-        
-        view.setRecordClickedCallback(new Callback<String>() {
-            public void onSuccess(String pageName) {
-                eventBus.fireEvent(new SwitchToPageEvent(pageName));
-            }
-        });
+    public void switchToPage(String pageName) {
+        eventBus.fireEvent(new SwitchToPageEvent(pageName));
+    }
 
-        view.setGoToWebSiteCallback(new Callback<String>() {
-            public void onSuccess(String url) {
-                eventBus.fireEvent(new VisitWebPageEvent(url));
-            }
-        });
+    public void visitWebPage() {
+        visitWebPage(attributionURL);
+    }
 
+    public void visitWebPage(String websiteURL) {
+        eventBus.fireEvent(new VisitWebPageEvent(websiteURL));
     }
 
     void bindEventBusHandlers() {

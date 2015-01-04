@@ -25,7 +25,6 @@ import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 
-
 public class WordOfTheDayView implements WordOfTheDayPresenter.View {
 
     final Panel panel = new ScrollablePanel("Vorto de l' Tago");
@@ -33,11 +32,9 @@ public class WordOfTheDayView implements WordOfTheDayPresenter.View {
     final Panel attibutionPanel = new Panel();
     final Anchor anchor = new Anchor();
 
- 
-     Callback<Void> goToWebSiteCallback = null;
-   
-	public WordOfTheDayView() {
+    WordOfTheDayPresenter delegate;
 
+	public WordOfTheDayView() {
         buildUI();
         wireUI();
         clear();
@@ -45,7 +42,12 @@ public class WordOfTheDayView implements WordOfTheDayPresenter.View {
         attibutionPanel.setVisible(false);
 	}
 
-    // WordOfTheDayView.View ---------------------------------------------------------------------
+    // WordOfTheDayPresenter.View ---------------------------------------------------------------------
+
+    @Override
+    public void setDelegate(WordOfTheDayPresenter delegate) {
+        this.delegate = delegate;
+    }
 
     @Override
     public void clear() {
@@ -77,10 +79,6 @@ public class WordOfTheDayView implements WordOfTheDayPresenter.View {
 
     }
 
-    @Override
-    public void setGoToWebSiteCallback(Callback<Void> callback) {
-        this.goToWebSiteCallback = callback;
-    }
 
     @Override
     public Panel asPanel() {        
@@ -104,8 +102,8 @@ public class WordOfTheDayView implements WordOfTheDayPresenter.View {
         anchor.addClickHandler(new ClickHandler(){
             @Override
             public void onClick(ClickEvent event) {
-                if(goToWebSiteCallback != null)
-                    goToWebSiteCallback.onSuccess(null);
+                if(delegate != null)
+                    delegate.visitWebPage();
             }
 
         });

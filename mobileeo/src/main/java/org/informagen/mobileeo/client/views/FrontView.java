@@ -3,6 +3,7 @@ package org.informagen.mobileeo.client.views;
 
 // EO Vortaro - Application
 import org.informagen.mobileeo.client.application.Callback;
+import org.informagen.mobileeo.client.icons.Icons;
 
 // EO Vortaro - Presenters
 import org.informagen.mobileeo.client.presenters.FrontPresenter;
@@ -14,8 +15,6 @@ import com.smartgwt.mobile.client.widgets.Dialog;
 import com.smartgwt.mobile.client.widgets.Panel;
 import com.smartgwt.mobile.client.widgets.ScrollablePanel;
 import com.smartgwt.mobile.client.widgets.Label;
-
-
 import com.smartgwt.mobile.client.widgets.tableview.TableView;
 
 // SmartGWT Mobile - Core
@@ -34,11 +33,13 @@ import com.smartgwt.mobile.client.widgets.layout.NavStack;
 import com.smartgwt.mobile.client.widgets.tableview.events.RecordNavigationClickHandler;
 import com.smartgwt.mobile.client.widgets.tableview.events.RecordNavigationClickEvent;
 
-import org.informagen.mobileeo.client.icons.Icons;
-
 // GWT
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.ui.Anchor;
+
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
 
 // Google Inject Annotation
 import com.google.inject.Inject;
@@ -48,10 +49,10 @@ public class FrontView implements FrontPresenter.View, RecordNavigationClickHand
 
     // final Menu<String> interchangeMenu;
     final Panel panel = new ScrollablePanel("EO Retaĵaro");
+    final private Panel attibutionPanel = new Panel();
+    final private Anchor anchor = new Anchor();
 
-    Callback<String> recordClickedCallback = null;
-    Callback<String> goToWebSiteCallback = null;
-
+    FrontPresenter delegate = null;
 
     final NavStack navigationStack;
 
@@ -73,27 +74,31 @@ public class FrontView implements FrontPresenter.View, RecordNavigationClickHand
             addBrowserAlternatives();
 */        
 
-        addDictionaries();
-        addPodcasts();
-        addPreferences();
+        buildUI();
+        wireUI();
 
 	}
 
     // FrontPresenter.View ---------------------------------------------------------------------
 
     @Override
+    public void setDelegate(FrontPresenter delegate) {
+        this.delegate = delegate;
+    }
+
+    @Override
+    public void setAttribution(String text) {
+        if ( text != null && text.trim().length() > 0 ) {
+            anchor.setText(text != null ? text : "");
+            attibutionPanel.addMember(anchor);
+            attibutionPanel.setVisible(true);
+        } else
+            attibutionPanel.setVisible(false);
+    }
+
+    @Override
     public Panel asPanel() {        
         return panel;
-    }
-
-    @Override
-    public void setRecordClickedCallback(Callback<String> recordClickedCallback) {
-        this.recordClickedCallback = recordClickedCallback;
-    }
-
-    @Override
-    public void setGoToWebSiteCallback(Callback<String> goToWebSiteCallback) {
-        this.goToWebSiteCallback = goToWebSiteCallback;
     }
 
     // RecordNavigationClickHandler ---------------------------------------------------------------------
@@ -103,16 +108,29 @@ public class FrontView implements FrontPresenter.View, RecordNavigationClickHand
         final Record selectedRecord = event.getRecord();
         String key = selectedRecord.getAttribute("key");
 
-        if(key != null && key.equals("lernu") && goToWebSiteCallback != null) {
-            goToWebSiteCallback.onSuccess("http://lernu.net");
+        if(key != null && key.equals("lernu") && delegate != null) {
+            delegate.visitWebPage("http://lernu.net");
             return;
         }
 
-        if (key != null && recordClickedCallback != null )
-            recordClickedCallback.onSuccess(key);   
+        if (key != null && delegate != null )
+            delegate.switchToPage(key);   
     }
 
     //-----------------------------------------------------------------------------------------
+
+    void buildUI() {
+
+        addDictionaries();
+        addPodcasts();
+        addPreferences();
+
+        attibutionPanel.setStyleName("footer-panel");
+        panel.addMember(attibutionPanel);
+
+    }
+
+
 
 /*
     void addFullScreen() {
@@ -212,6 +230,19 @@ public class FrontView implements FrontPresenter.View, RecordNavigationClickHand
         tableView.addRecordNavigationClickHandler(this);
 
         panel.addMember(tableView);
+    }
+
+    void wireUI() {
+
+        anchor.addClickHandler(new ClickHandler(){
+            @Override
+            public void onClick(ClickEvent event) {
+                if(delegate != null)
+                    delegate.visitWebPage();
+            }
+
+        });
+
     }
 
 /*        

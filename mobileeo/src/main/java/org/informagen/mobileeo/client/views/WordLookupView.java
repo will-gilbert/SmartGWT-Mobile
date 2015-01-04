@@ -30,6 +30,10 @@ import com.smartgwt.mobile.client.widgets.form.fields.events.BlurHandler;
 // GWT - UI
 import com.google.gwt.user.client.ui.Anchor;
 
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+
 
 public class WordLookupView implements WordLookupPresenter.View {
     
@@ -41,9 +45,9 @@ public class WordLookupView implements WordLookupPresenter.View {
     final private SearchItem searchItem = new SearchItem("search", "Search", "Search Term");
     final private Panel displayPanel = new Panel();
     final private Panel attibutionPanel = new Panel();
+    final private Anchor anchor = new Anchor();
 
-
-    Callback<String> searchTermCallback = null;
+    WordLookupPresenter delegate = null;
     
 	public WordLookupView() {
         buildUI();
@@ -57,6 +61,11 @@ public class WordLookupView implements WordLookupPresenter.View {
     // WordLookupPresenter.View ---------------------------------------------------------------------
 
     @Override
+    public void setDelegate(WordLookupPresenter delegate) {
+        this.delegate = delegate;
+    }
+
+    @Override
     public Panel asPanel() {        
         return panel;
     }
@@ -66,21 +75,11 @@ public class WordLookupView implements WordLookupPresenter.View {
         panel.setTitle(title);
     }
 
-
     @Override
-    public void setSearchTermCallback(Callback<String> callback) {
-        this.searchTermCallback = callback;
-    }
-
-    @Override
-    public void setAttribution(String text, String url) {
+    public void setAttribution(String text) {
 
         if ( text != null && text.trim().length() > 0 ) {
-            Anchor anchor = new Anchor();;
             anchor.setText(text != null ? text : "");
-
-            if ( url != null && url.trim().length() > 0 )
-                anchor.setHref(url);
 
             attibutionPanel.addMember(anchor);
             attibutionPanel.setVisible(true);
@@ -134,10 +133,18 @@ public class WordLookupView implements WordLookupPresenter.View {
         searchItem.addBlurHandler( new BlurHandler() {
             @Override
             public void onBlur(BlurEvent event) {
-                if (searchItem.getValue() != null && searchTermCallback != null) {
-                    searchTermCallback.onSuccess(searchItem.getValueAsString());
-                }
+                if (searchItem.getValue() != null && delegate != null) 
+                    delegate.lookupWord(searchItem.getValueAsString());
             }
+        });
+
+        anchor.addClickHandler(new ClickHandler(){
+            @Override
+            public void onClick(ClickEvent event) {
+                if(delegate != null)
+                    delegate.visitWebPage();
+            }
+
         });
 
     }

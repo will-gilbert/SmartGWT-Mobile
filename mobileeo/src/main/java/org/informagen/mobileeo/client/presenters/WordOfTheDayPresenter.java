@@ -23,13 +23,13 @@ public class WordOfTheDayPresenter implements Presenter {
     private static final String attributionText = "Difinoj provizatas per Lernu.net";
     private static final String attributionURL = "http://lernu.net/lernado/vortoj/tagovortoj/";
 
-//---------------------------------------------------------------------------------------------
+    //---------------------------------------------------------------------------------------------
 
     public interface View {
+        void setDelegate(WordOfTheDayPresenter delegate);
+        void setAttribution(String text);
         void clear();
         void display(WordOfTheDay wordOfTheDay);
-        void setAttribution(String text);
-        void setGoToWebSiteCallback(Callback<Void> callback);
         Panel asPanel();
     }
 
@@ -37,7 +37,7 @@ public class WordOfTheDayPresenter implements Presenter {
         void wordOfTheDay(final Callback<WordOfTheDay> callback);
     }
 
-//---------------------------------------------------------------------------------------------
+    //---------------------------------------------------------------------------------------------
     
     final EventBus eventBus;
     final View view;
@@ -50,27 +50,25 @@ public class WordOfTheDayPresenter implements Presenter {
         this.model = model;
 
         view.setAttribution(attributionText);
-        bindViewCallbacks();
+        view.setDelegate(this);
+
         fetchWordOfTheDay();       
     }
 
-    void bindViewCallbacks() {
-
-        view.setGoToWebSiteCallback(new Callback<Void>(){
-            public void onSuccess(Void nothing) {
-                eventBus.fireEvent(new VisitWebPageEvent(attributionURL));
-            } 
-        });
-
-    }
+    // Presenter ---------------------------------------------------------------------
 
     @Override
     public Panel getPanel() {
         return view.asPanel();
     }
 
+    // -------------------------------------------------------------------------------
+
+    public void visitWebPage() {
+        eventBus.fireEvent(new VisitWebPageEvent(attributionURL));
+    }
     
-    void fetchWordOfTheDay() {
+    private void fetchWordOfTheDay() {
 
         view.clear();
         

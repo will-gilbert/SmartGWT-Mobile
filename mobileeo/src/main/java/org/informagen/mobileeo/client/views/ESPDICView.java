@@ -28,10 +28,9 @@ import com.google.gwt.user.client.ui.HasText;
 // GWT - Core
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.user.client.ui.Anchor;
-
-// GWT - Simple Logging
-import com.google.gwt.core.client.GWT;
-
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
 
 public class ESPDICView implements ESPDICPresenter.View {
     
@@ -41,8 +40,10 @@ public class ESPDICView implements ESPDICPresenter.View {
     final private SearchItem searchItem = new SearchItem("search", "Search", "Search Term");
     final private Panel displayPanel = new Panel();
     final private Panel attibutionPanel = new Panel();
+    final private Anchor anchor = new Anchor();
 
-    Callback<String> searchTermCallback = null;
+
+    ESPDICPresenter delegate = null;
     
 	public ESPDICView() {
         buildUI();
@@ -53,6 +54,12 @@ public class ESPDICView implements ESPDICPresenter.View {
 	}
 
     // ESPDICPresenter.View ---------------------------------------------------------------------
+
+
+    @Override
+    public void setDelegate(ESPDICPresenter delegate) {
+        this.delegate = delegate;
+    }
 
     @Override
     public Panel asPanel() {        
@@ -65,15 +72,10 @@ public class ESPDICView implements ESPDICPresenter.View {
     }
 
     @Override
-    public void setAttribution(String text, String url) {
+    public void setAttribution(String text) {
 
         if ( text != null && text.trim().length() > 0 ) {
-            Anchor anchor = new Anchor();;
             anchor.setText(text != null ? text : "");
-
-            if ( url != null && url.trim().length() > 0 )
-                anchor.setHref(url);
-
             attibutionPanel.addMember(anchor);
             attibutionPanel.setVisible(true);
         } else
@@ -81,11 +83,6 @@ public class ESPDICView implements ESPDICPresenter.View {
 
     }
 
-    @Override
-    public void setSearchTermCallback(Callback<String> callback) {
-        this.searchTermCallback = callback;
-    }
- 
     public void display(Espdic espdic) {  
 
         // Exception handling here
@@ -125,13 +122,22 @@ public class ESPDICView implements ESPDICPresenter.View {
         searchItem.addBlurHandler( new BlurHandler() {
             @Override
             public void onBlur(BlurEvent event) {
-                if (searchItem.getValue() != null && searchTermCallback != null) {
-                    searchTermCallback.onSuccess(searchItem.getValueAsString());
-                }
+                if (searchItem.getValue() != null && delegate != null) 
+                    delegate.lookupWord(searchItem.getValueAsString());
             }
         });
-    }
 
+        anchor.addClickHandler(new ClickHandler(){
+            @Override
+            public void onClick(ClickEvent event) {
+                if(delegate != null)
+                    delegate.visitWebPage();
+            }
+
+        });
+
+    }
+    
    void displayNoResults() {
 
         String message = new StringBuilder()

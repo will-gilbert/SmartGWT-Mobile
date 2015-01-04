@@ -1,15 +1,15 @@
 package org.informagen.mobileeo.client.presenters;
 
-// EO Vortaro - Application
-import org.informagen.mobileeo.client.application.Configuration;
-import org.informagen.mobileeo.client.application.Callback;
+// Mobile EO - Application
 import org.informagen.mobileeo.client.application.Presenter;
+import org.informagen.mobileeo.client.application.Callback;
+import org.informagen.mobileeo.client.events.VisitWebPageEvent;
 
-// EO Vortaro - JSO
+// Mobile EO - JSO
 // 
 import org.informagen.mobileeo.jso.Definition;
 
-// EO Vortaro - Events
+// Mobile EO - Events
 // import org.informagen.mobileeo.client.events.HandlerFor;
 // import org.informagen.mobileeo.client.events.InstallHeaderButtonEvent;
 // import org.informagen.mobileeo.client.events.DictionaryChangedEvent;
@@ -19,6 +19,7 @@ import org.informagen.mobileeo.jso.Definition;
 
 // SmartGWT Mobile - Widgets
 import com.smartgwt.mobile.client.widgets.Panel;
+import com.google.gwt.resources.client.ImageResource;
 
 // GWT - UI
 import com.google.gwt.user.client.ui.Widget;
@@ -42,18 +43,17 @@ import com.google.inject.Inject;
 public class WordLookupPresenter implements Presenter {
 
     private static final String attributionText = "Vortaraj servoj provizatas per Lernu.net";
-    private static final String attributionURL = "http://lernu.net/";
+    private static final String attributionURL  = "http://lernu.net/";
 
 //---------------------------------------------------------------------------------------------
 
     public interface View {
+        void setDelegate(WordLookupPresenter delegate);
         void clear();
         void display(Definition definition);
         void setTitle(String title);
 
-        void setSearchTermCallback(Callback<String> callback);
-
-        void setAttribution(String text, String url);
+        void setAttribution(String text);
 
         // NavigationButton swapButton();
 
@@ -76,36 +76,24 @@ public class WordLookupPresenter implements Presenter {
     final Model model;
     
     @Inject
-     public WordLookupPresenter(EventBus eventBus, View view, Model model) {
+    public WordLookupPresenter(EventBus eventBus, View view, Model model) {
         this.eventBus = eventBus;
         this.view = view;
         this.model = model;        
 
-        bindViewCallbacks();
         bindViewHandlers();
         bindEventBusHandlers(); 
 
         view.setTitle("EO -> EN");
-        view.setAttribution(attributionText, attributionURL);
+        view.setDelegate(this);
+        view.setAttribution(attributionText);
     
     }
-
 
     @Override
     public Panel getPanel() {
         view.clear();
         return view.asPanel();
-    }
-
-    void bindViewCallbacks() {
-
-        view.setSearchTermCallback(new Callback<String>() {
-            public void onSuccess(String searchTerm) {
-                view.clear();
-                lookupWord(searchTerm);
-            }
-        });
-
     }
 
 
@@ -133,11 +121,16 @@ public class WordLookupPresenter implements Presenter {
 
     }
 
+    public void visitWebPage() {
+        eventBus.fireEvent(new VisitWebPageEvent(attributionURL));
+    }
 
-    void lookupWord(String searchTerm) {
+    public void lookupWord(String searchTerm) {
                 
         if(searchTerm.trim().length() == 0)
             return;
+
+        view.clear();
         
         model.lookupWord(searchTerm, new Callback<Definition>() {
             public void onSuccess(Definition definition) {

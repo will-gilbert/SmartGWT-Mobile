@@ -5,6 +5,8 @@ import org.informagen.mobileeo.client.application.Presenter;
 import org.informagen.mobileeo.client.application.Callback;
 
 import org.informagen.mobileeo.client.events.SwitchToPageEvent;
+import org.informagen.mobileeo.client.events.VisitWebPageEvent;
+
 
 
 // SmartGWT Mobile
@@ -31,7 +33,9 @@ public class FrontPresenter implements Presenter {
 
     public interface View {
         // void setInterchangeTitle(String title);       
-        void setRecordClickedCallback(Callback<String> callback);
+        void setRecordClickedCallback(Callback<String> recordClickedCallback);
+        void setGoToWebSiteCallback(Callback<String> goToWebSiteCallback);
+
         Panel asPanel();
     }
 
@@ -69,6 +73,12 @@ public class FrontPresenter implements Presenter {
         view.setRecordClickedCallback(new Callback<String>() {
             public void onSuccess(String pageName) {
                 eventBus.fireEvent(new SwitchToPageEvent(pageName));
+            }
+        });
+
+        view.setGoToWebSiteCallback(new Callback<String>() {
+            public void onSuccess(String url) {
+                eventBus.fireEvent(new VisitWebPageEvent(url));
             }
         });
 

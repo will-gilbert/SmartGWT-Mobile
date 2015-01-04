@@ -48,7 +48,10 @@ public class FrontView implements FrontPresenter.View, RecordNavigationClickHand
 
     // final Menu<String> interchangeMenu;
     final Panel panel = new ScrollablePanel("EO Retaĵaro");
-    Callback<String> callback;
+
+    Callback<String> recordClickedCallback = null;
+    Callback<String> goToWebSiteCallback = null;
+
 
     final NavStack navigationStack;
 
@@ -84,8 +87,13 @@ public class FrontView implements FrontPresenter.View, RecordNavigationClickHand
     }
 
     @Override
-    public void setRecordClickedCallback(Callback<String> callback) {
-        this.callback = callback;
+    public void setRecordClickedCallback(Callback<String> recordClickedCallback) {
+        this.recordClickedCallback = recordClickedCallback;
+    }
+
+    @Override
+    public void setGoToWebSiteCallback(Callback<String> goToWebSiteCallback) {
+        this.goToWebSiteCallback = goToWebSiteCallback;
     }
 
     // RecordNavigationClickHandler ---------------------------------------------------------------------
@@ -95,8 +103,13 @@ public class FrontView implements FrontPresenter.View, RecordNavigationClickHand
         final Record selectedRecord = event.getRecord();
         String key = selectedRecord.getAttribute("key");
 
-        if (callback != null && key != null)
-            callback.onSuccess(key);   
+        if(key != null && key.equals("lernu") && goToWebSiteCallback != null) {
+            goToWebSiteCallback.onSuccess("http://lernu.net");
+            return;
+        }
+
+        if (key != null && recordClickedCallback != null )
+            recordClickedCallback.onSuccess(key);   
     }
 
     //-----------------------------------------------------------------------------------------
@@ -117,11 +130,11 @@ public class FrontView implements FrontPresenter.View, RecordNavigationClickHand
 
         title.setStyleName("Mobile-Heading");
 
-        // recordList.add(createTableRecord(
-        //     "lernu", 
-        //     "Lernu.net", 
-        //     Icons.INSTANCE.lernu()
-        //     ));
+        recordList.add(createTableRecord(
+            "lernu", 
+            "Lernu.net", 
+            Icons.INSTANCE.lernu()
+        ));
 
         recordList.add(createTableRecord(
             "WordOfTheDay", 

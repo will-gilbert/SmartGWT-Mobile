@@ -13,7 +13,6 @@ import org.informagen.mobileeo.jso.EsperantaRetradio;
 
 // SmartGWT Mobile
 import com.smartgwt.mobile.client.widgets.Panel;
-import com.smartgwt.mobile.client.util.SC;
 
 // GWT
 import com.google.gwt.event.shared.EventBus;
@@ -55,14 +54,13 @@ public class EsperantaRetradioPresenter implements Presenter {
         this.view = view;
         this.model = model;
 
-        wireUI();
+        view.setAttribution(attributionText, attributionURL);
+        bindViewCallbacks();
 
         fetchEsperantaRetradio();
     }
 
-    void wireUI() {
-
-        view.setAttribution(attributionText, attributionURL);
+    void bindViewCallbacks() {
 
         view.setGoToWebSiteCallback(new Callback<Void>(){
             public void onSuccess(Void nothing) {

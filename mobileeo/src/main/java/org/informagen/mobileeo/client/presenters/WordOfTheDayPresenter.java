@@ -3,6 +3,7 @@ package org.informagen.mobileeo.client.presenters;
 // EO Vortaro - Application
 import org.informagen.mobileeo.client.application.Presenter;
 import org.informagen.mobileeo.client.application.Callback;
+import org.informagen.mobileeo.client.events.VisitWebPageEvent;
 
 // EO Vortaro - JSO
 import org.informagen.mobileeo.jso.WordOfTheDay;
@@ -10,6 +11,8 @@ import org.informagen.mobileeo.jso.WordOfTheDay;
 // SmartGWT Mobile
 import com.smartgwt.mobile.client.widgets.Panel;
 
+// GWT
+import com.google.gwt.event.shared.EventBus;
 
 // Google Inject Annotation
 import com.google.inject.Inject;
@@ -25,7 +28,8 @@ public class WordOfTheDayPresenter implements Presenter {
     public interface View {
         void clear();
         void display(WordOfTheDay wordOfTheDay);
-        void setAttribution(String text, String url);
+        void setAttribution(String text);
+        void setGoToWebSiteCallback(Callback<Void> callback);
         Panel asPanel();
     }
 
@@ -35,17 +39,29 @@ public class WordOfTheDayPresenter implements Presenter {
 
 //---------------------------------------------------------------------------------------------
     
+    final EventBus eventBus;
     final View view;
     final Model model;
     
     @Inject
-     public WordOfTheDayPresenter(View view, Model model ) {
+     public WordOfTheDayPresenter(EventBus eventBus, View view, Model model ) {
+        this.eventBus = eventBus;
         this.view = view;
         this.model = model;
 
-        view.setAttribution(attributionText, attributionURL);
-
+        view.setAttribution(attributionText);
+        bindViewCallbacks();
         fetchWordOfTheDay();       
+    }
+
+    void bindViewCallbacks() {
+
+        view.setGoToWebSiteCallback(new Callback<Void>(){
+            public void onSuccess(Void nothing) {
+                eventBus.fireEvent(new VisitWebPageEvent(attributionURL));
+            } 
+        });
+
     }
 
     @Override

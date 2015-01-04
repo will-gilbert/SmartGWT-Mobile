@@ -4,6 +4,7 @@ import org.informagen.mobileeo.client.presenters.WordOfTheDayPresenter;
 
 // EOVortaro - Application
 import org.informagen.mobileeo.client.application.Configuration;
+import org.informagen.mobileeo.client.application.Callback;
 
 // EOVortaro - Events
 import org.informagen.mobileeo.client.events.SwitchToPageEvent;
@@ -14,10 +15,15 @@ import org.informagen.mobileeo.jso.WordOfTheDay;
 
 // SmartGWT Mobile
 import com.smartgwt.mobile.client.widgets.Panel;
+import com.smartgwt.mobile.client.widgets.Label;
 import com.smartgwt.mobile.client.widgets.ScrollablePanel;
 
 // GWT - UI
 import com.google.gwt.user.client.ui.Anchor;
+
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
 
 
 public class WordOfTheDayView implements WordOfTheDayPresenter.View {
@@ -25,10 +31,15 @@ public class WordOfTheDayView implements WordOfTheDayPresenter.View {
     final Panel panel = new ScrollablePanel("Vorto de l' Tago");
     final Panel roundedPanel = new Panel();
     final Panel attibutionPanel = new Panel();
-    
+    final Anchor anchor = new Anchor();
+
+ 
+     Callback<Void> goToWebSiteCallback = null;
+   
 	public WordOfTheDayView() {
 
         buildUI();
+        wireUI();
         clear();
 
         attibutionPanel.setVisible(false);
@@ -54,20 +65,21 @@ public class WordOfTheDayView implements WordOfTheDayPresenter.View {
     }
 
     @Override
-    public void setAttribution(String text, String url) {
+    public void setAttribution(String text) {
 
         if ( text != null && text.trim().length() > 0 ) {
-            Anchor anchor = new Anchor();;
             anchor.setText(text != null ? text : "");
-
-            if ( url != null && url.trim().length() > 0 )
-                anchor.setHref(url);
 
             attibutionPanel.addMember(anchor);
             attibutionPanel.setVisible(true);
         } else
             attibutionPanel.setVisible(false);
 
+    }
+
+    @Override
+    public void setGoToWebSiteCallback(Callback<Void> callback) {
+        this.goToWebSiteCallback = callback;
     }
 
     @Override
@@ -85,6 +97,19 @@ public class WordOfTheDayView implements WordOfTheDayPresenter.View {
 
         panel.addMember(roundedPanel);
         panel.addMember(attibutionPanel);
+    }
+
+    void wireUI(){
+
+        anchor.addClickHandler(new ClickHandler(){
+            @Override
+            public void onClick(ClickEvent event) {
+                if(goToWebSiteCallback != null)
+                    goToWebSiteCallback.onSuccess(null);
+            }
+
+        });
+
     }
 
 

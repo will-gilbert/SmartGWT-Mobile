@@ -6,9 +6,9 @@ gradle compileJava
   Compile Java source code displaying warnings and error to the terminal console. Does not
   cross compile Java to JavaScript
 
-gradle clean compileGWT
+gradle compileGWT
 
-gradle clean jettyRun
+gradle jettyRun
   Cross compiles the client side Java into JavaScript; launches Jetty.  Use any browser to 
   connect to the localhost on the port defined by 'jettyRun.httpPort'
 
@@ -41,20 +41,9 @@ ext.gwtBuildDir = 'build-gwt'                     // GWT build directory and dev
 
 // Properties Configuration -------------------------------------------------------------------
 
-// GWT and Java Compilers Configuration -------------------------------------------------------
-
-// GWT SDK
-ext.gwtSDK = '2.7.0'
-ext.smartgwtMobile  = '1.0d-SNAPSHOT'
-
 // Java SDK
 sourceCompatibility = 1.7
 targetCompatibility = sourceCompatibility
-compileJava.options.compilerArgs = [
-    "-Xbootclasspath:${bootclasspath_17}", 
-//    '-Xlint:unchecked', 
-//    '-Xlint:deprecation',
-] 
 
 
 // R e p o s i t o r i e s   &   D e p e n d e n c i e s --------------------------------------
@@ -62,38 +51,27 @@ compileJava.options.compilerArgs = [
 configurations { [gwtCompile] }
 
 repositories {
-
-    maven {
-        url "http://informagen.org/maven"               // Remote maven
-    }
-
     mavenLocal()                                       // User's local
     mavenCentral()                                     // Maven Central repository
 }
 
 dependencies {
 
-    compile ([ 
-    
-        // SmartGWT Mobile =================================================
-        "com.smartgwt:smartgwt-mobile:$smartgwtMobile",
+    def gwt = '2.7.0'
 
-        // GWT =============================================================
-        "com.google.gwt:gwt-servlet:$gwtSDK",
-        "com.google.gwt:gwt-user:$gwtSDK",
-        
-    ])
-    
-    runtime ([
-        // GWT Validation API (since GWT 2.3.0) ============================
-        "com.google.gwt:validation-api:1.0.0.GA",
-        "com.google.gwt:validation-sources:1.0.0.GA",        
-    ])
+    // Download the SmartGWT Mobile jar at http://www.smartclient.com/product/smartgwtMobile.jsp
+    //   and put it top level directory
+    compile files( "../smartgwt-mobile.jar")
 
-    // The GWT cross compiler; Not needed for production or testing
+    compile ([
+        "com.google.gwt:gwt-user:$gwt"
+    ])
+  
+    
+    // The GWT cross compiler
     gwtCompile([
-        "com.google.gwt:gwt-dev:$gwtSDK", 
-        "com.google.gwt:gwt-servlet:$gwtSDK"
+        "com.google.gwt:gwt-dev:$gwt", 
+        "com.google.gwt:gwt-servlet:$gwt"
     ])
 }
 
@@ -118,7 +96,7 @@ task compileGWT(dependsOn: ['compileJava', 'copyWebAppResources'], type:JavaExec
     classpath = files([
         sourceSets.main.java.srcDirs,      // Contains Java sources to be compiled into JavaScript
         sourceSets.main.runtimeClasspath,  // Contains .gwt.xml file
-        configurations.gwtCompile.files       // Contains the GWT compiler JAR
+        configurations.gwtCompile.files    // Contains the GWT compiler JAR
     ])
 
     args = [ "-war", gwtBuildDir,  gwtModule]
@@ -154,7 +132,7 @@ task copyWebAppResources(type: Copy) {
 }
 
 
-task cleanDevMode(type:Delete) {
+task cleanGWT(type:Delete) {
     delete gwtBuildDir
 }
 
@@ -170,13 +148,4 @@ jettyRun.httpPort = 9090           // Avoid potential conflicts with 8080
 // P L U G I N   C O N F I G U R A T I O N ====================================================
 
 jettyRun { dependsOn 'compileGWT' }
-clean { dependsOn 'cleanDevMode'}
-
-// Augment the 'processResources' task from the 'java' plugin.  Use filtering to replace
-//   '@...@' tags with properties in order to customize the running environment
-
-
-
-
-
-
+clean { dependsOn 'cleanGWT'}

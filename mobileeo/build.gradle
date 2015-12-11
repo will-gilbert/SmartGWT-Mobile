@@ -50,11 +50,6 @@ ext.guiceVersion = '3.0'
 // Java SDK
 sourceCompatibility = 1.7
 targetCompatibility = sourceCompatibility
-compileJava.options.compilerArgs = [
-    "-Xbootclasspath:${bootclasspath_17}", 
-//    '-Xlint:unchecked', 
-    '-Xlint:deprecation',
-] 
 
 // Properties Configuration -------------------------------------------------------------------
 
@@ -69,25 +64,27 @@ ext.localityProperties = [
 configurations { [gwtCompile] }
 
 repositories {
-
-    maven {
-        url "http://informagen.org/maven"              // Remote maven
-    }
-
     mavenLocal()                                       // User's local
     mavenCentral()                                     // Maven Central repository; GWT
 }
 
 
 dependencies {
+
+    def gwt = '2.7.0'
+
+    // Download the SmartGWT Mobile jar at 
+    //
+    //    http://www.smartclient.com/product/smartgwtMobile.jsp
+    //
+    //  and put it top level directory
+    
+    compile files( "../smartgwt-mobile.jar")
+
     compile ([
-
-        // SmartGWT Mobile =================================================
-        "com.smartgwt:smartgwt-mobile:$smartgwtMobile",
-
         // GWT =============================================================
-        "com.google.gwt:gwt-user:$gwtSDK",
-        "com.google.gwt:gwt-servlet:$gwtSDK",
+        "com.google.gwt:gwt-user:$gwt",
+        "com.google.gwt:gwt-servlet:$gwt",
 
         "com.google.gwt.inject:gin:$ginVersion",
         "com.google.inject:guice:$guiceVersion"
@@ -96,15 +93,13 @@ dependencies {
     runtime ([
     ])
 
-    testCompile([  /* TBD*/ ])
+    testCompile([  /* TBD */ ])
 
-    testRuntime([ /* TBD*/ ])
+    testRuntime([ /* TBD */ ])
 
-    // The GWT cross compiler; Not needed for production or testing
+    // The GWT cross compiler;
     gwtCompile([
-        "com.google.gwt:gwt-dev:$gwtSDK", 
-        "com.google.gwt:validation-api:1.0.0.GA",
-        "com.google.gwt:validation-sources:1.0.0.GA"
+        "com.google.gwt:gwt-dev:$gwt"
     ])
 
 }

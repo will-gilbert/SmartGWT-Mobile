@@ -44,14 +44,12 @@ public class BasicContextMenu extends Panel {
 
     public BasicContextMenu() {
         super("Context Menu");
-
         getElement().getStyle().setBackgroundColor("#f7f7f7");
         getElement().getStyle().setWidth(100, Style.Unit.PCT);
         getElement().getStyle().setHeight(100, Style.Unit.PCT);
 
         addMember(new Label("Tap &amp; hold the image to reveal the context menu."));
 
-        // We will use a contextual menu to manipulate this image
         img = new Img("./sampleImages/yinyang.gif");
         img.getElement().addClassName("app-basicContextMenuSample-img");
         img.setWidth(imgSizePx);
@@ -62,7 +60,6 @@ public class BasicContextMenu extends Panel {
         img.getElement().getStyle().setLeft(imgLeftPx, Style.Unit.PX);
         addMember(img);
 
-        // Build a contextual menu
         menu = new Menu();
         leftItem = new MenuItem("Left");
         rightItem = new MenuItem("Right");
@@ -71,11 +68,9 @@ public class BasicContextMenu extends Panel {
         enlargeItem = new MenuItem("Enlarge");
         shrinkItem = new MenuItem("Shrink");
         shrinkItem.setEnabled(false);
-
         // A "Nevermind" item to cancel displaying the context menu is not necessary because
         // if the user taps anywhere off of the menu, the menu will automatically be dismissed.
         // This sample only uses a "Nevermind" item to demonstrate menu ClickHandlers.
-
         nevermindItem = new MenuItem("Nevermind");
         nevermindItemClickRegistration = nevermindItem.addClickHandler(new ClickHandler() {
             @Override
@@ -83,15 +78,11 @@ public class BasicContextMenu extends Panel {
                 SC.logWarn("'Nevermind' tapped.");
             }
         });
-
         menu.setItems(leftItem, rightItem, upItem, downItem, enlargeItem, shrinkItem, nevermindItem);
-
         menuItemClickRegistration = menu.addItemClickHandler(new ItemClickHandler() {
             @Override
             public void onItemClick(ItemClickEvent event) {
-
                 final MenuItem item = event.getItem();
-
                 if (item == leftItem) {
                     imgLeftPx -= TRANSLATE_DELTA_PX;
                     img.getElement().getStyle().setLeft(imgLeftPx, Style.Unit.PX);
@@ -121,23 +112,19 @@ public class BasicContextMenu extends Panel {
                 }
             }
         });
-
         img.setContextMenu(menu);
     }
 
     @Override
     public void destroy() {
-
         if (menuItemClickRegistration != null) {
             menuItemClickRegistration.removeHandler();
             menuItemClickRegistration = null;
         }
-
         if (nevermindItemClickRegistration != null) {
             nevermindItemClickRegistration.removeHandler();
             nevermindItemClickRegistration = null;
         }
-
         img.setContextMenu(null);
         menu.destroy();
         super.destroy();
@@ -150,23 +137,19 @@ public class BasicContextMenu extends Panel {
     }
 
     // Enables or disables `leftItem', `rightItem', `upItem', `downItem', `enlargeItem', and
-    //   `shrinkItem' based on whether the action would place any part of the image off-screen.
-    //   The item is enabled if the action would not place any part of the image off-screen;
-    //   disabled otherwise.
-
+    // `shrinkItem' based on whether the action would place any part of the image off-screen.
+    // The item is enabled if the action would not place any part of the image off-screen;
+    // disabled otherwise.
     private void enableDisableItems() {
         final int offsetWidth = getElement().getOffsetWidth(),
                 offsetHeight = getElement().getOffsetHeight();
-
         leftItem.setEnabled(imgLeftPx >= TRANSLATE_DELTA_PX);
         rightItem.setEnabled(imgLeftPx + TRANSLATE_DELTA_PX + imgSizePx <= offsetWidth);
         upItem.setEnabled(imgTopPx >= TRANSLATE_DELTA_PX);
         downItem.setEnabled(imgTopPx + TRANSLATE_DELTA_PX + imgSizePx <= offsetHeight);
-
         enlargeItem.setEnabled((imgLeftPx + imgSizePx + SCALE_DELTA_PX <= offsetWidth) &&
                 (imgTopPx + imgSizePx + SCALE_DELTA_PX <= offsetHeight) &&
                 (imgSizePx < START_IMG_SIZE_PX + NUM_SIZES * SCALE_DELTA_PX));
-
         shrinkItem.setEnabled(imgSizePx > START_IMG_SIZE_PX);
     }
 }

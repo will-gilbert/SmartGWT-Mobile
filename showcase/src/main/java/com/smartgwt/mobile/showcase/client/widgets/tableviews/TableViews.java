@@ -34,54 +34,13 @@ public class TableViews extends ScrollablePanel {
             "Cell Formatters"
     };
     private List<Function<Panel>> functions = new ArrayList<Function<Panel>>();
-    private Map<String, Function<Panel>> map = new HashMap<String,Function<Panel>>(); 
-
-    final TableView tableView = new TableView();
-
-    public TableViews(String title, final NavStack nav) {
-        super(title);
-
-        tableView.setTitleField("title");
-        tableView.setShowNavigation(true);
-        tableView.setSelectionType(SelectionStyle.SINGLE);
-        tableView.setNavigationMode(NavigationMode.WHOLE_RECORD);
-        tableView.setParentNavStack(nav);
-        tableView.setTableMode(TableMode.GROUPED);
-
-        tableView.addRecordNavigationClickHandler(new RecordNavigationClickHandler() {
-
-            @Override
-            public void onRecordNavigationClick(RecordNavigationClickEvent event) {
-                final Record selectedRecord = event.getRecord();
-                String title = selectedRecord.getAttribute("title");
-                create(title, nav);
-            }
-        });
-
-        RecordList recordList = new RecordList();
-
-        functions.add(new Function<Panel>(){public Panel execute(){return new SimpleTables(titles[0]);}});
-        functions.add(new Function<Panel>(){public Panel execute(){return new SimpleTablesWithEdit(titles[1]);}});
-        functions.add(new Function<Panel>(){public Panel execute(){return new GroupedTables(titles[2]);}});
-        functions.add(new Function<Panel>(){public Panel execute(){return new GroupedTablesWithDelete(titles[3]);}});
-        functions.add(new Function<Panel>(){public Panel execute(){return new GroupedTablesWithReorder(titles[4]);}});
-        functions.add(new Function<Panel>(){public Panel execute(){return new Subtitles(titles[5]);}});
-        functions.add(new Function<Panel>(){public Panel execute(){return new Details(titles[6]);}});
-        functions.add(new Function<Panel>(){public Panel execute(){return new CustomRecordFormatting(titles[7]);}});
-        functions.add(new Function<Panel>(){public Panel execute(){return new RecordComponents(titles[8]);}});
-        functions.add(new Function<Panel>(){public Panel execute(){return new MultipleSelection(titles[9],nav);}});
-        functions.add(new Function<Panel>(){public Panel execute(){return new CellFormatters(titles[10]);}});
-
-        for(int i = 0; i < titles.length; ++i) {
-            recordList.add(createRecord(new Integer(i).toString(),titles[i]));
-            map.put(titles[i], functions.get(i));
-        }
-
-
-        tableView.setData(recordList);
-        addMember(tableView);
+    private Map<String, Function<Panel>> map = new HashMap<String,Function<Panel>>();    
+    private static Record createRecord(String id, String title) {
+        Record record = new Record();
+        record.setAttribute("_id", id);
+        record.setAttribute("title", title);
+        return record;
     }
-
 
     private void create(String title, NavStack nav) {
         final Function<Panel> function = map.get(title);
@@ -93,14 +52,40 @@ public class TableViews extends ScrollablePanel {
         }
     }
 
-    // Static method ===================================================================================================
-
-    private static Record createRecord(String id, String title) {
-        Record record = new Record();
-        record.setAttribute("_id", id);
-        record.setAttribute("title", title);
-        return record;
+    public TableViews(String title, final NavStack nav) {
+        super(title);
+        RecordList recordList = new RecordList();
+        functions.add(new Function<Panel>(){public Panel execute(){return new SimpleTables(titles[0]);}});
+        functions.add(new Function<Panel>(){public Panel execute(){return new SimpleTablesWithEdit(titles[1]);}});
+        functions.add(new Function<Panel>(){public Panel execute(){return new GroupedTables(titles[2]);}});
+        functions.add(new Function<Panel>(){public Panel execute(){return new GroupedTablesWithDelete(titles[3]);}});
+        functions.add(new Function<Panel>(){public Panel execute(){return new GroupedTablesWithReorder(titles[4]);}});
+        functions.add(new Function<Panel>(){public Panel execute(){return new Subtitles(titles[5]);}});
+        functions.add(new Function<Panel>(){public Panel execute(){return new Details(titles[6]);}});
+        functions.add(new Function<Panel>(){public Panel execute(){return new CustomRecordFormatting(titles[7]);}});
+        functions.add(new Function<Panel>(){public Panel execute(){return new RecordComponents(titles[8]);}});
+        functions.add(new Function<Panel>(){public Panel execute(){return new MultipleSelection(titles[9],nav);}});
+        functions.add(new Function<Panel>(){public Panel execute(){return new CellFormatters(titles[10]);}});
+        for(int i = 0; i < titles.length; ++i) {
+            recordList.add(createRecord(new Integer(i).toString(),titles[i]));
+            map.put(titles[i], functions.get(i));
+        }
+        final TableView tableView = new TableView();
+        tableView.setTitleField("title");
+        tableView.setShowNavigation(true);
+        tableView.setSelectionType(SelectionStyle.SINGLE);
+        tableView.setNavigationMode(NavigationMode.WHOLE_RECORD);
+        tableView.setParentNavStack(nav);
+        tableView.setTableMode(TableMode.GROUPED);
+        tableView.addRecordNavigationClickHandler(new RecordNavigationClickHandler() {
+            @Override
+            public void onRecordNavigationClick(RecordNavigationClickEvent event) {
+                final Record selectedRecord = event.getRecord();
+                String title = selectedRecord.getAttribute("title");
+                create(title, nav);
+            }
+        });
+        tableView.setData(recordList);
+        addMember(tableView);
     }
-
-
 }

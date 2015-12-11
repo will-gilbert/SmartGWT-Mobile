@@ -1,12 +1,8 @@
 package com.smartgwt.mobile.showcase.client.overview;
 
-
-// GWT - Core & i18n
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.TimeZone;
-
-// SmartGWT Mobile
 import com.smartgwt.mobile.client.Version;
 import com.smartgwt.mobile.client.widgets.Panel;
 import com.smartgwt.mobile.client.widgets.ScrollablePanel;
@@ -18,22 +14,16 @@ public class About extends NavStack {
     private static final DateTimeFormat DTF = DateTimeFormat.getFormat("yyyy-MM-dd");
 
     public About() {
-
         super("About", IconResources.INSTANCE.info());
 
         final ScrollablePanel about = new ScrollablePanel("About", IconResources.INSTANCE.info());
-
         final Panel roundedPanel = new Panel();
+        roundedPanel.setContents("This app was built with:" +
+                "<ul><li>SmartGWT.mobile 1.0d (beta) built on " + DTF.format(Version.getBuildDate(), TimeZone.createTimeZone(0)) + "</li>" +
+                "<li>GWT version " + GWT.getVersion() + "</li></ul>");
         roundedPanel.setStyleName("sc-rounded-panel");
         roundedPanel.setMargin(10);
-
-        roundedPanel.setContents("This app was built with:" +
-                "<ul><li>SmartGWT.mobile v" + Version.getVersion() + 
-                " built on " + DTF.format(Version.getBuildDate(), TimeZone.createTimeZone(0)) + "</li>" +
-                "<li>GWT version " + GWT.getVersion() + "</li></ul>");
-
         about.addMember(roundedPanel);
-       
         setSinglePanel(about);
     }
 }

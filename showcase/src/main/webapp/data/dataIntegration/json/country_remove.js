@@ -1,10 +1,10 @@
 {
-	response: {
-		status: 0,
-		data: [
-		    {
-		    	countryCode: "UK"
-		    }
-		]
-	}
+    "response": {
+        "status": 0,
+        "data": [
+            {
+                "countryCode": "UK"
+            }
+        ]
+    }
 }

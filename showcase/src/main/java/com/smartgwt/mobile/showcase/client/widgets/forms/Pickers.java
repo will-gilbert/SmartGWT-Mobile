@@ -52,7 +52,7 @@ public class Pickers extends ScrollablePanel {
         colorItem = new ColorPickerItem("color", "Favorite Color", "Favorite Color");
 
         final DataSource fruitsDS = new DataSource("pickersSample-fruitsDS");
-        fruitsDS.setFetchDataURL("/sampleResponses/fruits");
+        fruitsDS.setFetchDataURL("sampleResponses/fruits");
         fruitsDS.setFields(new DataSourceField("value", "integer"), new DataSourceField("name", "text"));
         fruitItem = new SelectItem("fruit", "Favorite Fruit", "Favorite Fruit");
         fruitItem.setAllowEmptyValue(true);
@@ -62,7 +62,7 @@ public class Pickers extends ScrollablePanel {
         fruitItem.fetchData();
 
         final DataSource animalsDS = new DataSource("pickersSample-animalsDS");
-        animalsDS.setFetchDataURL("/sampleResponses/animals.xml");
+        animalsDS.setFetchDataURL("sampleResponses/animals.xml");
         animalsDS.setFields(new DataSourceField("_id", "integer"), new DataSourceField("scientificName", "text"),
                 new DataSourceField("commonName", "text"));
         animalsDS.setOperationBindings(new OperationBinding(DSOperationType.FETCH) {{

@@ -4,6 +4,10 @@
     "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app>
+
+    <display-name>@title@, v@version@</display-name>
+
+
     <servlet>
       <servlet-name>countriesDataProvider</servlet-name>
       <servlet-class>com.smartgwt.mobile.showcase.servlet.CountriesDataProviderServlet</servlet-class>
@@ -26,7 +30,7 @@
 
     <!-- Default page to serve -->
     <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
+        <welcome-file>@gwtRunTarget@</welcome-file>
     </welcome-file-list>
 
 </web-app>

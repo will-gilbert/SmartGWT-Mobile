@@ -25,22 +25,7 @@ gradle clean
 ==================================================================================
 """}
 
-/* ===================================================================================================
-
-NB: The bootclasspath and the default browser are set locally by creating a properties 
-    file in ~/.gradle/gradle.properties.  For example, I develop on Mac OSX with Java 7 
-    and my gradle.properties file looks something like this:
-    
-    defaultBrowser     safari
-    bootclasspath_16   /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Classes/classes.jar
-    bootclasspath_17   /Library/Java/JavaVirtualMachines/jdk1.7.0_09.jdk/Contents/Home/jre/lib/rt.jar
-
-Not defining the 'bootclasspath' only gives a warning at this time.  Use a search engine to
-    find out more about this new compiler flag for Java 7.
-
- =================================================================================================== */
-
-// Used to modify properties file resources
+// Used to modify resources e.g. web.xml, index.html, *.gwt.xml
 import org.apache.tools.ant.filters.ReplaceTokens
 
 apply plugin: 'java'
@@ -53,7 +38,7 @@ apply plugin: 'war'
 
 // Project Configuration ----------------------------------------------------------------------
 
-ext.applicationName = "Mobile Showcase"
+ext.applicationName = "Smart GWT Mobile Showcase"
 group = 'client'
 version = '1.0'
 
@@ -65,7 +50,7 @@ buildDir = 'build'
 // GWT Configuration
 ext.gwtModule = 'Showcase'                        // Path to module descriptor
 ext.gwtModuleRenamedTo = 'app'                    // 'rename-to' within module descriptor
-ext.gwtRunTarget = 'index.html'                   // HTML launching file
+ext.gwtStartPage = 'index.html'                   // HTML launching file
 ext.gwtBuildDir = "${buildDir}-gwt"               // GWT build directory
 
 // Remove the Java GWT client classes and GWT configurations from the WAR
@@ -88,60 +73,50 @@ ext.localityProperties = [
     'user.agent'                     : project.hasProperty('tomcat')  ? 'safari,gecko1_8' : findProperty('user.agent', 'safari'),
 ]
 
-// GWT and Java Compilers Configuration -------------------------------------------------------
-
-// GWT SDK
-ext.gwtSDK = '2.7.0'
-ext.smartgwtMobile  = '1.0d-SNAPSHOT' // '1.0d_2014-12-06'
+// Java Compilers Configuration -------------------------------------------------------
 
 // Java SDK
 sourceCompatibility = 1.7
 targetCompatibility = sourceCompatibility
-compileJava.options.compilerArgs = [
-    "-Xbootclasspath:${bootclasspath_17}", 
-//    '-Xlint:unchecked', 
-    '-Xlint:deprecation',
-] 
+
 
 // R E P O S I T O R I E S   &   D E P E N D E N C I E S --------------------------------------
 
 configurations { [gwtCompile] }
 
 repositories {
-
-    maven {
-        url "http://informagen.org/maven"              // Remote maven
-    }
-
     mavenLocal()                                       // User's local
     mavenCentral()                                     // Maven Central repository
 }
 
 dependencies {
+
+    def gwt = '2.7.0'
+
+    // Download the SmartGWT Mobile jar at 
+    //
+    //    http://www.smartclient.com/product/smartgwtMobile.jsp
+    //
+    //  and put it top level directory
+    
+    compile files( "../smartgwt-mobile.jar")
+
     compile ([ 
     
-        // SmartGWT Mobile =================================================
-        "com.smartgwt:smartgwt-mobile:$smartgwtMobile",
-
         // GWT =============================================================
-        "com.google.gwt:gwt-servlet:$gwtSDK",
-        "com.google.gwt:gwt-user:$gwtSDK",
-        
+        "com.google.gwt:gwt-servlet:$gwt",
+        "com.google.gwt:gwt-user:$gwt"
     ])
     
-    runtime ([
-        // GWT Validation API (since GWT 2.3.0) ============================
-    ])
+    runtime ([ /* TBD */ ])
 
-    testCompile([  /* TBD*/ ])
+    testCompile([  /* TBD */ ])
 
-    testRuntime([ /* TBD*/ ])
+    testRuntime([ /* TBD */ ])
 
     // The GWT cross compiler; Not used testing or deployment
     gwtCompile([
-        "com.google.gwt:gwt-dev:$gwtSDK", 
-        "com.google.gwt:validation-api:1.0.0.GA",
-        "com.google.gwt:validation-sources:1.0.0.GA",        
+        "com.google.gwt:gwt-dev:$gwt"
     ])
 
 }
@@ -178,7 +153,7 @@ task compileGWT(dependsOn: ['compileJava', 'copyWebAppResources'], type:JavaExec
 jettyRun.doFirst {
     print """=================================================================================='
     |
-    | Jetty running, open a browser with the URL->   http://localhost:${jettyRun.httpPort}/${project.name}/
+    | Jetty running, open a browser with the URL->   http://localhost:$jettyRun.httpPort/$project.name/$gwtStartPage
     |
     | Control-C (Command-. on Mac OS X) to quit Jetty
     |
@@ -199,13 +174,20 @@ task copyWebAppResources(type: Copy) {
     // Modify the web.xml file to provide a description
     from('src/main/webapp') {
         include '**/web.xml'
+        include "**/${gwtStartPage}"
         filter(ReplaceTokens,
-               tokens:[version: project.version, name: applicationName ])
+               tokens:[
+                version: project.version, 
+                title: applicationName, 
+                gwtModule: gwtModuleRenamedTo, 
+                gwtStartPage: gwtStartPage 
+            ])
     }
 
     // Copy the other unmodified files as well
     from('src/main/webapp') {
        exclude '**/web.xml'
+       exclude "**/${gwtStartPage}"
     }
 
     into gwtBuildDir
@@ -279,8 +261,6 @@ war {
         exclude  'asm-*.jar'
         exclude  'gwt-dev-*.jar'
         exclude  'gwt-user-*.jar'
-        exclude  'validation-api-*.jar'
-        exclude  'validation-sources-*.jar'
         exclude  'smartgwt-mobile-*.jar'
     }
 

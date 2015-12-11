@@ -106,9 +106,7 @@ public class GroupedTablesWithReorder extends ScrollablePanel {
                 }
             }
         });
-
         addMember(tableView);
-
         setActions(new Action[]{
             new Action("Reorder") {
                 @Override
@@ -119,9 +117,7 @@ public class GroupedTablesWithReorder extends ScrollablePanel {
                 }
             }
         });
-
         doneButton.setButtonType(ButtonType.BORDERED_IMPORTANT);
-        
         doneButton.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
                 nav.getNavigationBar().setRightButton(reorderButton);

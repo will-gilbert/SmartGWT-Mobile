@@ -1,0 +1,38 @@
+{
+    "response": {
+        "status": 0,
+        "startRow": 0,
+        "endRow": 6,
+        "totalRows": 7,
+        "data": [
+        {
+            "value": 0,
+            "name": "Apple"
+        },
+        {
+            "value": 1,
+            "name": "Banana"
+        },
+        {
+            "value": 2,
+            "name": "Cherry"
+        },
+        {
+            "value": 3,
+            "name": "Kiwi"
+        },
+        {
+            "value": 4,
+            "name": "Grape"
+        },
+        {
+            "value": 5,
+            "name": "Orange"
+        },
+        {
+            "value": 6,
+            "name": "Pineapple"
+        }
+        ]
+    }
+}

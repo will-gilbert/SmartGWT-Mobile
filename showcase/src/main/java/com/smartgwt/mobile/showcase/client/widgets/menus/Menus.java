@@ -40,7 +40,6 @@ public class Menus extends ScrollablePanel {
         menuSamplesTable.setSelectionType(SelectionStyle.SINGLE);
         menuSamplesTable.setParentNavStack(navStack);
         menuSamplesTable.setData(data);
-        
         recordNavigationClickRegistration = menuSamplesTable.addRecordNavigationClickHandler(new RecordNavigationClickHandler() {
             @Override
             public void onRecordNavigationClick(RecordNavigationClickEvent event) {

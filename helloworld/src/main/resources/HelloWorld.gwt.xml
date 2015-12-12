@@ -2,6 +2,7 @@
 
 <module rename-to="app">
 
+
     <inherits name="com.smartgwt.mobile.SmartGwtMobile"/>
 
     <!-- Specify the app entry point class.                          -->
@@ -9,6 +10,9 @@
 
     <!-- Limit the target browsers to WebKit (Safari,Chrome) and later Firefoxes  -->
     <set-property name="user.agent" value="safari"/>
+
+	<extend-property name="user.agent" values="ipad" fallback-value="safari"/>
+	<extend-property name="user.agent" values="iphone" fallback-value="safari"/>
 
     <!-- Specify the path(s) containing Java code to be compiled into JavaScript  -->
     <source path='com/mycompany/client'/>

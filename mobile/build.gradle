@@ -31,7 +31,7 @@ apply plugin: 'maven'
 
 // Project Configuration ----------------------------------------------------------------------
 group = 'com.smartgwt'
-version = '1.0d-SNAPSHOT'
+version = '1.0-local-SNAPSHOT'   // 'local' may differ from Isomorphic version
 
 // Properties Configuration -------------------------------------------------------------------
 
@@ -42,17 +42,9 @@ ext.localityProperties = [
 
 // Compilers Configuration -------------------------------------------------------------------
 
-// GWT SDK
-ext.gwtSDK = '2.7.0'
-
 // Java SDK
 sourceCompatibility = 1.7
 targetCompatibility = sourceCompatibility
-compileJava.options.compilerArgs = [
-    "-Xbootclasspath:${bootclasspath_17}", 
-//    '-Xlint:unchecked', 
-//    '-Xlint:deprecation',
-] 
 
 // R e p o s i t o r i e s   &   D e p e n d e n c i e s --------------------------------------
 
@@ -63,9 +55,11 @@ repositories {
 
 dependencies {
 
+    def gwt = '2.7.0'
+
     compile ([ 
-        "com.google.gwt:gwt-user:$gwtSDK",
-        "com.google.gwt:gwt-dev:$gwtSDK"  
+        "com.google.gwt:gwt-user:$gwt",
+        "com.google.gwt:gwt-dev:$gwt"  
     ])
     
 }

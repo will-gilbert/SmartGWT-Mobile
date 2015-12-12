@@ -30,7 +30,7 @@
 
     <!-- Default page to serve -->
     <welcome-file-list>
-        <welcome-file>@gwtRunTarget@</welcome-file>
+        <welcome-file>@gwtStartPage@</welcome-file>
     </welcome-file-list>
 
 </web-app>

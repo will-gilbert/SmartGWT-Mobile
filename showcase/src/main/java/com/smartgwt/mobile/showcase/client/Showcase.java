@@ -15,6 +15,8 @@
  */
 package com.smartgwt.mobile.showcase.client;
 
+import com.google.gwt.core.client.EntryPoint;
+
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.Timer;
@@ -31,7 +33,7 @@ import com.google.gwt.dom.client.Style.Position;
 /**
  * Showcase entry point class.
  */
-public class Showcase extends CordovaEntryPoint {
+public class Showcase implements EntryPoint {
 
     private Tab overviewTab, widgetsTab, aboutTab;
     private TabSet tabSet;
@@ -53,13 +55,15 @@ public class Showcase extends CordovaEntryPoint {
         tabSet.selectTab(widgetsTab);
     }
 
-    @Override
-    public void onDeviceReady() {
+    public void onModuleLoad() {
+
         RootLayoutPanel.get().add(tabSet);
-	tabSet.getElement().getStyle().setPosition(Position.FIXED);
+
+	    tabSet.getElement().getStyle().setPosition(Position.FIXED);
 
         final Element appLoadingPanelElem = Document.get().getElementById("appLoadingPanel");
         appLoadingPanelElem.getStyle().setOpacity(0.0);
+
         new Timer() {
             @Override
             public void run() {

@@ -12,7 +12,7 @@ gradle clean compileGWT
 gradle clean jettyRun
   Cross compiles the client side Java into JavaScript; launches Jetty.  Use any browser to 
   connect to:
-               http://localhost:${jettyRun.httpPort}/${project.name}/
+               http://localhost:$jettyRun.httpPort/$project.name/$gwtStartPage
 
 gradle clean war -P tomcat
   Build a WAR for deployment.  Be sure to 'clean' after the WAR is deployed in order to
@@ -177,10 +177,10 @@ task copyWebAppResources(type: Copy) {
         include "**/${gwtStartPage}"
         filter(ReplaceTokens,
                tokens:[
-                version: project.version, 
-                title: applicationName, 
-                gwtModule: gwtModuleRenamedTo, 
-                gwtStartPage: gwtStartPage 
+                    version: project.version, 
+                    title: applicationName, 
+                    gwtModule: gwtModuleRenamedTo, 
+                    gwtStartPage: gwtStartPage 
             ])
     }
 

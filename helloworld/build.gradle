@@ -22,6 +22,7 @@ gradle clean
 apply plugin: 'java'
 apply plugin: 'jetty'
 apply plugin: 'maven'
+apply plugin: 'war'
 
 // C O N F I G U R A T I O N ------------------------------------------------------------------
 

@@ -4,7 +4,7 @@ build-gwt/
 target/
 target-gwt/
 gwt-unitCache/
-smartgwt-mobile.jar
+lib/
 
 # Ignore Gradle GUI config
 gradle-app.setting

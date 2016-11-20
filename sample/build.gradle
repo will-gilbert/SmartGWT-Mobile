@@ -3,7 +3,7 @@
 // U S A G E   ================================================================================
 //=============================================================================================
 
-task usage << { print """${'='*90}
+task usage doLast { print """${'='*90}
 $applicationName v$version
 
 gradle compileJava
@@ -18,11 +18,15 @@ gradle jettyRun
 
 gradle pageObjectTest
   Runs Page Object tests by launching Jetty in the background. Choose the test browser.
-  via the contents of the gradle.properties file
+  via the contents of the gradle.properties file. Used to develop Page Object prior to 
+  running Cucumber BDD tests.
 
-gradle cucumber
+gradle cucumberTest
   Runs Cucumber by launching Jetty in the background. Choose the test browser
   via the contents of the gradle.properties file. Always display the output in the browser.
+
+gradle aggregate
+  Display the results of the Cucumber tests as a serenity report
 
 gradle clean
   Delete temporary files from: 
@@ -33,9 +37,6 @@ gradle clean
 ${'='*90}
 """}
 
-//=============================================================================================
-// C O N F I G U R A T I O N  =================================================================
-//=============================================================================================
 
 import static java.awt.Desktop.desktop
 
@@ -43,6 +44,27 @@ apply plugin: 'java'
 apply plugin: 'jetty'
 apply plugin: 'maven'
 apply plugin: 'war'
+apply plugin: 'net.serenity-bdd.aggregator'                             
+
+
+//============================================================================================
+// B U I L D S C R I P T S  ==================================================================
+//============================================================================================
+
+buildscript {
+    repositories {
+        mavenLocal()
+        jcenter()
+    }
+    dependencies {
+        classpath("net.serenity-bdd:serenity-gradle-plugin:1.1.42")     
+    }
+}
+
+//=============================================================================================
+// C O N F I G U R A T I O N  =================================================================
+//=============================================================================================
+
 
 
 // Project Configuration ----------------------------------------------------------------------
@@ -86,8 +108,10 @@ dependencies {
     def powerMock   = '1.6.5'
     def selenium    = '2.48.2'
     def selenide    = '4.0'
-    def cucumber    = '1.2.5'
     def groovy      = '2.4.7'
+    def cucumber    = '1.2.5'
+    def serenity    = '1.1.12'
+    def slf4j       = '1.7.21'
 
     // Download the SmartGWT Mobile jar at http://www.smartclient.com/product/smartgwtMobile.jsp
     compile files( "../lib/smartgwt-mobile.jar")
@@ -103,6 +127,7 @@ dependencies {
         "com.google.gwt.gwtmockito:gwtmockito:$gwtMockito",
     ])
 
+
     // Develop Page Objects seperately from application  
     pageObjectsCompile ([ 
         "junit:junit:$junit",
@@ -113,7 +138,12 @@ dependencies {
 
     cucumberCompile([
         "org.codehaus.groovy:groovy-all:$groovy",
-        "info.cukes:cucumber-groovy:$cucumber"
+        "info.cukes:cucumber-groovy:$cucumber",
+        "net.serenity-bdd:serenity-cucumber:$serenity",
+    ])
+
+    cucumberRuntime ([
+        "org.slf4j:slf4j-simple:$slf4j",
     ])
     
     // The GWT cross compiler; Java to JavaScript
@@ -131,11 +161,11 @@ dependencies {
 sourceSets {
 
     pageObjects {
-        java { srcDirs 'src/pageObjects/java' }
+        java { srcDirs = ['src/pageObjects/java'] }
     }
 
     cucumber {
-        java { srcDirs 'src/pageObjects/java' }
+        java { srcDirs = ['src/cucumber/java'] }
     }
 
 }
@@ -236,10 +266,15 @@ jettyStop {
 }
 
 //============================================================================================
-// P A G E   O B J E C T S   ================================================================= 
+// T E S T   P A G E   O B J E C T S   ======================================================= 
 //============================================================================================
 
 task pageObjectsTest(type: Test, dependsOn: jettyDaemon) {
+
+    reports.html.destination = new File(testReportDir, "pageObjects")
+
+    // If any tests file, move onto the next task e.g. Serenity aggregate
+    ignoreFailures true
 
     // Don't rerun test if they are up to date
     outputs.upToDateWhen { true }
@@ -259,7 +294,12 @@ task pageObjectsTest(type: Test, dependsOn: jettyDaemon) {
 // C U C U M B E R   ========================================================================= 
 //============================================================================================
 
-task cucumber(type:JavaExec, dependsOn: [pageObjectsClasses, jettyDaemon]) {
+task bdd(type:Test, dependsOn: [pageObjectsClasses, jettyDaemon]) {
+
+    reports.html.destination = new File(testReportDir, "cucumber")
+
+    // If any tests file, move onto the next task e.g. Serenity aggregate
+    ignoreFailures true
 
     // Don't rerun test if they are up to date
     outputs.upToDateWhen { false }
@@ -269,14 +309,8 @@ task cucumber(type:JavaExec, dependsOn: [pageObjectsClasses, jettyDaemon]) {
     systemProperty('selenide.browser', findProperty('selenide.browser'));
     systemProperty('selenide.browser-size', findProperty('selenide.browser-size'));
 
-    main = "cucumber.api.cli.Main"
-    classpath = configurations.cucumberCompile + 
-                sourceSets.pageObjects.runtimeClasspath
-    args = [
-        '--plugin', "html:$testReportDir/cucumber",
-        '--glue', 'src/cucumber/steps', 
-        'src/cucumber'
-    ]
+    testClassesDir = sourceSets.cucumber.output.classesDir
+    classpath = sourceSets.cucumber.runtimeClasspath + sourceSets.pageObjects.runtimeClasspath
 
     finalizedBy jettyStop
 }
@@ -301,6 +335,9 @@ webAppDirName = "${gwtBuildDir}"
 clean { dependsOn 'cleanGWT'}
 
 test {
+
+    // If any tests file, move onto the next task e.g. Serenity aggregate
+    ignoreFailures true
 
     // Always run tests; When you have changed the data but not the test code
     outputs.upToDateWhen { false }

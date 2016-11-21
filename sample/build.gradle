@@ -7,35 +7,37 @@ task usage doLast { print """${'='*90}
 $applicationName v$version
 
 gradle compileJava
-  Compile Java source code displaying warnings and error to the terminal console. Does not
-  cross compile Java to JavaScript
+  Compile Java source code displaying warnings and errors to the terminal console. Does not
+  cross compile GWT Java to JavaScript.
+
+gradle test
+  Run unit tests.
 
 gradle transpileGWT
+  Compiles GWT Java into JavaScript; Builds the GWT WebApp.
 
 gradle jettyRun
-  Cross compiles the client side Java into JavaScript; launches Jetty.  Use any browser to 
-  connect to the localhost on the port ${jettyRun.httpPort}.
+  Launches Jetty.  Use any browser to connect to the localhost on the port ${jettyRun.httpPort}.
 
 gradle pageObjectTest
   Runs Page Object tests by launching Jetty in the background. Choose the test browser.
-  via the contents of the gradle.properties file. Used to develop Page Object prior to 
-  running Cucumber BDD tests.
+  via the 'gradle.properties' file. Used to develop Page Objects prior to running Selenium BDD tests.
 
 gradle bdd
-  Runs Cucumber by launching Jetty in the background. Choose the test browser
-  via the contents of the gradle.properties file. Always display the output in the browser.
+  Evaluate Cucumber BDD features by launching Jetty in the background. Choose the test browser via the 
+  'gradle.properties' file. 
 
 gradle aggregate
-  Display the results of the Cucumber tests as a serenity report
+  Display the results of the BDD tests as a Serenity report.
 
+gradle clean test pageObjectTest bdd aggregate
+  Runs all tests, unit, page object and BDD; Reports are in ${testReportDir.toString() - file('.').toString()}
+    
 gradle clean
   Delete temporary files from: 
        './$project.buildDir.name'
        './$gwtBuildDir'
        './gwt-unitCache'
-
-
-gradle clean test pageObjectTest bdd aggregate
 
 ${'='*90}
 """}

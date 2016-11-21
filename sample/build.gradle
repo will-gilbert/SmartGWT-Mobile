@@ -21,7 +21,7 @@ gradle pageObjectTest
   via the contents of the gradle.properties file. Used to develop Page Object prior to 
   running Cucumber BDD tests.
 
-gradle cucumberTest
+gradle bdd
   Runs Cucumber by launching Jetty in the background. Choose the test browser
   via the contents of the gradle.properties file. Always display the output in the browser.
 
@@ -33,6 +33,9 @@ gradle clean
        './$project.buildDir.name'
        './$gwtBuildDir'
        './gwt-unitCache'
+
+
+gradle clean test pageObjectTest bdd aggregate
 
 ${'='*90}
 """}
@@ -332,17 +335,32 @@ def String findProperty(String propertyName, defaultValue='') {
 // WAR and Jetty builds; requires results of the 'transpileGWT' task rather than 'src/main/webapp'
 webAppDirName = "${gwtBuildDir}"
 
+// Gradle 'clean' needs to clean up GWT builds
 clean { dependsOn 'cleanGWT'}
 
-test {
+// Serenity needs something to 'aggregate'
+aggregate { dependsOn 'bdd' }
 
+// Define common behavior for all tests i.e. Unit, Page Object, Cucumber
+tasks.withType(Test) {
+    
     // If any tests file, move onto the next task e.g. Serenity aggregate
     ignoreFailures true
 
     // Always run tests; When you have changed the data but not the test code
     outputs.upToDateWhen { false }
-    
+
     testLogging { 
+
+        // set options for log level LIFECYCLE
+        events  'standardError'
+        showExceptions true
+        exceptionFormat "full"
+        showCauses false
+        showStackTraces false
+        showStandardStreams = false
+
+        // Display a green/red bar after the tests
         afterSuite { desc, result ->
           if (desc.parent == null) {
                 // Green background for complete success, red for any failures
@@ -358,6 +376,7 @@ test {
     }
 
 }
+
 
 //============================================================================================
 // U N I T   T E S T I N G ===================================================================

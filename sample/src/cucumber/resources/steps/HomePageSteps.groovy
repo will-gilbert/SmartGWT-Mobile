@@ -13,6 +13,7 @@ Selenide.open("index.html");
 
 
 Given(~/a running 'SmartGWT-mobile Sample' web application/) { ->
+    Selenide.refresh()
     homePage = new HomePageImpl();
     assert homePage != null
 }

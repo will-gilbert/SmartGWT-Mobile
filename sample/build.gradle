@@ -97,7 +97,7 @@ targetCompatibility = sourceCompatibility
 
 // Create a GWT Compiler & Selenium compile configuration
 configurations { 
-    [gwtCompile, pageObjectsCompile, cucumberCompile, cucumberRuntime] 
+    [transpileGWT, pageObjectsCompile, cucumberCompile, cucumberRuntime] 
 }
 
 repositories {
@@ -111,7 +111,7 @@ dependencies {
     def junit       = '4.12'
     def gwtMockito  = '1.1.6'
     def powerMock   = '1.6.5'
-    def selenium    = '2.48.2'
+    def selenium    = '3.0.1'
     def selenide    = '4.0'
     def groovy      = '2.4.7'
     def cucumber    = '1.2.5'
@@ -125,6 +125,7 @@ dependencies {
         "com.google.gwt:gwt-user:$gwt"
     ])
 
+    // Unit tests
     testCompile([ 
         "junit:junit:$junit",
         "org.powermock:powermock-api-mockito:$powerMock",   // PowerMock using Mockito
@@ -138,9 +139,9 @@ dependencies {
         "junit:junit:$junit",
         "org.seleniumhq.selenium:selenium-java:$selenium",
         "com.codeborne:selenide:$selenide",
-
     ]) 
 
+    // BDD testing seperate from unit or page object testing
     cucumberCompile([
         "org.codehaus.groovy:groovy-all:$groovy",
         "info.cukes:cucumber-groovy:$cucumber",
@@ -152,7 +153,7 @@ dependencies {
     ])
     
     // The GWT cross compiler; Java to JavaScript
-    gwtCompile([
+    transpileGWT([
         "com.google.gwt:gwt-dev:$gwt", 
         "com.google.gwt:gwt-servlet:$gwt"
     ])
@@ -199,7 +200,7 @@ task transpileGWT(dependsOn: ['compileJava', 'copyWebAppResources'], type:JavaEx
     classpath = files([
         sourceSets.main.java.srcDirs,      // Contains Java sources to be compiled into JavaScript
         sourceSets.main.runtimeClasspath,  // Contains .gwt.xml file
-        configurations.gwtCompile.files    // Contains the GWT compiler JAR
+        configurations.transpileGWT.files  // Contains the GWT compiler JAR
     ])
 
     args = [ "-war", gwtBuildDir,  gwtModule]
@@ -278,12 +279,6 @@ task pageObjectsTest(type: Test, dependsOn: jettyDaemon) {
 
     reports.html.destination = new File(testReportDir, "pageObjects")
 
-    // If any tests file, move onto the next task e.g. Serenity aggregate
-    ignoreFailures true
-
-    // Don't rerun test if they are up to date
-    outputs.upToDateWhen { true }
-
     // Pass the test URL, browser & window size
     systemProperty 'selenide.baseUrl', "http://localhost:$jettyRun.httpPort/$project.name/"
     systemProperty('selenide.browser', findProperty('selenide.browser'));
@@ -302,12 +297,6 @@ task pageObjectsTest(type: Test, dependsOn: jettyDaemon) {
 task bdd(type:Test, dependsOn: [pageObjectsClasses, jettyDaemon]) {
 
     reports.html.destination = new File(testReportDir, "cucumber")
-
-    // If any tests file, move onto the next task e.g. Serenity aggregate
-    ignoreFailures true
-
-    // Don't rerun test if they are up to date
-    outputs.upToDateWhen { false }
 
     // Pass the test URL, browser & window size
     systemProperty "selenide.baseUrl", "http://localhost:$jettyRun.httpPort/$project.name/"
@@ -384,7 +373,8 @@ tasks.withType(Test) {
 // U N I T   T E S T I N G ===================================================================
 //============================================================================================
 
-// Launch the browser if any unit or page object tests fails; Always show Cucumber results
+// Launch the browser if any unit, page object or BDD tests fail
+// 
 gradle.taskGraph.afterTask { task, taskState ->
 
     if ( task.name == 'test' && taskState.failure ) {
@@ -394,7 +384,7 @@ gradle.taskGraph.afterTask { task, taskState ->
     if (  task.name == 'pageObjectsTest' && taskState.failure )
         openReport 'pageObjectsTest/index.html'
 
-    if (  task.name == 'cucumber' )
+    if (  task.name == 'bdd'  && taskState.failure)
         openReport 'cucumber/index.html'
 }
 

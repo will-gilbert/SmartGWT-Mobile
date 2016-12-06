@@ -12,26 +12,25 @@ import java.util.HashMap;
 // Static methods
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selectors.byId;
 import static com.codeborne.selenide.Condition.appears;
 import static com.codeborne.selenide.Condition.disappears;
 
+public class SportsPage {
 
 
-public class SportsPageImpl implements SportsPage {
-
-
-    private static final String PAGE = "div.sc-scrollable#sports-page";
+    private static final String PAGE_ID = "sports-page";
     private static final String BUTTONS = "div.customTintedToolStrip div.sc-button";
     private static final String BACK = "div.sc-navigationbar > div.backButton";
-    private static final int WAIT = 5000;
+    private static final int WAIT = 500;
 
 
     private final Map<String,SelenideElement> sports = new HashMap<>();
 
-    public SportsPageImpl() {
+    public SportsPage() {
 
         // Use the page ID to ensure loading
-        $(PAGE).waitUntil(appears, WAIT);
+        $(byId(PAGE_ID)).waitUntil(appears, WAIT);
 
         // Find all of the "Sports" buttons
         ElementsCollection elements = $$(BUTTONS);
@@ -52,7 +51,7 @@ public class SportsPageImpl implements SportsPage {
 
         if(element != null) {
             element.click(); 
-            dialog = new DialogImpl();
+            dialog = new Dialog();
         }
         
         return dialog;
@@ -79,7 +78,7 @@ public class SportsPageImpl implements SportsPage {
     }
 
     public boolean isDisplayed() {
-        return $(PAGE).isDisplayed();
+        return $(byId(PAGE_ID)).isDisplayed();
     }
 
 }

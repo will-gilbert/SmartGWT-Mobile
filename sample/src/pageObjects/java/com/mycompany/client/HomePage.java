@@ -12,20 +12,21 @@ import java.util.HashMap;
 // Static methods
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selectors.byId;
 import static com.codeborne.selenide.Condition.appears;
 
 
-public class HomePageImpl implements HomePage {
+public class HomePage {
 
-    private static final String PAGE = "div.sc-scrollable#home-page";
+    private static final String PAGE_ID = "home-page";
     private static final String BUTTONS = "div.actionButton";
-    private static final int WAIT = 5000;
+    private static final int WAIT = 500;
 
     private final Map<String,SelenideElement> buttons = new HashMap<>();
 
-    public HomePageImpl() {
+    public HomePage() {
 
-        $(PAGE).waitUntil(appears, WAIT);
+        $(byId(PAGE_ID)).waitUntil(appears, WAIT);
 
         ElementsCollection elements = $$(BUTTONS);
 
@@ -44,7 +45,7 @@ public class HomePageImpl implements HomePage {
 
         if(element != null) {
             element.click(); 
-            sportsPage = new SportsPageImpl();   
+            sportsPage = new SportsPage();   
         }
 
         return sportsPage;
@@ -84,7 +85,7 @@ public class HomePageImpl implements HomePage {
     }
 
     public boolean isDisplayed() {
-        return $(PAGE).isDisplayed();
+        return $(byId(PAGE_ID)).isDisplayed();
     }
 
 }

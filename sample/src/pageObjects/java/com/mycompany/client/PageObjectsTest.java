@@ -35,7 +35,7 @@ public class PageObjectsTest {
     public void instanceHomePage()  {
 
         if ( homePage == null ) {
-            homePage = new HomePageImpl();
+            homePage = new HomePage();
         }
     }
 

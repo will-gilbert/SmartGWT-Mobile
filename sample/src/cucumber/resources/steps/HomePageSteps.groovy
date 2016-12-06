@@ -2,7 +2,6 @@ this.metaClass.mixin(cucumber.api.groovy.Hooks)
 this.metaClass.mixin(cucumber.api.groovy.EN)
 
 import com.mycompany.client.HomePage
-import com.mycompany.client.HomePageImpl
 
 // Selenide
 import com.codeborne.selenide.Selenide
@@ -14,7 +13,7 @@ Selenide.open("index.html");
 
 Given(~/a running 'SmartGWT-mobile Sample' web application/) { ->
     Selenide.refresh()
-    homePage = new HomePageImpl();
+    homePage = new HomePage();
     assert homePage != null
 }
 

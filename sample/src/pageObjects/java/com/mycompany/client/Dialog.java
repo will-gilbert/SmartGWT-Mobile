@@ -11,17 +11,17 @@ import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Condition.appears;
 import static com.codeborne.selenide.Condition.disappears;
 
-public class DialogImpl implements Dialog {
+public class Dialog {
 
     private static final String DIALOG = "div.windowBackground > div.windowHeader";
     private static final String TITLE = "div.windowHeaderLabel";
     private static final String YES = "div.dialogButtonsContainer > div.actionButton:nth-Child(1)";
     private static final String NO  = "div.dialogButtonsContainer > div.actionButton:nth-Child(2)";
     private static final String OUTSIDE = "div.modalMask";
-    private static final int WAIT = 5000;
+    private static final int WAIT = 500;
 
 
-    public DialogImpl() {
+    public Dialog() {
         $(DIALOG).waitUntil(appears, WAIT);
     }
 

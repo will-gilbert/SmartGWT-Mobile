@@ -15,6 +15,7 @@ import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Condition.appears;
 import static com.codeborne.selenide.Condition.disappears;
 
+import static com.codeborne.selenide.Screenshots.takeScreenShot;
 
 
 public class SportsPageImpl implements SportsPage {
@@ -42,6 +43,8 @@ public class SportsPageImpl implements SportsPage {
                 sports.put(element.text(), element);
        }
 
+        takeScreenShot("sports");
+
     }
 
     public Dialog selectSport(String sport) {
@@ -62,7 +65,7 @@ public class SportsPageImpl implements SportsPage {
         SelenideElement element = $(BACK);
         if(element.isDisplayed()) {
             element.click();
-            element.waitUntil(disappears, WAIT);
+            // element.waitUntil(disappears, WAIT);
         }
 
     }

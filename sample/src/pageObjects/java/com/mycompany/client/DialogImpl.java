@@ -35,7 +35,7 @@ public class DialogImpl implements Dialog {
 
         if(element.isDisplayed()) {
             element.click();
-            $(DIALOG).waitUntil(disappears, WAIT);
+            // $(DIALOG).waitUntil(disappears, WAIT);
         }
 
     }
@@ -45,7 +45,7 @@ public class DialogImpl implements Dialog {
 
         if(element.isDisplayed()) {
             element.click();
-            $(DIALOG).waitUntil(disappears, WAIT);
+            // $(DIALOG).waitUntil(disappears, WAIT);
         }
     }
 
@@ -53,7 +53,7 @@ public class DialogImpl implements Dialog {
         SelenideElement element = $(OUTSIDE);
         if(element.isDisplayed()) {
             element.click();
-            $(DIALOG).waitUntil(disappears, WAIT);
+            //$(DIALOG).waitUntil(disappears, WAIT);
         }
 
     }

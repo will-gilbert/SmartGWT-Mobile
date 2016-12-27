@@ -64,12 +64,10 @@ public class HomePage {
 
         String style = element.attr("style");
 
-        System.out.println("style: " + style);
         if(style == null || style.trim().length() == 0)
             return "";
 
         int indexOfProperty = style.indexOf(property);
-        System.out.println("indexOfProperty: " + indexOfProperty);
         if(indexOfProperty == -1)
             return "";
 

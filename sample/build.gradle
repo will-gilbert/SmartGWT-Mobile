@@ -332,6 +332,7 @@ webAppDirName = "${gwtBuildDir}"
 // Gradle 'clean' needs to clean up GWT builds
 clean { dependsOn 'cleanGWT'}
 
+
 // Define common behavior for all tests i.e. Unit, Page Object, Cucumber
 tasks.withType(Test) {
 
@@ -378,31 +379,5 @@ tasks.withType(Test) {
         }
     }
 
-}
-
-
-//============================================================================================
-// U N I T   T E S T I N G ===================================================================
-//============================================================================================
-
-// Launch the browser if any unit, page object or BDD tests fail
-// 
-gradle.taskGraph.afterTask { task, taskState ->
-
-    if ( task.name == 'test' && taskState.failure ) {
-        openReport 'test/index.html'
-    }
-
-    if (  task.name == 'pageObjectsTest' && taskState.failure )
-        openReport 'pageObjectsTest/index.html'
-
-    if (  task.name == 'bdd'  && taskState.failure)
-        openReport 'cucumber/index.html'
-}
-
-def openReport(fileName) {
-    def report  = new File(testReportDir, fileName)
-    if ( report.exists() )
-        desktop.browse( report.toURI() )
 }
 

@@ -14,7 +14,6 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selectors.byId;
 import static com.codeborne.selenide.Condition.appears;
-import static com.codeborne.selenide.WebDriverRunner.isJBrowser;
 
 public class HomePage {
 
@@ -41,12 +40,7 @@ public class HomePage {
 
     public String getBackgroundColor(String color) {
 
-        // JBrowser does not support returning attributes; Return input
-        if(isJBrowser())
-            return color;
-
         SelenideElement element = getButtonElement(color);
-        
         return ( element != null ) ? getValueForStyle(element, "background-color") : "";
     }
 

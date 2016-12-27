@@ -8,12 +8,14 @@ import com.codeborne.selenide.SelenideElement;
 // Static methods
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.sleep;
 import static com.codeborne.selenide.Selectors.byId;
 import static com.codeborne.selenide.Condition.appears;
 import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Condition.disappears;
 import static com.codeborne.selenide.Condition.disappear;
 import static com.codeborne.selenide.Screenshots.takeScreenShot;
+import static com.codeborne.selenide.WebDriverRunner.isJBrowser;
 
 public class Dialog {
 
@@ -41,7 +43,9 @@ public class Dialog {
 
         if(element.isDisplayed()) {
             element.click();
-            dialog.waitUntil(disappears, WAIT);
+
+            if(isJBrowser() == false)
+                dialog.should(disappear);
         }
 
     }
@@ -51,15 +55,18 @@ public class Dialog {
 
         if(element.isDisplayed()) {
             element.click();
-            dialog.waitUntil(disappear, WAIT);
+            if(isJBrowser() == false)
+                dialog.waitUntil(disappear, WAIT);
         }
     }
 
     public void selectOutside() {
         SelenideElement element = $(OUTSIDE);
+
         if(element.isDisplayed()) {
             element.click();
-            dialog.waitUntil(disappear, WAIT);
+            if(isJBrowser() == false)
+                dialog.waitUntil(disappear, WAIT);
         }
 
     }

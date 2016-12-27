@@ -5,14 +5,13 @@ import com.mycompany.client.HomePage
 
 // Selenide
 import com.codeborne.selenide.Selenide
-
 import cucumber.api.PendingException
 
+import static com.codeborne.selenide.WebDriverRunner.isJBrowser;
 
 
 Given(~/a running 'SmartGWT-mobile Sample' web application/) { ->
 	Selenide.open("index.html");
-    // Selenide.refresh()
     homePage = new HomePage();
     assert homePage != null
 }
@@ -22,5 +21,7 @@ When(~/the color (.+) is clicked/) { color ->
 }
 
 Then(~/the application will return to the 'Home' page/) { ->
-    assert homePage.isDisplayed()
+    
+	if(isJBrowser() == false)
+    	assert homePage.isDisplayed()
 }

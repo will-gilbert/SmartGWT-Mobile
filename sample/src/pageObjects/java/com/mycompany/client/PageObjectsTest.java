@@ -21,24 +21,28 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
+import static com.codeborne.selenide.WebDriverRunner.isJBrowser;
+import static com.codeborne.selenide.Screenshots.takeScreenShot;
+
 // @Ignore
 public class PageObjectsTest {
 
-    HomePage homePage;
-
-    @BeforeClass
-    public static void launchWebBrowser()  {
-        Selenide.open("index.html");
-    }
+    HomePage homePage;    
 
     @Before
     public void instanceHomePage()  {
+        Selenide.open("index.html");
         homePage = new HomePage();
     }
 
 
     @Test
     public void homePageColors() {
+
+        // 'JBrowserDriver' does not return attribute strings; Skip these tests
+        if( isJBrowser() )
+            return;
+
         assertEquals("blue", homePage.getBackgroundColor("blue"));
         assertEquals("red", homePage.getBackgroundColor("red"));
         assertEquals("yellow", homePage.getBackgroundColor("yellow"));
@@ -59,9 +63,12 @@ public class PageObjectsTest {
         assertEquals("Do you like Baseball?", dialog.getTitle());
 
         dialog.selectYes();
-        assertFalse(dialog.isDisplayed());
+
+        if(isJBrowser() == false)
+            assertFalse(dialog.isDisplayed());
 
         sportsPage.backNavigationAction();
+        takeScreenShot("BackToHome");
     }
 
     @Test
@@ -73,7 +80,8 @@ public class PageObjectsTest {
         assertEquals("Do you like Football?", dialog.getTitle());
 
         dialog.selectNo();
-        assertFalse(dialog.isDisplayed());
+        if(isJBrowser() == false)
+            assertFalse(dialog.isDisplayed());
         
         sportsPage.backNavigationAction();
 

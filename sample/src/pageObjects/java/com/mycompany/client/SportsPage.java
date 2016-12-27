@@ -12,9 +12,13 @@ import java.util.HashMap;
 // Static methods
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.back;
 import static com.codeborne.selenide.Selectors.byId;
 import static com.codeborne.selenide.Condition.appears;
 import static com.codeborne.selenide.Condition.disappears;
+import static com.codeborne.selenide.Screenshots.takeScreenShot;
+import static com.codeborne.selenide.WebDriverRunner.isJBrowser;
+import static com.codeborne.selenide.WebDriverRunner.isHeadless;
 
 public class SportsPage {
 
@@ -46,10 +50,17 @@ public class SportsPage {
     }
 
     public void backNavigationAction() {
+
         SelenideElement element = $(BACK);
+
+        System.out.println(element);
+        System.out.println(element.isDisplayed());
+        System.out.println(element.exists());
+
         if(element.isDisplayed()) {
             element.click();
-            //element.waitUntil(disappears, WAIT);
+            if(isJBrowser() == false)
+                element.waitUntil(disappears, WAIT);
         }
 
     }

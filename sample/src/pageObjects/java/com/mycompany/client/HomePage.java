@@ -14,28 +14,16 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selectors.byId;
 import static com.codeborne.selenide.Condition.appears;
-
+import static com.codeborne.selenide.WebDriverRunner.isJBrowser;
 
 public class HomePage {
 
     private static final String PAGE_ID = "home-page";
-    private static final String BUTTONS = "div.actionButton";
     private static final int WAIT = 500;
 
-    private final Map<String,SelenideElement> buttons = new HashMap<>();
 
     public HomePage() {
-
         $(byId(PAGE_ID)).waitUntil(appears, WAIT);
-
-        ElementsCollection elements = $$(BUTTONS);
-
-        for (int i = 0; i < elements.size(); i++) {
-            SelenideElement button = elements.get(i);
-            if(button != null && button.isDisplayed())
-                buttons.put(button.text(), button);
-        }
-
     }
 
     public SportsPage selectColor(String color) {
@@ -52,14 +40,19 @@ public class HomePage {
     }
 
     public String getBackgroundColor(String color) {
+
+        // JBrowser does not support returning attributes; Return input
+        if(isJBrowser())
+            return color;
+
         SelenideElement element = getButtonElement(color);
         
         return ( element != null ) ? getValueForStyle(element, "background-color") : "";
     }
 
-    private SelenideElement getButtonElement(String name) {
+    private SelenideElement getButtonElement(String color) {
 
-        SelenideElement element = buttons.get(name);
+        SelenideElement element = $(byId(PAGE_ID + "-" + color)).waitUntil(appears, WAIT);
         
         if(element != null && element.isDisplayed() == false)
             element = null;
@@ -70,10 +63,13 @@ public class HomePage {
     private String getValueForStyle(final SelenideElement element, final String property) {
 
         String style = element.attr("style");
+
+        System.out.println("style: " + style);
         if(style == null || style.trim().length() == 0)
             return "";
 
         int indexOfProperty = style.indexOf(property);
+        System.out.println("indexOfProperty: " + indexOfProperty);
         if(indexOfProperty == -1)
             return "";
 

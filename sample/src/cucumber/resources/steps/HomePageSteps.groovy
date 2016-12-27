@@ -8,11 +8,11 @@ import com.codeborne.selenide.Selenide
 
 import cucumber.api.PendingException
 
-Selenide.open("index.html");
 
 
 Given(~/a running 'SmartGWT-mobile Sample' web application/) { ->
-    Selenide.refresh()
+	Selenide.open("index.html");
+    // Selenide.refresh()
     homePage = new HomePage();
     assert homePage != null
 }

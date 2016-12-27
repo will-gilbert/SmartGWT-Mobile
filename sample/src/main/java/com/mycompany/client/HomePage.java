@@ -22,6 +22,7 @@ public class HomePage {
             Button button = new Button(color);
             button.setTintColor(color);
             button.addClickHandler(cickHandler);
+            button.setID(ID + "-" + color);
 
             container.addMember(button);
         });

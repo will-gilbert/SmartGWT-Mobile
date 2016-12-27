@@ -33,10 +33,7 @@ public class PageObjectsTest {
 
     @Before
     public void instanceHomePage()  {
-
-        if ( homePage == null ) {
-            homePage = new HomePage();
-        }
+        homePage = new HomePage();
     }
 
 

@@ -91,6 +91,12 @@ ext.gwtBuildDir = 'build-gwt'                     // GWT build directory
 sourceCompatibility = 1.8
 targetCompatibility = sourceCompatibility
 
+// Properties; Defined in 'gradle.properties' -------------------------------------------------
+
+// Selenide
+ext.selenideBrowser = findProperty 'selenide.browser' ?: 'chrome'
+ext.selenideBrowserSize = findProperty 'selenide.browser-size' ?: '320x900'
+
 //=============================================================================================
 // R e p o s i t o r i e s   &   D e p e n d e n c i e s   ====================================
 //=============================================================================================
@@ -117,6 +123,11 @@ dependencies {
     def cucumber    = '1.2.5'
     def serenity    = '1.1.12'
     def slf4j       = '1.7.21'
+
+    // Selenium compatiable web drivers
+    def jbrowser  = '0.17.3'
+    def firefox   = '3.0.1'
+    def safari    = '3.0.1'
 
     // Download the SmartGWT Mobile jar at http://www.smartclient.com/product/smartgwtMobile.jsp
     compile files( "../lib/smartgwt-mobile.jar")
@@ -157,6 +168,17 @@ dependencies {
         "com.google.gwt:gwt-dev:$gwt", 
         "com.google.gwt:gwt-servlet:$gwt"
     ])
+
+    // Add specific web driver support dependency for the test browser
+
+    if(selenideBrowser == 'jbrowser')
+        pageObjectsCompile "com.machinepublishers:jbrowserdriver:$jbrowser" 
+
+    if(selenideBrowser == 'safari')
+        pageObjectsCompile 'org.seleniumhq.selenium:selenium-safari-driver:$safari' 
+
+    if(selenideBrowser == 'firefox')
+        pageObjectsCompile 'org.seleniumhq.selenium:selenium-firefox-driver:$firefox' 
    
 }
 
@@ -279,11 +301,6 @@ task pageObjectsTest(type: Test, dependsOn: jettyDaemon) {
 
     reports.html.destination = new File(testReportDir, "pageObjects")
 
-    // Pass the test URL, browser & window size
-    systemProperty 'selenide.baseUrl', "http://localhost:$jettyRun.httpPort/$project.name/"
-    systemProperty('selenide.browser', findProperty('selenide.browser'));
-    systemProperty('selenide.browser-size', findProperty('selenide.browser-size'));
-
     testClassesDir = sourceSets.pageObjects.output.classesDir
     classpath = sourceSets.pageObjects.runtimeClasspath
 
@@ -298,26 +315,12 @@ task bdd(type:Test, dependsOn: [pageObjectsClasses, jettyDaemon]) {
 
     reports.html.destination = new File(testReportDir, "cucumber")
 
-    // Pass the test URL, browser & window size
-    systemProperty "selenide.baseUrl", "http://localhost:$jettyRun.httpPort/$project.name/"
-    systemProperty('selenide.browser', findProperty('selenide.browser'));
-    systemProperty('selenide.browser-size', findProperty('selenide.browser-size'));
-
     testClassesDir = sourceSets.cucumber.output.classesDir
     classpath = sourceSets.cucumber.runtimeClasspath + sourceSets.pageObjects.runtimeClasspath
 
     finalizedBy jettyStop
 }
 
-
-//============================================================================================
-// U T I L I T Y   M E T H O D S  ============================================================ 
-//============================================================================================
-
-def String findProperty(String propertyName, defaultValue='') {
-    def property = rootProject.hasProperty(propertyName) ? rootProject.getProperty(propertyName) : defaultValue
-    return property?.trim()
-}
 
 //============================================================================================
 // G R A D L E   C O N F I G U R A T I O N  ==================================================
@@ -329,11 +332,20 @@ webAppDirName = "${gwtBuildDir}"
 // Gradle 'clean' needs to clean up GWT builds
 clean { dependsOn 'cleanGWT'}
 
-// Serenity needs something to 'aggregate'
-aggregate { dependsOn 'bdd' }
-
 // Define common behavior for all tests i.e. Unit, Page Object, Cucumber
 tasks.withType(Test) {
+
+    // Pass the test URL, browser & window size
+    systemProperty 'selenide.baseUrl', "http://localhost:$jettyRun.httpPort/$project.name/"
+    systemProperty 'selenide.browser', selenideBrowser
+    systemProperty 'selenide.browser-size', selenideBrowserSize
+
+    // External webdriver executatables; Defined in 'gradle.properties'
+    if(selenideBrowser == 'chrome')
+        systemProperty 'webdriver.chrome.driver', chromedriver
+
+    if(selenideBrowser == 'firefox')
+        systemProperty 'webdriver.gecko.driver', firefoxdriver
     
     // If any tests file, move onto the next task e.g. Serenity aggregate
     ignoreFailures true

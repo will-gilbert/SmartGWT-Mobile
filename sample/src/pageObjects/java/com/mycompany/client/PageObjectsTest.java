@@ -26,13 +26,14 @@ public class PageObjectsTest {
 
     HomePage homePage;
 
+    @BeforeClass
+    public static void launchWebBrowser()  {
+        Selenide.open("index.html");
+    }
 
     @Before
     public void instanceHomePage()  {
-
-        Selenide.close();
-        Selenide.open("index.html");
-        homePage = new HomePageImpl();
+        homePage = new HomePage();
     }
 
 

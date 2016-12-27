@@ -28,6 +28,7 @@ public class SampleView implements SamplePresenter.View {
 
         HomePage homePage = new HomePage(colors, colorClickHandler);
         navigationStack = new NavStack(homePage.asPanel());
+        navigationStack.getNavigationBar().setID("navigationBar");
     }
 
     public Canvas asCanvas() {
@@ -50,6 +51,7 @@ public class SampleView implements SamplePresenter.View {
             BaseButton button = (BaseButton)event.getSource();
             String sport = button.getTitle();
             Dialog dialog = new Dialog("Do you like " + sport + "?");
+            dialog.setID("dialog");
             dialog.setButtons(Dialog.YES, Dialog.NO);
             dialog.show();
         };    

@@ -12,39 +12,23 @@ import java.util.HashMap;
 // Static methods
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selectors.byId;
 import static com.codeborne.selenide.Condition.appears;
 import static com.codeborne.selenide.Condition.disappears;
 
-import static com.codeborne.selenide.Screenshots.takeScreenShot;
+public class SportsPage {
 
 
-public class SportsPageImpl implements SportsPage {
-
-
-    private static final String PAGE = "div.sc-scrollable#sports-page";
+    private static final String PAGE_ID = "sports-page";
     private static final String BUTTONS = "div.customTintedToolStrip div.sc-button";
-    private static final String BACK = "div.sc-navigationbar > div.backButton";
-    private static final int WAIT = 5000;
+    private static final String BACK = "#navigationBar > div.sc-button:nth-child(1)";
+    private static final int WAIT = 500;
 
 
-    private final Map<String,SelenideElement> sports = new HashMap<>();
-
-    public SportsPageImpl() {
+    public SportsPage() {
 
         // Use the page ID to ensure loading
-        $(PAGE).waitUntil(appears, WAIT);
-
-        // Find all of the "Sports" buttons
-        ElementsCollection elements = $$(BUTTONS);
-
-        for (int i = 0; i < elements.size(); i++) {
-            SelenideElement element = elements.get(i);
-            if(element != null && element.isDisplayed())
-                sports.put(element.text(), element);
-       }
-
-        takeScreenShot("sports");
-
+        $(byId(PAGE_ID)).waitUntil(appears, WAIT);
     }
 
     public Dialog selectSport(String sport) {
@@ -53,9 +37,9 @@ public class SportsPageImpl implements SportsPage {
 
         SelenideElement element = getButtonElement(sport);
 
-        if(element != null) {
+        if(element != null && element.isDisplayed()) {
             element.click(); 
-            dialog = new DialogImpl();
+            dialog = new Dialog();
         }
         
         return dialog;
@@ -65,24 +49,25 @@ public class SportsPageImpl implements SportsPage {
         SelenideElement element = $(BACK);
         if(element.isDisplayed()) {
             element.click();
-            // element.waitUntil(disappears, WAIT);
+            //element.waitUntil(disappears, WAIT);
         }
 
     }
 
+    public boolean isDisplayed() {
+        return $(byId(PAGE_ID)).isDisplayed();
+    }
 
-    private SelenideElement getButtonElement(String name) {
+    //  P R I V A T E   ====================================================================
 
-        SelenideElement element = sports.get(name);
+    private SelenideElement getButtonElement(String sport) {
+
+        SelenideElement element = $(byId(PAGE_ID + "-" + sport)).waitUntil(appears, WAIT);
         
         if(element != null && element.isDisplayed() == false)
             element = null;
 
         return element;
-    }
-
-    public boolean isDisplayed() {
-        return $(PAGE).isDisplayed();
     }
 
 }

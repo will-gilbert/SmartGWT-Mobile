@@ -26,6 +26,7 @@ public class SportsPage {
             ToolStripButton button = new ToolStripButton(sport);
             button.setInheritTint(true);
             button.addClickHandler(clickHandler); 
+            button.setID(ID + "-" + sport);
             
             // Create a tool bar; Add the sports button
             ToolStrip toolbar = new ToolStrip();

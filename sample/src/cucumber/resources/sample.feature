@@ -1,5 +1,22 @@
 Feature: SmartGWT-Mobile Sample
     
+    Scenario: Toggle between the Home page and the Sports page; No dialog
+
+        Given a running 'SmartGWT-mobile Sample' web application 
+
+        When the color blue is clicked
+            Then the app will navigate to the 'Sports' page
+
+        When the 'Home' navigation bar button is clicked
+            Then the application will return to the 'Home' page
+
+        When the color red is clicked
+            Then the app will navigate to the 'Sports' page
+
+        When the 'Home' navigation bar button is clicked
+            Then the application will return to the 'Home' page
+
+    #===================================================================================
     Scenario: Choose 'blue', navigate to the 'Sports' page; Select Baseball
 
         Given a running 'SmartGWT-mobile Sample' web application 

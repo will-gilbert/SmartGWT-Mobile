@@ -53,14 +53,10 @@ public class SportsPage {
 
         SelenideElement element = $(BACK);
 
-        System.out.println(element);
-        System.out.println(element.isDisplayed());
-        System.out.println(element.exists());
-
         if(element.isDisplayed()) {
             element.click();
-            if(isJBrowser() == false)
-                element.waitUntil(disappears, WAIT);
+            // if(isJBrowser() == false)
+            //     element.waitUntil(disappears, WAIT);
         }
 
     }

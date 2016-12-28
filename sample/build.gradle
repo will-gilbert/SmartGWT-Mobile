@@ -332,6 +332,11 @@ webAppDirName = "${gwtBuildDir}"
 // Gradle 'clean' needs to clean up GWT builds
 clean { dependsOn 'cleanGWT'}
 
+// BDD 'clearReports' also clears other test reports
+clearReports.doLast { 
+    delete testReportDir
+}
+
 
 // Define common behavior for all tests i.e. Unit, Page Object, Cucumber
 tasks.withType(Test) {

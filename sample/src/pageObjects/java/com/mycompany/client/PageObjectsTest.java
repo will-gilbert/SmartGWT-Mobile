@@ -54,6 +54,27 @@ public class PageObjectsTest {
         assertEquals("brown", homePage.getBackgroundColor("brown"));
     }
 
+
+    @Test
+    public void homeNavigation() {
+
+        SportsPage sportsPage =  homePage.selectColor("blue");
+        assertNotNull(sportsPage);
+        sportsPage.backNavigationAction();
+
+        sportsPage = homePage.selectColor("red");
+        assertNotNull(sportsPage);
+        sportsPage.backNavigationAction();
+
+        sportsPage = homePage.selectColor("yellow");
+        assertNotNull(sportsPage);
+        sportsPage.backNavigationAction();
+
+        sportsPage = homePage.selectColor("green");
+        assertNotNull(sportsPage);
+        sportsPage.backNavigationAction();
+    }
+
     @Test
     public void selectBlueBaseball() {
         SportsPage sportsPage =  homePage.selectColor("blue");
@@ -68,7 +89,6 @@ public class PageObjectsTest {
             assertFalse(dialog.isDisplayed());
 
         sportsPage.backNavigationAction();
-        takeScreenShot("BackToHome");
     }
 
     @Test

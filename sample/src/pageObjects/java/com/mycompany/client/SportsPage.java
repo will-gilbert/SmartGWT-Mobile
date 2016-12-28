@@ -12,6 +12,7 @@ import java.util.HashMap;
 // Static methods
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.sleep;
 import static com.codeborne.selenide.Selenide.back;
 import static com.codeborne.selenide.Selectors.byId;
 import static com.codeborne.selenide.Condition.appears;
@@ -22,12 +23,11 @@ import static com.codeborne.selenide.WebDriverRunner.isHeadless;
 
 public class SportsPage {
 
-
     private static final String PAGE_ID = "sports-page";
+    private static final String NAVIGATION_BAR_ID = "navigationBar";
+    private static final String BACK = "div.backButton";
     private static final String BUTTONS = "div.customTintedToolStrip div.sc-button";
-    private static final String BACK = "#navigationBar > div.sc-button:nth-child(1)";
     private static final int WAIT = 500;
-
 
     public SportsPage() {
 
@@ -51,12 +51,12 @@ public class SportsPage {
 
     public void backNavigationAction() {
 
-        SelenideElement element = $(BACK);
+        SelenideElement element = $(byId(NAVIGATION_BAR_ID)).$(BACK);
 
         if(element.isDisplayed()) {
             element.click();
-            // if(isJBrowser() == false)
-            //     element.waitUntil(disappears, WAIT);
+            if(isJBrowser() == false)
+                element.waitUntil(disappears, WAIT);
         }
 
     }

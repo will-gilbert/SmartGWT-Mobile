@@ -1,4 +1,4 @@
-task usage << { print """
+task usage doLast { print """
 ==================================================================================
 
 gradle compileJava
@@ -9,7 +9,7 @@ gradle clean compileGWT
     Executes the 'javaCompile' task as a syntax check and then cross compiles Java source
     code to JavaScript.
 
-gradle clean jettyRun
+gradle clean war jettyRun
   Cross compiles the client side Java into JavaScript; launches Jetty.  Use any browser to 
   connect to:
                http://localhost:$jettyRun.httpPort/$project.name/$gwtStartPage
@@ -29,12 +29,25 @@ gradle clean
 import org.apache.tools.ant.filters.ReplaceTokens
 
 apply plugin: 'java'
-apply plugin: 'jetty'
-apply plugin: 'maven'
+apply plugin: 'org.akhikhl.gretty'
 apply plugin: 'war'
 
 
-// C O N F I G U R A T I O N ------------------------------------------------------------------
+// C O N F I G U R A T I O N ==================================================================
+
+// Script Configuration -----------------------------------------------------------------------
+
+buildscript {
+  repositories {
+    mavenLocal()
+    jcenter()
+    maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local' }
+  }
+
+  dependencies {
+    classpath "org.akhikhl.gretty:gretty:1.4.2"
+  }
+}
 
 // Project Configuration ----------------------------------------------------------------------
 
@@ -76,7 +89,7 @@ ext.localityProperties = [
 // Java Compilers Configuration -------------------------------------------------------
 
 // Java SDK
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 targetCompatibility = sourceCompatibility
 
 
@@ -91,7 +104,7 @@ repositories {
 
 dependencies {
 
-    def gwt = '2.7.0'
+    def gwtSDK     = '2.8.1'
 
     // Download the SmartGWT Mobile jar at 
     //
@@ -104,8 +117,9 @@ dependencies {
     compile ([ 
     
         // GWT =============================================================
-        "com.google.gwt:gwt-servlet:$gwt",
-        "com.google.gwt:gwt-user:$gwt"
+        "com.google.gwt:gwt-user:$gwtSDK",
+        "com.google.gwt:gwt-dev:$gwtSDK",
+        "com.google.gwt:gwt-servlet:$gwtSDK",
     ])
     
     runtime ([ /* TBD */ ])
@@ -113,11 +127,6 @@ dependencies {
     testCompile([  /* TBD */ ])
 
     testRuntime([ /* TBD */ ])
-
-    // The GWT cross compiler; Not used testing or deployment
-    gwtCompile([
-        "com.google.gwt:gwt-dev:$gwt"
-    ])
 
 }
 
@@ -137,12 +146,12 @@ task compileGWT(dependsOn: ['compileJava', 'copyWebAppResources'], type:JavaExec
     // Define the properties for the 'JavaExec' task
     main ='com.google.gwt.dev.Compiler'
     
-    jvmArgs = ['-Xmx512M']                 // 512M Memory, increase for larger Apps
+    jvmArgs = ['-Xmx1024M']                 // 512M Memory, increase for larger Apps
 
     classpath = files ([
         sourceSets.main.java.srcDirs,      // Contains Java sources to be compiled into JavaScript
-        sourceSets.main.runtimeClasspath,  // Contains .gwt.xml file
-        configurations.gwtCompile.files    // Contains the GWT compiler
+        sourceSets.main.runtimeClasspath  // Contains .gwt.xml file
+        // configurations.gwtCompile.files    // Contains the GWT compiler
     ])
 
     args = [ "-war", gwtBuildDir,  gwtModule]
@@ -150,14 +159,21 @@ task compileGWT(dependsOn: ['compileJava', 'copyWebAppResources'], type:JavaExec
 }
 
 
-jettyRun.doFirst {
-    print """=================================================================================='
-    |
-    | Jetty running, open a browser with the URL->   http://localhost:$jettyRun.httpPort/$project.name/$gwtStartPage
-    |
-    | Control-C (Command-. on Mac OS X) to quit Jetty
-    |
-    """.replaceAll(/\n */,'\n')
+//============================================================================================
+// G R E T T Y   C O N F I G U R A T I O N  ==================================================
+//============================================================================================
+
+gretty {
+
+    servletContainer = 'jetty9'
+
+    httpEnabled = true
+    httpPort = 9090
+    contextPath = '/showcase-1.0'
+    jvmArgs { '-ea' }
+
+    loggingLevel = 'INFO' // options:   'ALL', 'DEBUG', 'ERROR', 'INFO', 'OFF', 'TRACE', 'WARN'
+
 }
 
 
@@ -216,17 +232,10 @@ task cleanGWTBuildDir(type:Delete) {
 }
 
 
-task createPOM(dependsOn: 'war') {
-    pom{}.writeTo("${buildDir}/poms/${project.name}-${project.version}.xml")
-}
-
 // G R A D L E   C O N F I G U R A T I O N ====================================================
 
 // WAR and Jetty builds; requires results of 'compileGWT' task rather than 'src/main/webapp'
 webAppDirName = "${gwtBuildDir}"
-
-// Jetty Configuration
-jettyRun.httpPort = 9090           // Avoid potential conflicts with 8080
 
 
 // P L U G I N   C O N F I G U R A T I O N ====================================================
@@ -236,7 +245,7 @@ jettyRun.httpPort = 9090           // Avoid potential conflicts with 8080
 //   on the command line.  Same idea with the 'clean' task to clean up the 'devMode' directory
 
 war {dependsOn 'compileGWT'}
-jettyRun { dependsOn 'compileGWT' }
+// jettyRun { dependsOn 'compileGWT' }
 clean { dependsOn 'cleanGWTBuildDir'}
 
 war {
@@ -268,6 +277,13 @@ war {
     excludes = excludedResources
 }
 
+//============================================================================================
+// G R A D L E   T A S K S  ==================================================================
+//============================================================================================
+
+// Also clean the GWT build directory
+
+clean { dependsOn 'cleanGWT' }
 
 // Augment the 'processResources' task from the 'java' plugin.  Use filtering to replace
 //   '@...@' tags with properties in order to customize the target environment

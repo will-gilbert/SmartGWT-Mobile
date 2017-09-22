@@ -8,3 +8,7 @@ lib/
 
 # Ignore Gradle GUI config
 gradle-app.setting
+
+# Ignore SmartGWT Mobile; Must be downloaded from Isomorphics
+
+smartgwt-mobile.jar

@@ -1,27 +1,19 @@
 
-task usage << { print """
+task usage doLast { print """
 ==================================================================================
 
-gradle compileJava
-  Compile Java source code displaying warnings and error to the terminal console. Does not
-  cross compile Java to JavaScript
+Download the SmartGWT Mobile jar at http://www.smartclient.com/product/smartgwtMobile.jsp
+   and put it top level directory
 
-gradle compileGWT
-
-gradle jettyRun
-  Cross compiles the client side Java into JavaScript; launches Jetty.  Use any browser to 
-  connect to the localhost on the port defined by 'jettyRun.httpPort'
-
-gradle clean
-  Delete working files in 'project.buildDir'; invokes '' to remove the directory 
-  used by the GWT DevMode environment
+gradle clean explodedWar
+  Cross compiles the client side Java into JavaScript; launches web browser.
 
 ============================================================================================
 """}
 
+import static java.awt.Desktop.desktop
+
 apply plugin: 'java'
-apply plugin: 'jetty'
-apply plugin: 'maven'
 apply plugin: 'war'
 
 // C O N F I G U R A T I O N ------------------------------------------------------------------
@@ -38,12 +30,12 @@ version = '1.0'
 ext.gwtModule = 'HelloWorld'                      // Path to module descriptor
 ext.gwtModuleRenamedTo = 'app'                    // 'rename-to' within module descriptor
 ext.gwtRunTarget = 'index.html'                   // HTML launching file
-ext.gwtBuildDir = 'build-gwt'                     // GWT build directory and devMode
+ext.gwtBuildDir = "${buildDir}-gwt"               // GWT build directory
 
 // Properties Configuration -------------------------------------------------------------------
 
 // Java SDK
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 targetCompatibility = sourceCompatibility
 
 
@@ -58,7 +50,7 @@ repositories {
 
 dependencies {
 
-    def gwt = '2.7.0'
+    def gwt = '2.8.1'
 
     // Download the SmartGWT Mobile jar at http://www.smartclient.com/product/smartgwtMobile.jsp
     //   and put it top level directory
@@ -78,7 +70,7 @@ dependencies {
 
 // G W T   T A S K S --------------------------------------------------------------------------
 
-task compileGWT(dependsOn: ['compileJava', 'copyWebAppResources'], type:JavaExec) {
+task compileGWT(dependsOn: ['compileJava','copyWebAppResources'], type:JavaExec) {
 
     description ='Cross compiles Java into JavaScript for each browser specified'
 
@@ -104,15 +96,16 @@ task compileGWT(dependsOn: ['compileJava', 'copyWebAppResources'], type:JavaExec
 
 }
 
-jettyRun.doFirst {
-    print """=================================================================================='
-    |
-    | Jetty running, open a browser with the URL->   http://localhost:${jettyRun.httpPort}/${project.name}/
-    |
-    | Control-C (Command-. on Mac OS X) to quit Jetty
-    |
-    """.replaceAll(/\n */,'\n')
+task explodedWar(type: Sync) {
+    dependsOn 'compileGWT' 
+    into "$buildDir/explodedWar"
+    with war
+
+    doLast {
+        desktop.browse(new File("$buildDir.name/explodedWar", gwtRunTarget).toURI())
+    }
 }
+
 
 // U T I L I T Y   M E T H O D S -------------------------------------------------------------- 
 
@@ -135,6 +128,7 @@ task copyWebAppResources(type: Copy) {
 
 task cleanGWT(type:Delete) {
     delete gwtBuildDir
+    delete './gwt-unitCache'
 }
 
 
@@ -143,10 +137,6 @@ task cleanGWT(type:Delete) {
 // WAR and Jetty builds; requires results of 'compileGWT' task rather than 'src/main/webapp'
 webAppDirName = "${gwtBuildDir}"
 
-// Jetty Configuration
-jettyRun.httpPort = 9090           // Avoid potential conflicts with 8080
-
 // P L U G I N   C O N F I G U R A T I O N ====================================================
 
-jettyRun { dependsOn 'compileGWT' }
 clean { dependsOn 'cleanGWT'}
